@@ -149,7 +149,6 @@ void RoboCatClient::Read(InputMemoryBitStream& inInputStream)
 		{
 			InterpolateClientSidePrediction(oldRotation, oldLocation, oldVelocity, true);
 		}
-
 	}
 }
 
@@ -175,7 +174,10 @@ void RoboCatClient::DoClientSidePredictionAfterReplicationForLocalCat(uint32_t i
 }
 
 
-void RoboCatClient::InterpolateClientSidePrediction(float inOldRotation, const Vector3 & inOldLocation, const Vector3 & inOldVelocity, bool inIsForRemoteCat)
+void RoboCatClient::InterpolateClientSidePrediction(float inOldRotation,
+                                                    const Vector3& inOldLocation,
+                                                    const Vector3& inOldVelocity,
+                                                    bool inIsForRemoteCat)
 {
 	if (inOldRotation != GetRotation() && !inIsForRemoteCat)
 	{
@@ -198,7 +200,8 @@ void RoboCatClient::InterpolateClientSidePrediction(float inOldRotation, const V
 		float durationOutOfSync = time - mTimeLocationBecameOutOfSync;
 		if (durationOutOfSync < roundTripTime)
 		{
-			SetLocation(Lerp(inOldLocation, GetLocation(), inIsForRemoteCat ? (durationOutOfSync / roundTripTime) : 0.1f));
+			SetLocation(Lerp(inOldLocation, GetLocation(),
+			                 inIsForRemoteCat ? (durationOutOfSync / roundTripTime) : 0.1f));
 		}
 	}
 	else
@@ -223,17 +226,16 @@ void RoboCatClient::InterpolateClientSidePrediction(float inOldRotation, const V
 		float durationOutOfSync = time - mTimeVelocityBecameOutOfSync;
 		if (durationOutOfSync < roundTripTime)
 		{
-			SetVelocity(Lerp(inOldVelocity, GetVelocity(), inIsForRemoteCat ? (durationOutOfSync / roundTripTime) : 0.1f));
+			SetVelocity(Lerp(inOldVelocity, GetVelocity(),
+			                 inIsForRemoteCat ? (durationOutOfSync / roundTripTime) : 0.1f));
 		}
 		//otherwise, fine...
-
 	}
 	else
 	{
 		//we're in sync
 		mTimeVelocityBecameOutOfSync = 0.f;
 	}
-
 }
 
 
@@ -243,7 +245,6 @@ void RoboCatClient::DoClientSidePredictionAfterReplicationForRemoteCat(uint32_t 
 {
 	if ((inReadState & ECRS_Pose) != 0)
 	{
-
 		//simulate movement for an additional RTT
 		float rtt = NetworkManagerClient::sInstance->GetRoundTripTime();
 		//LOG( "Other cat came in, simulating for an extra %f", rtt );
@@ -258,12 +259,8 @@ void RoboCatClient::DoClientSidePredictionAfterReplicationForRemoteCat(uint32_t 
 				SimulateMovement(rtt);
 				break;
 			}
-			else
-			{
-				SimulateMovement(deltaTime);
-				rtt -= deltaTime;
-			}
+			SimulateMovement(deltaTime);
+			rtt -= deltaTime;
 		}
 	}
 }
-

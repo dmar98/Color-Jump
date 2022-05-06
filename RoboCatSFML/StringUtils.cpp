@@ -58,5 +58,3 @@ void StringUtils::Log(const char* inFormat, ...)
 	OutputDebugString(temp);
 	OutputDebugString("\n");
 }
-
-

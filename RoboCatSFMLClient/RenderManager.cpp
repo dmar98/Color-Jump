@@ -22,11 +22,11 @@ void RenderManager::AddComponent(SpriteComponent* inComponent)
 
 void RenderManager::RemoveComponent(SpriteComponent* inComponent)
 {
-	int index = GetComponentIndex(inComponent);
+	const int index = GetComponentIndex(inComponent);
 
 	if (index != -1)
 	{
-		int lastIndex = mComponents.size() - 1;
+		const int lastIndex = mComponents.size() - 1;
 		if (index != lastIndex)
 		{
 			mComponents[index] = mComponents[lastIndex];
@@ -48,11 +48,27 @@ int RenderManager::GetComponentIndex(SpriteComponent* inComponent) const
 	return -1;
 }
 
+void RenderManager::Render(const StateStack* stack)
+{
+	WindowManager::sInstance->clear(sf::Color(100, 149, 237, 255));
+	WindowManager::sInstance->setView(WindowManager::sInstance->getDefaultView());
+
+	// sInstance->RenderComponents();
+
+	stack->Render();
+	// HUD::sInstance->Render();
+
+	//
+	// Present our back buffer to our front buffer
+	//
+	WindowManager::sInstance->display();
+}
+
 
 //this part that renders the world is really a camera-
 //in a more detailed engine, we'd have a list of cameras, and then render manager would
 //render the cameras in order
-void RenderManager::RenderComponents()
+void RenderManager::RenderComponents() const
 {
 	//Get the logical viewport so we can pass this to the SpriteComponents when it's draw time
 	for (SpriteComponent* c : mComponents)
@@ -68,7 +84,7 @@ void RenderManager::Render()
 	//
 	WindowManager::sInstance->clear(sf::Color(100, 149, 237, 255));
 
-	RenderManager::sInstance->RenderComponents();
+	sInstance->RenderComponents();
 
 	HUD::sInstance->Render();
 

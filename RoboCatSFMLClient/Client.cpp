@@ -3,7 +3,7 @@
 bool Client::StaticInit()
 {
 	// Create the Client pointer first because it initializes SDL
-	Client* client = new Client();
+	auto* client = new Client();
 	InputManager::StaticInit();
 
 	WindowManager::StaticInit();
@@ -19,35 +19,29 @@ bool Client::StaticInit()
 	return true;
 }
 
-Client::Client()
+Client::Client() : m_stack(new StateStack())
 {
-	GameObjectRegistry::sInstance->RegisterCreationFunction('RCAT', RoboCatClient::StaticCreate);
-	GameObjectRegistry::sInstance->RegisterCreationFunction('MOUS', MouseClient::StaticCreate);
-	GameObjectRegistry::sInstance->RegisterCreationFunction('YARN', YarnClient::StaticCreate);
-
-	string destination = StringUtils::GetCommandLineArg(1);
-	string name = StringUtils::GetCommandLineArg(2);
-
-	SocketAddressPtr serverAddress = SocketAddressFactory::CreateIPv4FromString(destination);
-
-	NetworkManagerClient::StaticInit(*serverAddress, name);
-
-	//NetworkManagerClient::sInstance->SetSimulatedLatency(0.0f);
+	RegisterStates();
+	m_stack->PushState(StateID::kTitle);
 }
 
-
+void Client::RegisterStates() const
+{
+	m_stack->RegisterState<TitleState>(StateID::kTitle);
+	m_stack->RegisterState<MenuState>(StateID::kMenu);
+}
 
 void Client::DoFrame()
 {
 	InputManager::sInstance->Update();
 
-	Engine::DoFrame();
+	// Engine::DoFrame();
 
-	NetworkManagerClient::sInstance->ProcessIncomingPackets();
+	// NetworkManagerClient::sInstance->ProcessIncomingPackets();
+	m_stack->Update(Timing::sInstance.GetDeltaTime());
+	RenderManager::sInstance->Render(m_stack);
 
-	RenderManager::sInstance->Render();
-
-	NetworkManagerClient::sInstance->SendOutgoingPackets();
+	// NetworkManagerClient::sInstance->SendOutgoingPackets();
 }
 
 void Client::HandleEvent(sf::Event& p_event)
@@ -63,6 +57,8 @@ void Client::HandleEvent(sf::Event& p_event)
 	default:
 		break;
 	}
+
+	m_stack->HandleEvent(p_event);
 }
 
 bool Client::PollEvent(sf::Event& p_event)

@@ -1,17 +1,17 @@
-class Client : public Engine
+#pragma once
+class Client final : public Engine
 {
 public:
-
 	static bool StaticInit();
 
 protected:
-
 	Client();
+	void RegisterStates() const;
 
-	virtual void	DoFrame() override;
-	virtual void	HandleEvent(sf::Event& p_event) override;
-	virtual bool	PollEvent(sf::Event& p_event) override;
+	void DoFrame() override;
+	void HandleEvent(sf::Event& p_event) override;
+	bool PollEvent(sf::Event& p_event) override;
 
 private:
-
+	StateStack* m_stack;
 };
