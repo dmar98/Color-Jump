@@ -19,38 +19,76 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.hpp" />
+    <ClInclude Include="ButtonType.hpp" />
     <ClInclude Include="Client.hpp" />
+    <ClInclude Include="Component.hpp" />
+    <ClInclude Include="Container.hpp" />
     <ClInclude Include="FontManager.hpp" />
     <ClInclude Include="HUD.hpp" />
     <ClInclude Include="InputManager.hpp" />
+    <ClInclude Include="JoinServerState.hpp" />
+    <ClInclude Include="KeyBinding.hpp" />
+    <ClInclude Include="Label.hpp" />
+    <ClInclude Include="LevelLoseState.hpp" />
+    <ClInclude Include="LevelPauseState.hpp" />
+    <ClInclude Include="LevelWinState.hpp" />
+    <ClInclude Include="LobbyState.hpp" />
+    <ClInclude Include="MenuState.hpp" />
     <ClInclude Include="LevelLoaderClient.hpp" />
     <ClInclude Include="MouseClient.hpp" />
+    <ClInclude Include="MultiPlayerGameOverState.hpp" />
+    <ClInclude Include="MultiplayerGameState.hpp" />
     <ClInclude Include="NetworkManagerClient.hpp" />
     <ClInclude Include="PlatformClient.hpp" />
     <ClInclude Include="PlatformPartClient.hpp" />
+    <ClInclude Include="PlayerAction.hpp" />
+    <ClInclude Include="PlayerDataManager.hpp" />
     <ClInclude Include="PlayerSpriteComponent.hpp" />
     <ClInclude Include="RenderManager.hpp" />
     <ClInclude Include="ReplicationManagerClient.hpp" />
     <ClInclude Include="RoboCatClient.hpp" />
     <ClInclude Include="RoboCatClientPCH.hpp" />
+    <ClInclude Include="SettingsState.hpp" />
     <ClInclude Include="SpriteComponent.hpp" />
+    <ClInclude Include="StackManager.hpp" />
+    <ClInclude Include="State.hpp" />
+    <ClInclude Include="StateID.hpp" />
+    <ClInclude Include="StateStack.hpp" />
     <ClInclude Include="TextureManager.hpp" />
     <ClInclude Include="TileClient.hpp" />
     <ClInclude Include="TileFactoryClient.hpp" />
+    <ClInclude Include="TitleState.hpp" />
+    <ClInclude Include="TutorialState.hpp" />
+    <ClInclude Include="Utility.hpp" />
     <ClInclude Include="WindowManager.hpp" />
     <ClInclude Include="YarnClient.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientMain.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Container.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LevelLoaderClient.cpp" />
+    <ClCompile Include="JoinServerState.cpp" />
+    <ClCompile Include="KeyBinding.cpp" />
+    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="LevelLoseState.cpp" />
+    <ClCompile Include="LevelPauseState.cpp" />
+    <ClCompile Include="LevelWinState.cpp" />
+    <ClCompile Include="LobbyState.cpp" />
+    <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="MouseClient.cpp" />
+    <ClCompile Include="MultiplayerGameOverState.cpp" />
+    <ClCompile Include="MultiplayerGameState.cpp" />
     <ClCompile Include="NetworkManagerClient.cpp" />
     <ClCompile Include="PlatformClient.cpp" />
     <ClCompile Include="PlatformPartClient.cpp" />
+    <ClCompile Include="PlayerDataManager.cpp" />
     <ClCompile Include="PlayerSpriteComponent.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="ReplicationManagerClient.cpp" />
@@ -61,8 +99,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SettingsState.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="StackManager.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="TitleState.cpp" />
+    <ClCompile Include="TutorialState.cpp" />
+    <ClCompile Include="Utility.cpp" />
     <ClCompile Include="TileClient.cpp" />
     <ClCompile Include="TileFactoryClient.cpp" />
     <ClCompile Include="WindowManager.cpp" />

@@ -1,6 +1,6 @@
 #include "RoboCatClientPCH.hpp"
 
-std::unique_ptr< TextureManager >		TextureManager::sInstance;
+std::unique_ptr<TextureManager> TextureManager::sInstance;
 
 void TextureManager::StaticInit()
 {
@@ -9,26 +9,24 @@ void TextureManager::StaticInit()
 
 TextureManager::TextureManager()
 {
-	CacheTexture("cat", "../Assets/cat.png");
-	CacheTexture("mouse", "../Assets/mouse.png");
-	CacheTexture("yarn", "../Assets/yarn.png");
+	CacheTexture("background", "../Assets/Media/Textures/TitleScreen.png");
+	CacheTexture("button", "../Assets/Media/Textures/Buttons.png");
 }
 
-TexturePtr	TextureManager::GetTexture(const string& inTextureName)
+TexturePtr TextureManager::GetTexture(const string& inTextureName)
 {
 	return mNameToTextureMap[inTextureName];
 }
 
-bool TextureManager::CacheTexture(string inTextureName, const char* inFileName)
+bool TextureManager::CacheTexture(const string& inName, const char* inFileName)
 {
-	TexturePtr newTexture(new sf::Texture());
+	const TexturePtr newTexture(new sf::Texture());
 	if (!newTexture->loadFromFile(inFileName))
 	{
 		return false;
 	}
 
-	mNameToTextureMap[inTextureName] = newTexture;
+	mNameToTextureMap[inName] = newTexture;
 
 	return true;
-
 }

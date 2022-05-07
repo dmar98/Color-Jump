@@ -9,8 +9,8 @@ namespace
 }
 
 NetworkManagerClient::NetworkManagerClient() :
-	mState(NCS_Uninitialized),
 	mDeliveryNotificationManager(true, false),
+	mState(NCS_Uninitialized),
 	mLastRoundTripTime(0.f)
 {
 }
@@ -33,9 +33,10 @@ void NetworkManagerClient::Init(const SocketAddress& inServerAddress, const stri
 	mAvgRoundTripTime = WeightedTimedMovingAverage(1.f);
 }
 
-void NetworkManagerClient::ProcessPacket(InputMemoryBitStream& inInputStream, const SocketAddress& inFromAddress)
+void NetworkManagerClient::ProcessPacket(InputMemoryBitStream& inInputStream,
+                                         const SocketAddress& inFromAddress)
 {
-	uint32_t	packetType;
+	uint32_t packetType;
 	inInputStream.Read(packetType);
 	switch (packetType)
 	{
@@ -100,7 +101,6 @@ void NetworkManagerClient::HandleWelcomePacket(InputMemoryBitStream& inInputStre
 }
 
 
-
 void NetworkManagerClient::HandleStatePacket(InputMemoryBitStream& inInputStream)
 {
 	if (mState == NCS_Welcomed)
@@ -116,7 +116,8 @@ void NetworkManagerClient::HandleStatePacket(InputMemoryBitStream& inInputStream
 	}
 }
 
-void NetworkManagerClient::ReadLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& inInputStream)
+void NetworkManagerClient::ReadLastMoveProcessedOnServerTimestamp(
+	InputMemoryBitStream& inInputStream)
 {
 	bool isTimestampDirty;
 	inInputStream.Read(isTimestampDirty);
@@ -128,15 +129,15 @@ void NetworkManagerClient::ReadLastMoveProcessedOnServerTimestamp(InputMemoryBit
 		mLastRoundTripTime = rtt;
 		mAvgRoundTripTime.Update(rtt);
 
-		InputManager::sInstance->GetMoveList().RemovedProcessedMoves(mLastMoveProcessedByServerTimestamp);
-
+		InputManager::sInstance->GetMoveList().RemovedProcessedMoves(
+			mLastMoveProcessedByServerTimestamp);
 	}
 }
 
 void NetworkManagerClient::HandleGameObjectState(InputMemoryBitStream& inInputStream)
 {
 	//copy the mNetworkIdToGameObjectMap so that anything that doesn't get an updated can be destroyed...
-	IntToGameObjectMap	objectsToDestroy = m_network_id_to_game_object_map;
+	IntToGameObjectMap objectsToDestroy = m_network_id_to_game_object_map;
 
 	int stateCount;
 	inInputStream.Read(stateCount);
@@ -187,8 +188,6 @@ void NetworkManagerClient::DestroyGameObjectsInMap(const IntToGameObjectMap& inO
 		//and remove from our map!
 		m_network_id_to_game_object_map.erase(pair.first);
 	}
-
-
 }
 
 

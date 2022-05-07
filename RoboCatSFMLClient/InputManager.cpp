@@ -1,6 +1,6 @@
 #include "RoboCatClientPCH.hpp"
 
-unique_ptr< InputManager >	InputManager::sInstance;
+unique_ptr<InputManager> InputManager::sInstance;
 
 namespace
 {
@@ -15,7 +15,7 @@ void InputManager::StaticInit()
 
 namespace
 {
-	inline void UpdateDesireVariableFromKey(EInputAction inInputAction, bool& ioVariable)
+	void UpdateDesireVariableFromKey(EInputAction inInputAction, bool& ioVariable)
 	{
 		if (inInputAction == EIA_Pressed)
 		{
@@ -27,7 +27,7 @@ namespace
 		}
 	}
 
-	inline void UpdateDesireFloatFromKey(EInputAction inInputAction, float& ioVariable)
+	void UpdateDesireFloatFromKey(EInputAction inInputAction, float& ioVariable)
 	{
 		if (inInputAction == EIA_Pressed)
 		{
@@ -61,29 +61,28 @@ void InputManager::HandleInput(EInputAction inInputAction, int inKeyCode)
 		break;
 	case sf::Keyboard::Add:
 	case sf::Keyboard::Equal:
-	{
-		float latency = NetworkManagerClient::sInstance->GetSimulatedLatency();
-		latency += 0.1f;
-		if (latency > 0.5f)
 		{
-			latency = 0.5f;
+			float latency = NetworkManagerClient::sInstance->GetSimulatedLatency();
+			latency += 0.1f;
+			if (latency > 0.5f)
+			{
+				latency = 0.5f;
+			}
+			NetworkManagerClient::sInstance->SetSimulatedLatency(latency);
+			break;
 		}
-		NetworkManagerClient::sInstance->SetSimulatedLatency(latency);
-		break;
-	}
 	case sf::Keyboard::Subtract:
-	{
-		float latency = NetworkManagerClient::sInstance->GetSimulatedLatency();
-		latency -= 0.1f;
-		if (latency < 0.0f)
 		{
-			latency = 0.0f;
+			float latency = NetworkManagerClient::sInstance->GetSimulatedLatency();
+			latency -= 0.1f;
+			if (latency < 0.0f)
+			{
+				latency = 0.0f;
+			}
+			NetworkManagerClient::sInstance->SetSimulatedLatency(latency);
+			break;
 		}
-		NetworkManagerClient::sInstance->SetSimulatedLatency(latency);
-		break;
 	}
-	}
-
 }
 
 
@@ -91,7 +90,6 @@ InputManager::InputManager() :
 	mNextTimeToSampleInput(0.f),
 	mPendingMove(nullptr)
 {
-
 }
 
 const Move& InputManager::SampleInputAsMove()

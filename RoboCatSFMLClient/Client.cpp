@@ -3,53 +3,36 @@
 bool Client::StaticInit()
 {
 	// Create the Client pointer first because it initializes SDL
-	Client* client = new Client();
+	auto* client = new Client();
 	InputManager::StaticInit();
-
+	KeyBinding::StaticInit();
 	WindowManager::StaticInit();
 	FontManager::StaticInit();
 	TextureManager::StaticInit();
 	RenderManager::StaticInit();
-	
-
-	HUD::StaticInit();
+	StackManager::StaticInit();
+	PlayerDataManager::StaticInit();
 
 	s_instance.reset(client);
 
 	return true;
 }
 
-Client::Client()
-{
-	GameObjectRegistry::sInstance->RegisterCreationFunction('RCAT', RoboCatClient::StaticCreate);
-	GameObjectRegistry::sInstance->RegisterCreationFunction('MOUS', MouseClient::StaticCreate);
-	GameObjectRegistry::sInstance->RegisterCreationFunction('YARN', YarnClient::StaticCreate);
-
-	GameObjectRegistry::sInstance->RegisterCreationFunction('NORT', [] { return TileClient::StaticCreate({}, kHorizontalPlatformPart); });
-
-	string destination = StringUtils::GetCommandLineArg(1);
-	string name = StringUtils::GetCommandLineArg(2);
-
-	SocketAddressPtr serverAddress = SocketAddressFactory::CreateIPv4FromString(destination);
-
-	NetworkManagerClient::StaticInit(*serverAddress, name);
-
-	//NetworkManagerClient::sInstance->SetSimulatedLatency(0.0f);
-}
-
-
+Client::Client() = default;
 
 void Client::DoFrame()
 {
 	InputManager::sInstance->Update();
 
-	Engine::DoFrame();
+	StackManager::sInstance->Update(Timing::sInstance.GetDeltaTime());
 
-	NetworkManagerClient::sInstance->ProcessIncomingPackets();
+	if (StackManager::sInstance->IsEmpty())
+	{
+		PlayerDataManager::sInstance->Save();
+		WindowManager::sInstance->close();
+	}
 
 	RenderManager::sInstance->Render();
-
-	NetworkManagerClient::sInstance->SendOutgoingPackets();
 }
 
 void Client::HandleEvent(sf::Event& p_event)
@@ -65,11 +48,16 @@ void Client::HandleEvent(sf::Event& p_event)
 	default:
 		break;
 	}
+
+	StackManager::sInstance->HandleEvent(p_event);
+	if (p_event.type == sf::Event::Closed)
+	{
+		PlayerDataManager::sInstance->Save();
+		WindowManager::sInstance->close();
+	}
 }
 
 bool Client::PollEvent(sf::Event& p_event)
 {
 	return WindowManager::sInstance->pollEvent(p_event);
 }
-
-
