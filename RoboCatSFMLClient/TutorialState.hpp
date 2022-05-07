@@ -3,9 +3,9 @@
 class TutorialState final : public State
 {
 public:
-	explicit TutorialState(StateStack& stack);
+	explicit TutorialState();
 
-	void Draw();
+	void Draw() override;
 	bool Update(float dt) override;
 	bool HandleEvent(const sf::Event& event) override;
 

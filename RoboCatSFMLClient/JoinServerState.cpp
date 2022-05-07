@@ -1,57 +1,62 @@
 #include "RoboCatClientPCH.hpp"
 
-//Written by Paul Bichler (D00242563)
-JoinServerState::JoinServerState(StateStack& stack)
-	: State(stack),
-	m_player_input_ip("127.0.0.1:50005")
+auto JoinServerState::HandleConnectButton() const
 {
-	const TexturePtr texture = TextureManager::sInstance->GetTexture("mouse");
-	m_background_sprite.setTexture(*texture);
-
-	//Ip Input
-	m_change_ip_button = std::make_shared<GUI::Button>();
-	m_change_ip_button->SetText("IP Address");
-	m_change_ip_button->SetToggle(true);
-	m_change_ip_button->setPosition(80.f, 300.f);
-
-	m_current_ip_label = std::make_shared<GUI::Label>(m_player_input_ip, 20);
-	m_current_ip_label->setPosition(310.f, 315.f);
-
-	m_gui_container.Pack(m_change_ip_button);
-	m_gui_container.Pack(m_current_ip_label);
-
-	//Connect Button
-	const auto connect_button = std::make_shared<GUI::Button>();
-	connect_button->setPosition(80.f, 400.f);
-	connect_button->SetText("Connect");
-	connect_button->SetCallback([this]
+	return [this]
 	{
-		RequestStackPop(); //Pop Menu State
-		RequestStackPush(StateID::kLobbyClient);
-	});
+		RequestStackPop();
+		RequestStackPush(StateID::kLobby);
+	};
+}
 
-	m_gui_container.Pack(connect_button);
-
-	//Back Button
-	const auto back_button = std::make_shared<GUI::Button>();
-	back_button->setPosition(80.f, 450.f);
-	back_button->SetText("Back");
-	back_button->SetCallback([this]
+auto JoinServerState::HandleBackButton() const
+{
+	return [this]
 	{
 		RequestStackPop();
 		RequestStackPush(StateID::kMenu);
-	});
-
-	m_gui_container.Pack(back_button);
+	};
 }
 
 //Written by Paul Bichler (D00242563)
+JoinServerState::JoinServerState() : State()
+                                     , m_player_input_ip(PlayerDataManager::sInstance->GetIP())
+{
+	m_background_sprite.setTexture(*TextureManager::sInstance->GetTexture("background"));
+
+	constexpr int button_x = 80;
+	constexpr int button_y = 300;
+	constexpr int label_x = 310;
+	constexpr int label_height = 15;
+	constexpr int space = 55;
+	constexpr int button_height = 50;
+
+
+	Utility::CreateButton(m_change_ip_button, button_x, button_y, "IP Address", true);
+	m_gui_container.Pack(m_change_ip_button);
+
+
+	Utility::CreateLabel(m_current_ip_label, label_x, button_y + label_height, m_player_input_ip,
+	                     20, false);
+	m_gui_container.Pack(m_current_ip_label);
+
+	auto button = std::make_shared<GUI::Button>();
+
+
+	Utility::CreateButton(button, button_x, button_y + button_height + space, "Connect",
+	                      HandleConnectButton());
+	m_gui_container.Pack(button);
+
+	Utility::CreateButton(button, button_x, button_y + button_height + 2 * space, "Back",
+	                      HandleBackButton());
+	m_gui_container.Pack(button);
+}
+
 bool JoinServerState::Update(float dt)
 {
 	return true;
 }
 
-//Written by Paul Bichler (D00242563)
 bool JoinServerState::HandleEvent(const sf::Event& event)
 {
 	if (m_change_ip_button->IsActive())
@@ -61,8 +66,8 @@ bool JoinServerState::HandleEvent(const sf::Event& event)
 		{
 			//Make Ip Address persistent by saving it once input in finished
 			m_change_ip_button->Deactivate();
-			// GetContext().m_player_data_manager->GetData().m_ip_address = m_player_input_ip;
-			// GetContext().m_player_data_manager->Save();
+			PlayerDataManager::sInstance->SetIp(m_player_input_ip);
+			PlayerDataManager::sInstance->Save();
 		}
 		else if (event.type == sf::Event::TextEntered)
 		{
@@ -92,4 +97,6 @@ bool JoinServerState::HandleEvent(const sf::Event& event)
 
 void JoinServerState::Draw()
 {
+	WindowManager::sInstance->draw(m_background_sprite);
+	WindowManager::sInstance->draw(m_gui_container);
 }

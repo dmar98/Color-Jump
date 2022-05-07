@@ -1,7 +1,4 @@
-//I take care of rendering things!
-
-#include "Client.hpp"
-
+#pragma once
 class RenderManager
 {
 public:
@@ -15,7 +12,6 @@ public:
 	void AddComponent(SpriteComponent* inComponent);
 	void RemoveComponent(SpriteComponent* inComponent);
 	int GetComponentIndex(SpriteComponent* inComponent) const;
-	static void Render(const StateStack* stack);
 
 private:
 	RenderManager();

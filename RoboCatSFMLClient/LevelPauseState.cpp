@@ -1,6 +1,6 @@
 #include "RoboCatClientPCH.hpp"
 
-LevelPauseState::LevelPauseState(StateStack& stack): State(stack)
+LevelPauseState::LevelPauseState(): State()
 {
 }
 

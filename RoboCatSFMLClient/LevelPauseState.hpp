@@ -3,7 +3,7 @@
 class LevelPauseState final : public State
 {
 public:
-	explicit LevelPauseState(StateStack& stack);
+	explicit LevelPauseState();
 
 	void Draw() override;
 	bool Update(float dt) override;

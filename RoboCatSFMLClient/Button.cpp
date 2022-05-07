@@ -44,6 +44,11 @@ namespace GUI
 		m_text.setString(text);
 	}
 
+	sf::Text& Button::GetText()
+	{
+		return m_text;
+	}
+
 	void Button::SetToggle(const bool flag)
 	{
 		m_is_toggle = flag;

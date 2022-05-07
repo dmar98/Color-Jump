@@ -1,20 +1,19 @@
 #include "RoboCatClientPCH.hpp"
 
 
-TitleState::TitleState(StateStack& stack)
-	: State(stack)
+TitleState::TitleState()
+	: State()
 	  , m_show_text(true)
 	  , m_text_effect_time(0)
 {
 	const auto texture_ptr = TextureManager::sInstance->GetTexture("background");
 	m_background_sprite.setTexture(*texture_ptr);
 
-	m_text.setFont(*FontManager::sInstance->GetFont("carlito"));
-	m_text.setString("Press any key to continue");
-	const sf::FloatRect bounds = m_text.getLocalBounds();
-	m_text.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
-	                 std::floor(bounds.top + bounds.height / 2.f));
-	m_text.setPosition(WindowManager::sInstance->getView().getSize() / 2.f);
+	const auto position = WindowManager::sInstance->getView().getSize() / 2.f;
+
+	std::shared_ptr<GUI::Label> label;
+	Utility::CreateLabel(label, position.x, position.y, "Press any key to continue", 50);
+	m_container.Pack(label);
 }
 
 bool TitleState::Update(const float dt)
@@ -44,6 +43,6 @@ void TitleState::Draw()
 	WindowManager::sInstance->draw(m_background_sprite);
 	if (m_show_text)
 	{
-		WindowManager::sInstance->draw(m_text);
+		WindowManager::sInstance->draw(m_container);
 	}
 }

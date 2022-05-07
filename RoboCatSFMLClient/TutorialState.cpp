@@ -1,6 +1,6 @@
 #include "RoboCatClientPCH.hpp"
 
-TutorialState::TutorialState(StateStack& stack) : State(stack)
+TutorialState::TutorialState() : State()
 {
 }
 

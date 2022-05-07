@@ -6,18 +6,15 @@ class State
 public:
 	using Ptr = std::unique_ptr<State>;
 
-	explicit State(StateStack& stack);
+	explicit State();
 	virtual ~State();
 	virtual bool Update(float dt) = 0;
 	virtual bool HandleEvent(const sf::Event& event) = 0;
 	virtual void OnStackPopped();
-	void RequestStackPush(StateID state_id) const;
+	static void RequestStackPush(StateID state_id);
 	virtual void Draw() = 0;
 
 protected:
-	void RequestStackPop() const;
-	void RequestStackClear() const;
-
-private:
-	StateStack* m_stack;
+	static void RequestStackPop();
+	static void RequestStackClear();
 };

@@ -23,4 +23,6 @@ public:
 
 	static void CreateLabel(std::shared_ptr<GUI::Label>& label, int x, int y,
 	                        const std::string& label_text, int text_size);
+	static void CreateLabel(std::shared_ptr<GUI::Label>& label, int x, int y, const string& label_text, int text_size,
+	                bool centered);
 };

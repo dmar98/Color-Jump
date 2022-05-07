@@ -2,7 +2,7 @@
 class LevelWinState final : public State
 {
 public:
-	explicit LevelWinState(StateStack& stack);
+	explicit LevelWinState();
 
 	void Draw() override;
 	bool Update(float dt) override;

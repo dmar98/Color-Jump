@@ -19,6 +19,7 @@ void Utility::CreateButton(std::shared_ptr<GUI::Button>& play_button, const int 
 	play_button = std::make_shared<GUI::Button>();
 	play_button->setPosition(static_cast<float>(x), static_cast<float>(y));
 	play_button->SetText(label);
+	CentreOrigin(play_button->GetText());
 	play_button->SetToggle(toggle);
 	if (callback != nullptr)
 	{
@@ -214,6 +215,17 @@ void Utility::CreateButton(std::shared_ptr<GUI::Button>& button, const int x,
 void Utility::CreateLabel(std::shared_ptr<GUI::Label>& label, const int x,
                           const int y, const std::string& label_text, const int text_size)
 {
+	CreateLabel(label, x, y, label_text, text_size, true);
+}
+
+void Utility::CreateLabel(std::shared_ptr<GUI::Label>& label, const int x, const int y,
+                          const string& label_text,
+                          int text_size, const bool centered)
+{
 	label = std::make_shared<GUI::Label>(label_text, text_size);
+	if (centered)
+	{
+		CentreOrigin(label->GetText());
+	}
 	label->setPosition(static_cast<float>(x), static_cast<float>(y));
 }

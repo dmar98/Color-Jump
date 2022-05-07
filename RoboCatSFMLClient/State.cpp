@@ -1,8 +1,6 @@
 #include "RoboCatClientPCH.hpp"
 
-State::State(StateStack& stack) : m_stack(&stack)
-{
-}
+State::State() = default;
 
 State::~State() = default;
 
@@ -13,17 +11,17 @@ void State::OnStackPopped()
 	//(This is needed because certain operations can't be done in the destructor)
 }
 
-void State::RequestStackPush(const StateID state_id) const
+void State::RequestStackPush(const StateID state_id)
 {
-	m_stack->PushState(state_id);
+	StackManager::sInstance->PushState(state_id);
 }
 
-void State::RequestStackPop() const
+void State::RequestStackPop()
 {
-	m_stack->PopState();
+	StackManager::sInstance->PopState();
 }
 
-void State::RequestStackClear() const
+void State::RequestStackClear()
 {
-	m_stack->ClearStates();
+	StackManager::sInstance->ClearStates();
 }

@@ -5,43 +5,34 @@ bool Client::StaticInit()
 	// Create the Client pointer first because it initializes SDL
 	auto* client = new Client();
 	InputManager::StaticInit();
-
+	KeyBinding::StaticInit();
 	WindowManager::StaticInit();
 	FontManager::StaticInit();
 	TextureManager::StaticInit();
 	RenderManager::StaticInit();
-	
-
-	HUD::StaticInit();
+	StackManager::StaticInit();
+	PlayerDataManager::StaticInit();
 
 	s_instance.reset(client);
 
 	return true;
 }
 
-Client::Client() : m_stack(new StateStack())
-{
-	RegisterStates();
-	m_stack->PushState(StateID::kTitle);
-}
-
-void Client::RegisterStates() const
-{
-	m_stack->RegisterState<TitleState>(StateID::kTitle);
-	m_stack->RegisterState<MenuState>(StateID::kMenu);
-}
+Client::Client() = default;
 
 void Client::DoFrame()
 {
 	InputManager::sInstance->Update();
 
-	// Engine::DoFrame();
+	StackManager::sInstance->Update(Timing::sInstance.GetDeltaTime());
 
-	// NetworkManagerClient::sInstance->ProcessIncomingPackets();
-	m_stack->Update(Timing::sInstance.GetDeltaTime());
-	RenderManager::sInstance->Render(m_stack);
+	if (StackManager::sInstance->IsEmpty())
+	{
+		PlayerDataManager::sInstance->Save();
+		WindowManager::sInstance->close();
+	}
 
-	// NetworkManagerClient::sInstance->SendOutgoingPackets();
+	RenderManager::sInstance->Render();
 }
 
 void Client::HandleEvent(sf::Event& p_event)
@@ -58,12 +49,15 @@ void Client::HandleEvent(sf::Event& p_event)
 		break;
 	}
 
-	m_stack->HandleEvent(p_event);
+	StackManager::sInstance->HandleEvent(p_event);
+	if (p_event.type == sf::Event::Closed)
+	{
+		PlayerDataManager::sInstance->Save();
+		WindowManager::sInstance->close();
+	}
 }
 
 bool Client::PollEvent(sf::Event& p_event)
 {
 	return WindowManager::sInstance->pollEvent(p_event);
 }
-
-

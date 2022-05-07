@@ -5,13 +5,14 @@ namespace GUI
 	class Button final : public Component
 	{
 	public:
-		typedef std::shared_ptr<Button> Ptr;
-		typedef std::function<void()> Callback;
+		using Ptr = std::shared_ptr<Button>;
+		using Callback = std::function<void()>;
 
 		void ChangeTextColor(ButtonType button);
 		explicit Button();
 		void SetCallback(Callback callback);
 		void SetText(const std::string& text);
+		sf::Text& GetText();
 		void SetToggle(bool flag);
 
 		bool IsSelectable() const override;
@@ -31,4 +32,3 @@ namespace GUI
 		bool m_is_toggle;
 	};
 }
-

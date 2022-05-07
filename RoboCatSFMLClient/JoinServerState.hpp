@@ -2,7 +2,9 @@
 class JoinServerState final : public State
 {
 public:
-	explicit JoinServerState(StateStack& stack);
+	auto HandleConnectButton() const;
+	auto HandleBackButton() const;
+	explicit JoinServerState();
 	bool Update(float dt) override;
 	bool HandleEvent(const sf::Event& event) override;
 	void Draw() override;

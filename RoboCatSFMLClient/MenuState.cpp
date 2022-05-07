@@ -1,39 +1,38 @@
 #include "RoboCatClientPCH.hpp"
 
-MenuState::MenuState(StateStack& stack): State(stack)
+MenuState::MenuState(): State()
 {
-	const auto texture = TextureManager::sInstance->GetTexture("background");
+	m_background_sprite.setTexture(*TextureManager::sInstance->GetTexture("background"));
 
-	m_background_sprite.setTexture(*texture);
+	std::shared_ptr<GUI::Button> button;
+	constexpr int x = 100;
+	constexpr int y = 350;
+	constexpr int space = 55;
 
-	std::shared_ptr<GUI::Button> join_button;
-	Utility::CreateButton(join_button, 100, 350, "Join", [this]
-		{
-			RequestStackPop();
-			RequestStackPush(StateID::kJoinSettings);
-		});
+	Utility::CreateButton(button, x, y, "Join", [this]
+	{
+		RequestStackPop();
+		RequestStackPush(StateID::kJoinSettings);
+	});
+	m_container.Pack(button);
 
-	std::shared_ptr<GUI::Button> settings_button;
-	Utility::CreateButton(settings_button, 100, 400, "Settings", [this]
-		{
-			RequestStackPush(StateID::kSettings);
-		});
+	Utility::CreateButton(button, x, y + space, "Settings", [this]
+	{
+		RequestStackPush(StateID::kSettings);
+	});
+	m_container.Pack(button);
 
-	std::shared_ptr<GUI::Button> exit_button;
-	Utility::CreateButton(exit_button, 100, 450, "Exit", [this]
-		{
-			RequestStackPop();
-		});
-	
-	m_gui_container.Pack(join_button);
-	m_gui_container.Pack(settings_button);
-	m_gui_container.Pack(exit_button);
+	Utility::CreateButton(button, x, y + space * 2, "Exit", [this]
+	{
+		RequestStackPop();
+	});
+	m_container.Pack(button);
 }
 
 void MenuState::Draw()
 {
 	WindowManager::sInstance->draw(m_background_sprite);
-	WindowManager::sInstance->draw(m_gui_container);
+	WindowManager::sInstance->draw(m_container);
 }
 
 bool MenuState::Update(float dt)
@@ -43,6 +42,6 @@ bool MenuState::Update(float dt)
 
 bool MenuState::HandleEvent(const sf::Event& event)
 {
-	m_gui_container.HandleEvent(event);
+	m_container.HandleEvent(event);
 	return false;
 }

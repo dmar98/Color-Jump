@@ -1,7 +1,7 @@
 #include "RoboCatClientPCH.hpp"
 
 
-LevelWinState::LevelWinState(StateStack& stack): State(stack)
+LevelWinState::LevelWinState(): State()
 {
 }
 

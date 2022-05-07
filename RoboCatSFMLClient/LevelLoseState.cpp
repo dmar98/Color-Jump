@@ -1,6 +1,6 @@
 #include "RoboCatClientPCH.hpp"
 
-LevelLoseState::LevelLoseState(StateStack& stack): State(stack)
+LevelLoseState::LevelLoseState(): State()
 {
 }
 

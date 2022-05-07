@@ -45,7 +45,7 @@ void StateStack::RegisterState(const StateID state_id)
 {
 	m_state_factory[state_id] = [this]
 	{
-		return State::Ptr(new T(*this));
+		return State::Ptr(new T());
 	};
 }
 
@@ -54,6 +54,6 @@ void StateStack::RegisterState(const StateID state_id, Param1 arg1)
 {
 	m_state_factory[state_id] = [this, arg1]
 	{
-		return State::Ptr(new T(*this, arg1));
+		return State::Ptr(new T(arg1));
 	};
 }

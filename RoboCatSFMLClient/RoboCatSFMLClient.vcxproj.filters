@@ -141,6 +141,18 @@
     <ClInclude Include="Utility.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StackManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAction.hpp">
+      <Filter>Header Files\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBinding.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDataManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -243,6 +255,15 @@
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StackManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyBinding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDataManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

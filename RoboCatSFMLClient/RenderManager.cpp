@@ -1,6 +1,6 @@
 #include "RoboCatClientPCH.hpp"
 
-std::unique_ptr< RenderManager >	RenderManager::sInstance;
+std::unique_ptr<RenderManager> RenderManager::sInstance;
 
 RenderManager::RenderManager()
 {
@@ -48,23 +48,6 @@ int RenderManager::GetComponentIndex(SpriteComponent* inComponent) const
 	return -1;
 }
 
-void RenderManager::Render(const StateStack* stack)
-{
-	WindowManager::sInstance->clear(sf::Color(100, 149, 237, 255));
-	WindowManager::sInstance->setView(WindowManager::sInstance->getDefaultView());
-
-	// sInstance->RenderComponents();
-
-	stack->Render();
-	// HUD::sInstance->Render();
-
-	//
-	// Present our back buffer to our front buffer
-	//
-	WindowManager::sInstance->display();
-}
-
-
 //this part that renders the world is really a camera-
 //in a more detailed engine, we'd have a list of cameras, and then render manager would
 //render the cameras in order
@@ -72,25 +55,15 @@ void RenderManager::RenderComponents() const
 {
 	//Get the logical viewport so we can pass this to the SpriteComponents when it's draw time
 	for (SpriteComponent* c : mComponents)
-	{	
-		WindowManager::sInstance->draw(c->GetSprite());	
+	{
+		WindowManager::sInstance->draw(c->GetSprite());
 	}
 }
 
 void RenderManager::Render()
 {
-	//
-	// Clear the back buffer
-	//
 	WindowManager::sInstance->clear(sf::Color(100, 149, 237, 255));
-
-	sInstance->RenderComponents();
-
-	HUD::sInstance->Render();
-
-	//
-	// Present our back buffer to our front buffer
-	//
+	WindowManager::sInstance->setView(WindowManager::sInstance->getDefaultView());
+	StackManager::sInstance->Render();
 	WindowManager::sInstance->display();
-
 }

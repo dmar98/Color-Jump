@@ -9,9 +9,6 @@ void TextureManager::StaticInit()
 
 TextureManager::TextureManager()
 {
-	CacheTexture("cat", "../Assets/cat.png");
-	CacheTexture("mouse", "../Assets/mouse.png");
-	CacheTexture("yarn", "../Assets/yarn.png");
 	CacheTexture("background", "../Assets/Media/Textures/TitleScreen.png");
 	CacheTexture("button", "../Assets/Media/Textures/Buttons.png");
 }

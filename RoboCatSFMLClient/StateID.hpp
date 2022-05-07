@@ -11,10 +11,9 @@ enum class StateID
 	kLevelLose,
 	kNetworkPause,
 	kJoinSettings,
-	kLobbyHost,
-	kLobbyClient,
 	kNetworkGame,
 	kTutorial,
 	kMultiplayerWin,
-	kMultiplayerLose
+	kMultiplayerLose,
+	kLobby
 };

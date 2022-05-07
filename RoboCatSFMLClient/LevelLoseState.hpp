@@ -2,7 +2,7 @@
 class LevelLoseState final : public State
 {
 public:
-	explicit LevelLoseState(StateStack& stack);
+	explicit LevelLoseState();
 	void Draw() override;
 	bool Update(float dt) override;
 	bool HandleEvent(const sf::Event& event) override;

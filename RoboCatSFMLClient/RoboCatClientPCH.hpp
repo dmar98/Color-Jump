@@ -4,12 +4,18 @@
 
 #include "StateID.hpp"
 #include "ButtonType.hpp"
+#include "PlayerAction.hpp"
 
 #include "SFML/Graphics.hpp"
 
 #include <random>
 #include <iostream>
 #include <functional>
+#include <string>
+#include <array>
+#include <fstream>
+#include <sstream>
+
 
 #include "Component.hpp"
 #include "Button.hpp"
@@ -17,6 +23,7 @@
 #include "Container.hpp"
 
 #include "Utility.hpp"
+#include "KeyBinding.hpp"
 
 #include "State.hpp"
 #include "StateStack.hpp"
@@ -28,6 +35,7 @@
 #include "FontManager.hpp"
 #include "RenderManager.hpp"
 #include "WindowManager.hpp"
+#include "StackManager.hpp"
 
 #include "RoboCatClient.hpp"
 #include "MouseClient.hpp"
@@ -47,7 +55,7 @@
 
 #include "HUD.hpp"
 
-
 #include "ReplicationManagerClient.hpp"
 #include "NetworkManagerClient.hpp"
 #include "Client.hpp"
+#include "PlayerDataManager.hpp"

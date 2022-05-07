@@ -28,6 +28,7 @@
     <ClInclude Include="HUD.hpp" />
     <ClInclude Include="InputManager.hpp" />
     <ClInclude Include="JoinServerState.hpp" />
+    <ClInclude Include="KeyBinding.hpp" />
     <ClInclude Include="Label.hpp" />
     <ClInclude Include="LevelLoseState.hpp" />
     <ClInclude Include="LevelPauseState.hpp" />
@@ -38,6 +39,8 @@
     <ClInclude Include="MultiPlayerGameOverState.hpp" />
     <ClInclude Include="MultiplayerGameState.hpp" />
     <ClInclude Include="NetworkManagerClient.hpp" />
+    <ClInclude Include="PlayerAction.hpp" />
+    <ClInclude Include="PlayerDataManager.hpp" />
     <ClInclude Include="PlayerSpriteComponent.hpp" />
     <ClInclude Include="RenderManager.hpp" />
     <ClInclude Include="ReplicationManagerClient.hpp" />
@@ -45,6 +48,7 @@
     <ClInclude Include="RoboCatClientPCH.hpp" />
     <ClInclude Include="SettingsState.hpp" />
     <ClInclude Include="SpriteComponent.hpp" />
+    <ClInclude Include="StackManager.hpp" />
     <ClInclude Include="State.hpp" />
     <ClInclude Include="StateID.hpp" />
     <ClInclude Include="StateStack.hpp" />
@@ -65,6 +69,7 @@
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="JoinServerState.cpp" />
+    <ClCompile Include="KeyBinding.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="LevelLoseState.cpp" />
     <ClCompile Include="LevelPauseState.cpp" />
@@ -75,6 +80,7 @@
     <ClCompile Include="MultiplayerGameOverState.cpp" />
     <ClCompile Include="MultiplayerGameState.cpp" />
     <ClCompile Include="NetworkManagerClient.cpp" />
+    <ClCompile Include="PlayerDataManager.cpp" />
     <ClCompile Include="PlayerSpriteComponent.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="ReplicationManagerClient.cpp" />
@@ -87,6 +93,7 @@
     </ClCompile>
     <ClCompile Include="SettingsState.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="StackManager.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="TextureManager.cpp" />
