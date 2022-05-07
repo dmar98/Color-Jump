@@ -9,7 +9,7 @@ public:
 	~SpriteComponent();
 
 
-	void SetTexture(TexturePtr inTexture);
+	void SetTexture(TexturePtr inTexture, sf::IntRect subRect = {});
 	virtual sf::Sprite& GetSprite();
 	
 

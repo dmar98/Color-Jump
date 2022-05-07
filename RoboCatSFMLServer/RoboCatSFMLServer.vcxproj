@@ -156,19 +156,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ClientProxy.hpp" />
+    <ClInclude Include="LevelLoader.hpp" />
+    <ClInclude Include="LevelLoaderServer.hpp" />
+    <ClInclude Include="LevelManager.hpp" />
     <ClInclude Include="MouseServer.hpp" />
     <ClInclude Include="NetworkManagerServer.hpp" />
+    <ClInclude Include="PlatformServer.hpp" />
+    <ClInclude Include="PlatformPartServer.hpp" />
     <ClInclude Include="ReplicationManagerServer.hpp" />
     <ClInclude Include="ReplicationManagerTransmissionData.hpp" />
     <ClInclude Include="RoboCatServer.hpp" />
     <ClInclude Include="RoboCatServerPCH.hpp" />
     <ClInclude Include="Server.hpp" />
+    <ClInclude Include="TileFactoryServer.hpp" />
+    <ClInclude Include="TileServer.hpp" />
+    <ClInclude Include="TileFactory.hpp" />
     <ClInclude Include="YarnServer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientProxy.cpp" />
+    <ClCompile Include="LevelLoaderServer.cpp" />
     <ClCompile Include="MouseServer.cpp" />
     <ClCompile Include="NetworkManagerServer.cpp" />
+    <ClCompile Include="PlatformServer.cpp" />
+    <ClCompile Include="PlatformPartServer.cpp" />
     <ClCompile Include="ReplicationManagerServer.cpp" />
     <ClCompile Include="ReplicationManagerTransmissionData.cpp" />
     <ClCompile Include="RoboCatServer.cpp" />
@@ -180,6 +191,8 @@
     </ClCompile>
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ServerMain.cpp" />
+    <ClCompile Include="TileFactoryServer.cpp" />
+    <ClCompile Include="TileServer.cpp" />
     <ClCompile Include="YarnServer.cpp" />
   </ItemGroup>
   <ItemGroup>

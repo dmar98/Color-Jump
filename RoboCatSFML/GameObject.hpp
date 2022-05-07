@@ -54,7 +54,7 @@ public:
 	virtual void Read(InputMemoryBitStream& inInputStream) { (void)inInputStream; }
 
 private:
-	Vector3	mLocation;
+	Vector3 mLocation;
 	Vector3	mColor;
 
 	float mCollisionRadius;

@@ -3,8 +3,7 @@
 const float WORLD_HEIGHT = 720.f;
 const float WORLD_WIDTH = 1280.f;
 
-RoboCat::RoboCat() :
-	GameObject(),
+RoboCat::RoboCat() : GameObject(),
 	mMaxRotationSpeed(100.f),
 	mMaxLinearSpeed(5000.f),
 	mVelocity(Vector3::Zero),

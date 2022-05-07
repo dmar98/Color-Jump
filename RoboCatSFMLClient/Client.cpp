@@ -25,6 +25,8 @@ Client::Client()
 	GameObjectRegistry::sInstance->RegisterCreationFunction('MOUS', MouseClient::StaticCreate);
 	GameObjectRegistry::sInstance->RegisterCreationFunction('YARN', YarnClient::StaticCreate);
 
+	GameObjectRegistry::sInstance->RegisterCreationFunction('NORT', [] { return TileClient::StaticCreate({}, kHorizontalPlatformPart); });
+
 	string destination = StringUtils::GetCommandLineArg(1);
 	string name = StringUtils::GetCommandLineArg(2);
 

@@ -35,6 +35,9 @@ const int SOCKET_ERROR = -1;
 #include "deque"
 #include "unordered_set"
 #include "cassert"
+#include "fstream"
+#include "iostream"
+#include "sstream"
 
 using std::shared_ptr;
 using std::unique_ptr;
@@ -91,3 +94,13 @@ class GameObject;
 #include "ReplicationCommand.hpp"
 #include "NetworkManager.hpp"
 #include "Engine.hpp"
+
+#include "Tile.hpp"
+#include "EPlatformType.hpp"
+#include "Platform.hpp"
+#include "PlatformPart.hpp"
+#include "EColorType.hpp"
+#include "ETileType.hpp"
+#include "LevelManager.hpp"
+#include "LevelLoader.hpp"
+#include "TileFactory.hpp"

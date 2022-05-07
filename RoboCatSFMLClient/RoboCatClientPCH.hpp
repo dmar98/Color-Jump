@@ -21,4 +21,7 @@
 #include "NetworkManagerClient.hpp"
 #include "Client.hpp"
 
-
+#include "TileClient.hpp"
+#include "PlatformClient.hpp"
+#include "PlatformPartClient.hpp"
+#include "TileFactoryClient.hpp"

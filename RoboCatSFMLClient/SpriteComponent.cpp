@@ -14,9 +14,13 @@ SpriteComponent::~SpriteComponent()
 	RenderManager::sInstance->RemoveComponent(this);
 }
 
-void SpriteComponent::SetTexture(TexturePtr inTexture)
+void SpriteComponent::SetTexture(TexturePtr inTexture, sf::IntRect subRect)
 {
 	auto tSize = inTexture->getSize();
+
+	if(subRect != sf::IntRect(0,0,0,0))
+		m_sprite.setTextureRect(subRect);
+
 	m_sprite.setTexture(*inTexture);
 	m_sprite.setOrigin(tSize.x / 2, tSize.y / 2);
 	m_sprite.setScale(sf::Vector2f(1.f * mGameObject->GetScale(), 1.f * mGameObject->GetScale()));
