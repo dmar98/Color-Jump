@@ -11,6 +11,8 @@ public:
 	void PopState();
 	void ClearStates();
 	static std::unique_ptr<StackManager> sInstance;
+	State* GetCurrentState() const;
+	
 private:
 	StackManager();
 

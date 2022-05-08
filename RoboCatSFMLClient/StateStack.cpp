@@ -46,6 +46,11 @@ bool StateStack::IsEmpty() const
 	return m_stack.empty();
 }
 
+State* StateStack::Current() const
+{
+	return m_stack.back().get();
+}
+
 void StateStack::Render() const
 {
 	for (const State::Ptr& state : m_stack)

@@ -43,6 +43,11 @@ void StackManager::ClearStates()
 	m_stack.ClearStates();
 }
 
+State* StackManager::GetCurrentState() const
+{
+	return m_stack.Current();
+}
+
 StackManager::StackManager()
 {
 	m_stack.RegisterState<TitleState>(StateID::kTitle);
@@ -53,3 +58,5 @@ StackManager::StackManager()
 
 	m_stack.PushState(StateID::kTitle);
 }
+
+

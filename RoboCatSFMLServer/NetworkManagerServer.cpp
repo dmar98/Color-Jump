@@ -6,12 +6,11 @@ NetworkManagerServer* NetworkManagerServer::sInstance;
 NetworkManagerServer::NetworkManagerServer() :
 	mNewPlayerId(1),
 	mNewNetworkId(1),
-	mTimeBetweenStatePackets(0.033f),
 	mClientDisconnectTimeout(3.f)
 {
 }
 
-bool NetworkManagerServer::StaticInit(uint16_t inPort)
+bool NetworkManagerServer::StaticInit(const uint16_t inPort)
 {
 	sInstance = new NetworkManagerServer();
 	return sInstance->Init(inPort);
@@ -20,21 +19,22 @@ bool NetworkManagerServer::StaticInit(uint16_t inPort)
 void NetworkManagerServer::HandleConnectionReset(const SocketAddress& inFromAddress)
 {
 	//just dc the client right away...
-	auto it = mAddressToClientMap.find(inFromAddress);
+	const auto it = mAddressToClientMap.find(inFromAddress);
 	if (it != mAddressToClientMap.end())
 	{
 		HandleClientDisconnected(it->second);
 	}
 }
 
-void NetworkManagerServer::ProcessPacket(InputMemoryBitStream& inInputStream, const SocketAddress& inFromAddress)
+void NetworkManagerServer::ProcessPacket(InputMemoryBitStream& inInputStream,
+                                         const SocketAddress& inFromAddress)
 {
 	//try to get the client proxy for this address
 	//pass this to the client proxy to process
-	auto it = mAddressToClientMap.find(inFromAddress);
+	const auto it = mAddressToClientMap.find(inFromAddress);
 	if (it == mAddressToClientMap.end())
 	{
-		//didn't find one? it's a new cilent..is the a HELO? if so, create a client proxy...
+		//didn't find one? it's a new client..is the a HELO? if so, create a client proxy...
 		HandlePacketFromNewClient(inInputStream, inFromAddress);
 	}
 	else
@@ -44,51 +44,105 @@ void NetworkManagerServer::ProcessPacket(InputMemoryBitStream& inInputStream, co
 }
 
 
-void NetworkManagerServer::ProcessPacket(ClientProxyPtr inClientProxy, InputMemoryBitStream& inInputStream)
+void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
+                                         InputMemoryBitStream& inInputStream)
 {
 	//remember we got a packet so we know not to disconnect for a bit
 	inClientProxy->UpdateLastPacketTime();
 
-	uint32_t	packetType;
+	PacketType packetType;
 	inInputStream.Read(packetType);
 	switch (packetType)
 	{
-	case kHelloCC:
+	case PacketType::PT_Hello:
 		//need to resend welcome. to be extra safe we should check the name is the one we expect from this address,
 		//otherwise something weird is going on...
 		SendWelcomePacket(inClientProxy);
 		break;
-	case kInputCC:
+	case PacketType::PT_Welcomed:
 		if (inClientProxy->GetDeliveryNotificationManager().ReadAndProcessState(inInputStream))
 		{
 			HandleInputPacket(inClientProxy, inInputStream);
 		}
 		break;
+	case PacketType::PT_Quit:
+		HandleClientDisconnected(inClientProxy);
+		break;
+	case PacketType::PT_Platform: break;
+	case PacketType::PT_Player: break;
+	case PacketType::PT_Goal: break;
+	case PacketType::PT_Team_Changed:
+		HandleTeamChange(inClientProxy, inInputStream);
+		break;
+	case PacketType::PT_Start_Game: break;
+	case PacketType::PT_Start_Game_Countdown: break;
+	case PacketType::PT_Team_Death: break;
+	case PacketType::PT_Checkpoint: break;
 	default:
-		LOG("Unknown packet type received from %s", inClientProxy->GetSocketAddress().ToString().c_str());
+		LOG("Unknown packet type received from %s",
+		    inClientProxy->GetSocketAddress().ToString().c_str())
 		break;
 	}
 }
 
+auto NetworkManagerServer::NotifyOfTeamChange(const ClientProxyPtr& inClientProxy)
+{
+	OutputMemoryBitStream packet;
 
-void NetworkManagerServer::HandlePacketFromNewClient(InputMemoryBitStream& inInputStream, const SocketAddress& inFromAddress)
+	packet.Write(PacketType::PT_Team_Changed);
+	packet.Write(inClientProxy->GetPlayerId());
+	packet.Write(inClientProxy->GetTeamID());
+	packet.Write(inClientProxy->GetColor());
+
+	LOG("Server Team Change, client '%s' as player %d changed to team %d", inClientProxy->GetName().c_str(),
+		inClientProxy->GetPlayerId(), inClientProxy->GetTeamID())
+
+		SendPacket(packet, inClientProxy->GetSocketAddress());
+}
+
+void NetworkManagerServer::HandleTeamChange(const ClientProxyPtr& inClientProxy,
+                                            InputMemoryBitStream& in_input_stream)
+{
+	int id;
+	int team_id;
+	int color;
+	in_input_stream.Read(id);
+	in_input_stream.Read(team_id);
+	in_input_stream.Read(color, 1);
+
+	inClientProxy->SetTeamID(team_id);
+	inClientProxy->SetColor(color);
+
+	auto p_function = [this](const ClientProxyPtr& client_proxy)
+	{
+		NotifyOfTeamChange(client_proxy);
+	};
+
+	SendPacketToAll(p_function);
+}
+
+
+
+void NetworkManagerServer::HandlePacketFromNewClient(InputMemoryBitStream& inInputStream,
+                                                     const SocketAddress& inFromAddress)
 {
 	//read the beginning- is it a hello?
-	uint32_t	packetType;
+	PacketType packetType;
 	inInputStream.Read(packetType);
-	if (packetType == kHelloCC)
+	if (packetType == PacketType::PT_Hello)
 	{
 		//read the name
 		string name;
 		inInputStream.Read(name);
-		ClientProxyPtr newClientProxy = std::make_shared< ClientProxy >(inFromAddress, name, mNewPlayerId++);
+		const auto newClientProxy = std::make_shared<ClientProxy>(
+			inFromAddress, name, mNewPlayerId++);
 		mAddressToClientMap[inFromAddress] = newClientProxy;
 		mPlayerIdToClientMap[newClientProxy->GetPlayerId()] = newClientProxy;
 
 		//tell the server about this client, spawn a cat, etc...
 		//if we had a generic message system, this would be a good use for it...
 		//instead we'll just tell the server directly
-		static_cast<Server*> (Engine::s_instance.get())->HandleNewClient(newClientProxy);
+		dynamic_cast<Server*>(Engine::s_instance.get())->HandleNewClient(newClientProxy);
 
 		//and welcome the client...
 		SendWelcomePacket(newClientProxy);
@@ -96,33 +150,48 @@ void NetworkManagerServer::HandlePacketFromNewClient(InputMemoryBitStream& inInp
 		//and now init the replication manager with everything we know about!
 		for (const auto& pair : m_network_id_to_game_object_map)
 		{
-			newClientProxy->GetReplicationManagerServer().ReplicateCreate(pair.first, pair.second->GetAllStateMask());
+			newClientProxy->GetReplicationManagerServer().ReplicateCreate(
+				pair.first, pair.second->GetAllStateMask());
 		}
 	}
 	else
 	{
 		//bad incoming packet from unknown client- we're under attack!!
-		LOG("Bad incoming packet from unknown client at socket %s", inFromAddress.ToString().c_str());
+		LOG("Bad incoming packet from unknown client at socket %s",
+		    inFromAddress.ToString().c_str())
 	}
 }
 
-void NetworkManagerServer::SendWelcomePacket(ClientProxyPtr inClientProxy)
+void NetworkManagerServer::SendWelcomePacket(const ClientProxyPtr& inClientProxy)
 {
-	OutputMemoryBitStream welcomePacket;
+	OutputMemoryBitStream packet;
 
-	welcomePacket.Write(kWelcomeCC);
-	welcomePacket.Write(inClientProxy->GetPlayerId());
+	packet.Write(PacketType::PT_Welcomed);
+	packet.Write(inClientProxy->GetPlayerId());
 
-	LOG("Server Welcoming, new client '%s' as player %d", inClientProxy->GetName().c_str(), inClientProxy->GetPlayerId());
+	LOG("Server Welcoming, new client '%s' as player %d", inClientProxy->GetName().c_str(),
+	    inClientProxy->GetPlayerId())
 
-	SendPacket(welcomePacket, inClientProxy->GetSocketAddress());
+	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
 
-void NetworkManagerServer::RespawnCats()
+void NetworkManagerServer::SendPacketToAll(
+	const std::function<void(const ClientProxyPtr& inClientProxy)>& p_function) const
 {
-	for (auto it = mAddressToClientMap.begin(), end = mAddressToClientMap.end(); it != end; ++it)
+	for (const auto& it : mAddressToClientMap)
 	{
-		ClientProxyPtr clientProxy = it->second;
+		//process any timed out packets while we're going through the list
+		it.second->GetDeliveryNotificationManager().ProcessTimedOutPackets();
+
+		p_function(it.second);
+	}
+}
+
+void NetworkManagerServer::RespawnCats() const
+{
+	for (const auto& it : mAddressToClientMap)
+	{
+		const ClientProxyPtr clientProxy = it.second;
 
 		clientProxy->RespawnCatIfNecessary();
 	}
@@ -131,9 +200,9 @@ void NetworkManagerServer::RespawnCats()
 void NetworkManagerServer::SendOutgoingPackets()
 {
 	//let's send a client a state packet whenever their move has come in...
-	for (auto it = mAddressToClientMap.begin(), end = mAddressToClientMap.end(); it != end; ++it)
+	for (const auto& it : mAddressToClientMap)
 	{
-		ClientProxyPtr clientProxy = it->second;
+		const ClientProxyPtr clientProxy = it.second;
 		//process any timed out packets while we're going through the list
 		clientProxy->GetDeliveryNotificationManager().ProcessTimedOutPackets();
 
@@ -146,22 +215,22 @@ void NetworkManagerServer::SendOutgoingPackets()
 
 void NetworkManagerServer::UpdateAllClients()
 {
-	for (auto it = mAddressToClientMap.begin(), end = mAddressToClientMap.end(); it != end; ++it)
+	for (const auto& it : mAddressToClientMap)
 	{
-		//process any timed out packets while we're going throug hthe list
-		it->second->GetDeliveryNotificationManager().ProcessTimedOutPackets();
+		//process any timed out packets while we're going through the list
+		it.second->GetDeliveryNotificationManager().ProcessTimedOutPackets();
 
-		SendStatePacketToClient(it->second);
+		SendStatePacketToClient(it.second);
 	}
 }
 
-void NetworkManagerServer::SendStatePacketToClient(ClientProxyPtr inClientProxy)
+void NetworkManagerServer::SendStatePacketToClient(const ClientProxyPtr& inClientProxy)
 {
 	//build state packet
-	OutputMemoryBitStream	statePacket;
+	OutputMemoryBitStream statePacket;
 
 	//it's state!
-	statePacket.Write(kStateCC);
+	statePacket.Write(PacketType::PT_State);
 
 	InFlightPacket* ifp = inClientProxy->GetDeliveryNotificationManager().WriteState(statePacket);
 
@@ -169,18 +238,19 @@ void NetworkManagerServer::SendStatePacketToClient(ClientProxyPtr inClientProxy)
 
 	AddScoreBoardStateToPacket(statePacket);
 
-	ReplicationManagerTransmissionData* rmtd = new ReplicationManagerTransmissionData(&inClientProxy->GetReplicationManagerServer());
+	const auto rmtd = new ReplicationManagerTransmissionData(
+		&inClientProxy->GetReplicationManagerServer());
 	inClientProxy->GetReplicationManagerServer().Write(statePacket, rmtd);
 	ifp->SetTransmissionData('RPLM', TransmissionDataPtr(rmtd));
 
 	SendPacket(statePacket, inClientProxy->GetSocketAddress());
-
 }
 
-void NetworkManagerServer::WriteLastMoveTimestampIfDirty(OutputMemoryBitStream& inOutputStream, ClientProxyPtr inClientProxy)
+void NetworkManagerServer::WriteLastMoveTimestampIfDirty(OutputMemoryBitStream& inOutputStream,
+                                                         const ClientProxyPtr& inClientProxy)
 {
 	//first, dirty?
-	bool isTimestampDirty = inClientProxy->IsLastMoveTimestampDirty();
+	const bool isTimestampDirty = inClientProxy->IsLastMoveTimestampDirty();
 	inOutputStream.Write(isTimestampDirty);
 	if (isTimestampDirty)
 	{
@@ -197,7 +267,7 @@ void NetworkManagerServer::AddWorldStateToPacket(OutputMemoryBitStream& inOutput
 	//now start writing objects- do we need to remember how many there are? we can check first...
 	inOutputStream.Write(gameObjects.size());
 
-	for (GameObjectPtr gameObject : gameObjects)
+	for (const GameObjectPtr& gameObject : gameObjects)
 	{
 		inOutputStream.Write(gameObject->GetNetworkId());
 		inOutputStream.Write(gameObject->GetClassId());
@@ -213,17 +283,17 @@ void NetworkManagerServer::AddScoreBoardStateToPacket(OutputMemoryBitStream& inO
 
 int NetworkManagerServer::GetNewNetworkId()
 {
-	int toRet = mNewNetworkId++;
+	const int toRet = mNewNetworkId++;
 	if (mNewNetworkId < toRet)
 	{
-		LOG("Network ID Wrap Around!!! You've been playing way too long...", 0);
+		LOG("Network ID Wrap Around!!! You've been playing way too long...", 0)
 	}
 
 	return toRet;
-
 }
 
-void NetworkManagerServer::HandleInputPacket(ClientProxyPtr inClientProxy, InputMemoryBitStream& inInputStream)
+void NetworkManagerServer::HandleInputPacket(const ClientProxyPtr& inClientProxy,
+                                             InputMemoryBitStream& inInputStream)
 {
 	uint32_t moveCount = 0;
 	Move move;
@@ -241,9 +311,9 @@ void NetworkManagerServer::HandleInputPacket(ClientProxyPtr inClientProxy, Input
 	}
 }
 
-ClientProxyPtr NetworkManagerServer::GetClientProxy(int inPlayerId) const
+ClientProxyPtr NetworkManagerServer::GetClientProxy(const int inPlayerId) const
 {
-	auto it = mPlayerIdToClientMap.find(inPlayerId);
+	const auto it = mPlayerIdToClientMap.find(inPlayerId);
 	if (it != mPlayerIdToClientMap.end())
 	{
 		return it->second;
@@ -254,9 +324,10 @@ ClientProxyPtr NetworkManagerServer::GetClientProxy(int inPlayerId) const
 
 void NetworkManagerServer::CheckForDisconnects()
 {
-	vector< ClientProxyPtr > clientsToDC;
+	vector<ClientProxyPtr> clientsToDC;
 
-	float minAllowedLastPacketFromClientTime = Timing::sInstance.GetTimef() - mClientDisconnectTimeout;
+	const float minAllowedLastPacketFromClientTime = Timing::sInstance.GetTimef() -
+		mClientDisconnectTimeout;
 	for (const auto& pair : mAddressToClientMap)
 	{
 		if (pair.second->GetLastPacketFromClientTime() < minAllowedLastPacketFromClientTime)
@@ -266,17 +337,17 @@ void NetworkManagerServer::CheckForDisconnects()
 		}
 	}
 
-	for (ClientProxyPtr client : clientsToDC)
+	for (const ClientProxyPtr& client : clientsToDC)
 	{
 		HandleClientDisconnected(client);
 	}
 }
 
-void NetworkManagerServer::HandleClientDisconnected(ClientProxyPtr inClientProxy)
+void NetworkManagerServer::HandleClientDisconnected(const ClientProxyPtr& inClientProxy)
 {
 	mPlayerIdToClientMap.erase(inClientProxy->GetPlayerId());
 	mAddressToClientMap.erase(inClientProxy->GetSocketAddress());
-	static_cast<Server*> (Engine::s_instance.get())->HandleLostClient(inClientProxy);
+	dynamic_cast<Server*>(Engine::s_instance.get())->HandleLostClient(inClientProxy);
 
 	//was that the last client? if so, bye!
 	if (mAddressToClientMap.empty())
@@ -285,10 +356,10 @@ void NetworkManagerServer::HandleClientDisconnected(ClientProxyPtr inClientProxy
 	}
 }
 
-void NetworkManagerServer::RegisterGameObject(GameObjectPtr inGameObject)
+void NetworkManagerServer::RegisterGameObject(const GameObjectPtr& inGameObject)
 {
 	//assign network id
-	int newNetworkId = GetNewNetworkId();
+	const int newNetworkId = GetNewNetworkId();
 	inGameObject->SetNetworkId(newNetworkId);
 
 	//add mapping from network id to game object
@@ -297,25 +368,25 @@ void NetworkManagerServer::RegisterGameObject(GameObjectPtr inGameObject)
 	//tell all client proxies this is new...
 	for (const auto& pair : mAddressToClientMap)
 	{
-		pair.second->GetReplicationManagerServer().ReplicateCreate(newNetworkId, inGameObject->GetAllStateMask());
+		pair.second->GetReplicationManagerServer().ReplicateCreate(
+			newNetworkId, inGameObject->GetAllStateMask());
 	}
 }
 
 
-void NetworkManagerServer::UnregisterGameObject(GameObject* inGameObject)
+void NetworkManagerServer::UnregisterGameObject(const GameObject* inGameObject)
 {
-	int networkId = inGameObject->GetNetworkId();
+	const int networkId = inGameObject->GetNetworkId();
 	m_network_id_to_game_object_map.erase(networkId);
 
 	//tell all client proxies to STOP replicating!
-	//tell all client proxies this is new...
 	for (const auto& pair : mAddressToClientMap)
 	{
 		pair.second->GetReplicationManagerServer().ReplicateDestroy(networkId);
 	}
 }
 
-void NetworkManagerServer::SetStateDirty(int inNetworkId, uint32_t inDirtyState)
+void NetworkManagerServer::SetStateDirty(const int inNetworkId, const uint32_t inDirtyState) const
 {
 	//tell everybody this is dirty
 	for (const auto& pair : mAddressToClientMap)
@@ -323,5 +394,3 @@ void NetworkManagerServer::SetStateDirty(int inNetworkId, uint32_t inDirtyState)
 		pair.second->GetReplicationManagerServer().SetStateDirty(inNetworkId, inDirtyState);
 	}
 }
-
-

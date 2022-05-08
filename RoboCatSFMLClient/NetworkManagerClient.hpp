@@ -1,62 +1,122 @@
-class NetworkManagerClient : public NetworkManager
+#pragma once
+class NetworkManagerClient final : public NetworkManager
 {
-	enum NetworkClientState
+public:
+	enum class NetworkClientState
 	{
 		NCS_Uninitialized,
-		NCS_SayingHello,
-		NCS_Welcomed
+		NCS_Saying_Hello,
+		NCS_Position_Update,
+		NCS_Quit,
+		NCS_Platform_Update,
+		NCS_Player_Update,
+		NCS_Goal_Reached,
+		NCS_Team_Change,
+		NCS_Start_Network_Game,
+		NCS_Team_Death,
+		NCS_Checkpoint_Reached,
+		NCS_Welcomed,
+		NCS_State,
+		NCS_Size
 	};
-
-public:
 	static NetworkManagerClient* sInstance;
 
-	static	void	StaticInit(const SocketAddress& inServerAddress, const string& inName);
+	static void StaticInit(const SocketAddress& inServerAddress, const string& inName);
 
-	void	SendOutgoingPackets();
 
-	virtual void	ProcessPacket(InputMemoryBitStream& inInputStream, const SocketAddress& inFromAddress) override;
+	void SendOutgoingPackets();
+	
+	void ProcessPacket(InputMemoryBitStream& inInputStream,
+	                   const SocketAddress& inFromAddress) override;
 
-	const	WeightedTimedMovingAverage& GetAvgRoundTripTime()	const { return mAvgRoundTripTime; }
-	float									GetRoundTripTime()		const { return mAvgRoundTripTime.GetValue(); }
-	int		GetPlayerId()											const { return mPlayerId; }
-	float	GetLastMoveProcessedByServerTimestamp()					const { return mLastMoveProcessedByServerTimestamp; }
+	const WeightedTimedMovingAverage& GetAvgRoundTripTime() const
+	{
+		return mAvgRoundTripTime;
+	}
+
+	float GetRoundTripTime() const
+	{
+		return mAvgRoundTripTime.GetValue();
+	}
+
+	int GetPlayerId() const
+	{
+		return mPlayerId;
+	}
+
+	float GetLastMoveProcessedByServerTimestamp() const
+	{
+		return mLastMoveProcessedByServerTimestamp;
+	}
+
+	void SetTeamID(int team_id);
+	void SetName(const string& name);
+	void SetPlayerColor(int i);
+
 private:
 	NetworkManagerClient();
 	void Init(const SocketAddress& inServerAddress, const string& inName);
 
-	void	UpdateSayingHello();
-	void	SendHelloPacket();
+	void UpdateInfoPacket(NetworkClientState p_enum, const std::function<void()>& p_function);
 
-	void	HandleWelcomePacket(InputMemoryBitStream& inInputStream);
-	void	HandleStatePacket(InputMemoryBitStream& inInputStream);
-	void	ReadLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& inInputStream);
+	void UpdateSayingHello();
+	void UpdateSendingQuit();
+	void UpdateSendingPlatform();
+	void UpdateSendingPlayer();
+	void UpdateSendingGoalReached();
+	void UpdateSendingTeamChange();
+	void UpdateSendingStartGame();
+	void UpdateSendingTeamDeath();
+	void UpdateSendingCheckpoint();
 
-	void	HandleGameObjectState(InputMemoryBitStream& inInputStream);
-	void	HandleScoreBoardState(InputMemoryBitStream& inInputStream);
+	void SendHelloPacket();
+	void SendQuitPacket();
+	void SendPlatformPacket();
+	void SendPlayerPacket();
+	void SendGoalPacket();
+	void SendTeamChangePacket();
+	void SendStartGamePacket();
+	void SendTeamDeathPacket();
+	void SendCheckpointPacket();
 
-	void	UpdateSendingInputPacket();
-	void	SendInputPacket();
+	void HandleWelcomePacket(InputMemoryBitStream& inInputStream);
+	void HandleStatePacket(InputMemoryBitStream& inInputStream);
+	void ReadLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& inInputStream);
+	
+	void HandleTeamChange(InputMemoryBitStream& inInputStream);
 
-	void	DestroyGameObjectsInMap(const IntToGameObjectMap& inObjectsToDestroy);
+	void HandleGameObjectState(InputMemoryBitStream& inInputStream);
+	static void HandleScoreBoardState(InputMemoryBitStream& inInputStream);
 
+	void UpdateInfoUpdatePacket(NetworkClientState p_enum, const std::function<void()>& p_function);
+
+	void UpdateSendingInputPacket();
+	void UpdateSendingPosition();
+
+	void SendInputPacket();
+	void SendPositionPacket();
+
+	void DestroyGameObjectsInMap(const IntToGameObjectMap& inObjectsToDestroy);
 
 	DeliveryNotificationManager mDeliveryNotificationManager;
-	ReplicationManagerClient	mReplicationManagerClient;
 
-	SocketAddress		mServerAddress;
+	SocketAddress mServerAddress;
 
-	NetworkClientState	mState;
+	NetworkClientState mState = NetworkClientState::NCS_Uninitialized;
+	
 
-	float				mTimeOfLastHello;
-	float				mTimeOfLastInputPacket;
+public:
+	void SetState(NetworkClientState m_state);
+private:
+	std::map<NetworkClientState, float> mTimeOfLastPacket;
 
-	string				mName;
-	int					mPlayerId;
+	string mName;
+	int mPlayerId{};
+	int mTeamID{};
+	int mColor;
 
-	float				mLastMoveProcessedByServerTimestamp;
+	float mLastMoveProcessedByServerTimestamp{};
 
-	WeightedTimedMovingAverage	mAvgRoundTripTime;
-	float						mLastRoundTripTime;
-
+	WeightedTimedMovingAverage mAvgRoundTripTime;
+	float mLastRoundTripTime;
 };
-

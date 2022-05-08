@@ -25,6 +25,12 @@ const int SOCKET_ERROR = -1;
 #endif
 
 
+#include <random>
+#include <iostream>
+#include <functional>
+#include <string>
+#include <array>
+
 #include "memory"
 
 #include "vector"

@@ -8,15 +8,6 @@
 
 #include "SFML/Graphics.hpp"
 
-#include <random>
-#include <iostream>
-#include <functional>
-#include <string>
-#include <array>
-#include <fstream>
-#include <sstream>
-
-
 #include "Component.hpp"
 #include "Button.hpp"
 #include "Label.hpp"

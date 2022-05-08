@@ -22,6 +22,7 @@ public:
 	void ClearStates();
 
 	bool IsEmpty() const;
+	State* Current() const;
 	void Render() const;
 
 private:
