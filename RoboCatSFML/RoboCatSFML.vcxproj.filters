@@ -28,6 +28,12 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{a622e6cc-7195-4ab7-9935-bee1c9ec43bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Player">
+      <UniqueIdentifier>{e6c42ae3-3db6-44a2-9230-0523f08d3168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{178f2af7-25e1-4036-bf5a-937838debe54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.hpp">
@@ -153,6 +159,9 @@
     <ClInclude Include="TileFactory.hpp">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Character.hpp">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -247,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="TileFactory.cpp">
       <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Source Files\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

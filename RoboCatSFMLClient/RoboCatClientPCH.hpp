@@ -60,7 +60,11 @@
 #include "Client.hpp"
 #include "PlayerDataManager.hpp"
 
+#include "WorldClient.hpp"
+#include "LevelLoaderClient.hpp"
 #include "TileClient.hpp"
 #include "PlatformClient.hpp"
 #include "PlatformPartClient.hpp"
 #include "TileFactoryClient.hpp"
+#include "CharacterClient.hpp"
+#include "RayGround.hpp"

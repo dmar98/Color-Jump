@@ -1,4 +1,5 @@
 #pragma once
+
 using TexturePtr = shared_ptr<sf::Texture>;
 using FontPtr = shared_ptr<sf::Font>;
 
@@ -8,7 +9,6 @@ public:
 	explicit SpriteComponent(GameObject* inGameObject);
 	virtual ~SpriteComponent();
 
-	void DrawSelf() const;
 	void SetTexture(TexturePtr inTexture, sf::IntRect subRect = {});
 	virtual sf::Sprite& GetSprite();
 

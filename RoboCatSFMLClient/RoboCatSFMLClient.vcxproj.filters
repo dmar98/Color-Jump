@@ -46,6 +46,12 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{f7d8a1ed-e6bb-463c-b35b-20d93669edb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Player">
+      <UniqueIdentifier>{df162c19-a88e-408e-8f81-97e9aafad729}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{25d0783a-4f44-4d25-8a40-152dd2267500}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.hpp">
@@ -180,6 +186,15 @@
     <ClInclude Include="LevelLoaderClient.hpp">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="WorldClient.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayGround.hpp">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterClient.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -307,6 +322,15 @@
     </ClCompile>
     <ClCompile Include="LevelLoaderClient.cpp">
       <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayGround.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterClient.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

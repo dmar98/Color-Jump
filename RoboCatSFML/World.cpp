@@ -2,13 +2,18 @@
 
 std::unique_ptr<World> World::sInstance;
 
-void World::StaticInit()
+void World::StaticInit(World* world_instance)
 {
-	sInstance.reset(new World());
+	sInstance.reset(world_instance);
 }
 
 World::World()
 {
+}
+
+void World::HandleCollisions()
+{
+
 }
 
 
@@ -39,10 +44,9 @@ void World::RemoveGameObject(GameObjectPtr inGameObject)
 void World::Update()
 {
 	//update all game objects- sometimes they want to die, so we need to tread carefully...
-
 	for (int i = 0, c = mGameObjects.size(); i < c; ++i)
 	{
-		GameObjectPtr go = mGameObjects[i];
+		const GameObjectPtr go = mGameObjects[i];
 
 
 		if (!go->DoesWantToDie())
@@ -61,14 +65,17 @@ void World::Update()
 	}
 }
 
-void World::LoadLevel()
-{
-	LevelManager::sInstance->SetIsMultiplayer(true);
-	LevelManager::LevelData level_data = LevelManager::sInstance->GetCurrentLevelData();
-	LevelLoader::sInstance->LoadLevel(level_data);
-}
-
-void World::DisposeLevel()
+void World::RemoveAllGameObjects()
 {
 	mGameObjects.clear();
+}
+
+void World::SetWorldBounds(sf::FloatRect world_bounds)
+{
+	m_world_bounds = world_bounds;
+}
+
+sf::FloatRect& World::GetWorldBounds()
+{
+	return m_world_bounds;
 }

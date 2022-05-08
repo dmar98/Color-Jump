@@ -1,7 +1,5 @@
 #include "RoboCatClientPCH.hpp"
 
-#include "LevelLoaderClient.hpp"
-
 bool Client::StaticInit()
 {
 	// Create the Client pointer first because it initializes SDL
@@ -14,7 +12,7 @@ bool Client::StaticInit()
 	RenderManager::StaticInit();
 	StackManager::StaticInit();
 	PlayerDataManager::StaticInit();
-	LevelLoader::StaticInit(new LevelLoaderClient());
+	World::StaticInit(new WorldClient());
 
 	s_instance.reset(client);
 

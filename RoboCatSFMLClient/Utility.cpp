@@ -177,6 +177,12 @@ sf::Vector2f Utility::UnitVector(const sf::Vector2f vector)
 	return vector / Length(vector);
 }
 
+Vector3 Utility::UnitVector(Vector3 vector)
+{
+	assert(vector.Length() != 0.f);
+	return vector / vector.Length();
+}
+
 float Utility::Length(const sf::Vector2f vector)
 {
 	return sqrtf(powf(vector.x, 2) + powf(vector.y, 2));

@@ -1,14 +1,16 @@
 #include "RoboCatClientPCH.hpp"
 
 MultiplayerGameState::MultiplayerGameState()
+	:m_world_client(dynamic_cast<WorldClient*>(World::sInstance.get()))
 {
 	//Load the Level
-	World::sInstance->LoadLevel();
+	m_world_client->LoadLevel();
+	m_world_client->SetCamera(WindowManager::sInstance->getDefaultView());
 }
 
-MultiplayerGameState::~MultiplayerGameState()
+void MultiplayerGameState::OnStackPopped()
 {
-	World::sInstance->DisposeLevel();
+	m_world_client->RemoveAllGameObjects();
 }
 
 bool MultiplayerGameState::Update(float dt)
@@ -23,7 +25,7 @@ bool MultiplayerGameState::HandleEvent(const sf::Event& event)
 
 void MultiplayerGameState::Draw()
 {
-	//Draw the Level
-	RenderManager::sInstance->RenderComponents();
+	//Draw the Level using the worlds camera (the client player's camera)
+	RenderManager::sInstance->RenderComponents(m_world_client->GetCamera());
 }
 

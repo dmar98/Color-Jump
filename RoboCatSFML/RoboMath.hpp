@@ -45,6 +45,12 @@ public:
 		return Vector3(inVec.mX * inScalar, inVec.mY * inScalar, inVec.mZ * inScalar);
 	}
 
+	// Scalar multiply
+	friend Vector3 operator/(const Vector3& inVec, float inScalar)
+	{
+		return Vector3(inVec.mX / inScalar, inVec.mY / inScalar, inVec.mZ / inScalar);
+	}
+
 	friend Vector3 operator*(const Vector3& inVec, float inScalar)
 	{
 		return Vector3(inVec.mX * inScalar, inVec.mY * inScalar, inVec.mZ * inScalar);

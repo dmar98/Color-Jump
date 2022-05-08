@@ -4,9 +4,9 @@ public:
 
 	static bool StaticInit();
 
-	virtual void DoFrame() override;
+	void DoFrame() override;
 
-	virtual int Run();
+	int Run() override;
 
 	void HandleNewClient(ClientProxyPtr inClientProxy);
 	void HandleLostClient(ClientProxyPtr inClientProxy);

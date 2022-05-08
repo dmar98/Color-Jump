@@ -28,11 +28,8 @@ struct LevelInfo
 class LevelLoader
 {
 public:
-	static std::unique_ptr<LevelLoader> sInstance;
-	static void StaticInit(LevelLoader* level_loader);
-
-	virtual ~LevelLoader() = default;
 	LevelLoader();
+	virtual ~LevelLoader() = default;
 	virtual LevelInfo LoadLevel(LevelManager::LevelData& level_data);
 
 private:

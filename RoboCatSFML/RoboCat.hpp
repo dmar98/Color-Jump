@@ -28,13 +28,13 @@ public:
 	void ProcessCollisions();
 	void ProcessCollisionsWithScreenWalls();
 
-	void		SetPlayerId(uint32_t inPlayerId) { mPlayerId = inPlayerId; }
-	uint32_t	GetPlayerId()						const { return mPlayerId; }
+	void SetPlayerId(uint32_t inPlayerId) { mPlayerId = inPlayerId; }
+	uint32_t GetPlayerId() const { return mPlayerId; }
 
-	void			SetVelocity(const Vector3& inVelocity) { mVelocity = inVelocity; }
-	const Vector3& GetVelocity()						const { return mVelocity; }
+	void SetVelocity(const Vector3& inVelocity) { mVelocity = inVelocity; }
+	const Vector3& GetVelocity() const { return mVelocity; }
 
-	virtual uint32_t	Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const override;
+	uint32_t Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const override;
 
 protected:
 	RoboCat();

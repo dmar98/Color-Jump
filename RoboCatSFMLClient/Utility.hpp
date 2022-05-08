@@ -12,6 +12,7 @@ public:
 	static std::string ToString(sf::Keyboard::Key key);
 	static double ToRadians(int degrees);
 	static sf::Vector2f UnitVector(sf::Vector2f vector);
+	static Vector3 UnitVector(Vector3 vector);
 	static float Length(sf::Vector2f vector);
 	static float ToDegrees(float angle);
 	static void Debug(const std::string& message);

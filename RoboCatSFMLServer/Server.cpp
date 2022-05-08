@@ -1,8 +1,4 @@
-
 #include "RoboCatServerPCH.hpp"
-#include <iostream>
-
-
 
 //uncomment this when you begin working on the server
 
@@ -10,7 +6,7 @@ bool Server::StaticInit()
 {
 	s_instance.reset(new Server());
 
-	LevelLoader::StaticInit(new LevelLoaderServer());
+	World::StaticInit(new WorldServer());
 
 	return true;
 }

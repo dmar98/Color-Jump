@@ -51,8 +51,10 @@ int RenderManager::GetComponentIndex(SpriteComponent* inComponent) const
 //this part that renders the world is really a camera-
 //in a more detailed engine, we'd have a list of cameras, and then render manager would
 //render the cameras in order
-void RenderManager::RenderComponents() const
+void RenderManager::RenderComponents(const sf::View& camera) const
 {
+	WindowManager::sInstance->setView(camera);
+
 	//Get the logical viewport so we can pass this to the SpriteComponents when it's draw time
 	for (SpriteComponent* c : mComponents)
 	{
@@ -63,7 +65,6 @@ void RenderManager::RenderComponents() const
 void RenderManager::Render()
 {
 	WindowManager::sInstance->clear(sf::Color(100, 149, 237, 255));
-	WindowManager::sInstance->setView(WindowManager::sInstance->getDefaultView());
 	StackManager::sInstance->Render();
 	WindowManager::sInstance->display();
 

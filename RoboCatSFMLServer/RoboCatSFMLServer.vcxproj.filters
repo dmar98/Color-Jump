@@ -75,6 +75,9 @@
     <ClInclude Include="LevelLoaderServer.hpp">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="WorldServer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientProxy.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="LevelLoaderServer.cpp">
       <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldServer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

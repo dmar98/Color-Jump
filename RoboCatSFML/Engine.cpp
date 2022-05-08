@@ -9,7 +9,6 @@ Engine::Engine() : m_should_keep_running(true)
 	srand(static_cast<uint32_t>(time(nullptr)));
 
 	GameObjectRegistry::StaticInit();
-	World::StaticInit();
 	ScoreBoardManager::StaticInit();
 	LevelManager::StaticInit();
 }

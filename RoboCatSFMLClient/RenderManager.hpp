@@ -6,7 +6,7 @@ public:
 	static std::unique_ptr<RenderManager> sInstance;
 
 	static void Render();
-	void RenderComponents() const;
+	void RenderComponents(const sf::View& camera) const;
 
 	//vert inefficient method of tracking scene graph...
 	void AddComponent(SpriteComponent* inComponent);

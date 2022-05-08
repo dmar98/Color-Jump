@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Button.hpp" />
     <ClInclude Include="ButtonType.hpp" />
+    <ClInclude Include="CharacterClient.hpp" />
     <ClInclude Include="Client.hpp" />
     <ClInclude Include="Component.hpp" />
     <ClInclude Include="Container.hpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="PlayerAction.hpp" />
     <ClInclude Include="PlayerDataManager.hpp" />
     <ClInclude Include="PlayerSpriteComponent.hpp" />
+    <ClInclude Include="RayGround.hpp" />
     <ClInclude Include="RenderManager.hpp" />
     <ClInclude Include="ReplicationManagerClient.hpp" />
     <ClInclude Include="RoboCatClient.hpp" />
@@ -62,10 +64,12 @@
     <ClInclude Include="TutorialState.hpp" />
     <ClInclude Include="Utility.hpp" />
     <ClInclude Include="WindowManager.hpp" />
+    <ClInclude Include="WorldClient.hpp" />
     <ClInclude Include="YarnClient.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CharacterClient.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientMain.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -90,6 +94,7 @@
     <ClCompile Include="PlatformPartClient.cpp" />
     <ClCompile Include="PlayerDataManager.cpp" />
     <ClCompile Include="PlayerSpriteComponent.cpp" />
+    <ClCompile Include="RayGround.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="ReplicationManagerClient.cpp" />
     <ClCompile Include="RoboCatClient.cpp" />
@@ -111,6 +116,7 @@
     <ClCompile Include="TileClient.cpp" />
     <ClCompile Include="TileFactoryClient.cpp" />
     <ClCompile Include="WindowManager.cpp" />
+    <ClCompile Include="WorldClient.cpp" />
     <ClCompile Include="YarnClient.cpp" />
   </ItemGroup>
   <ItemGroup>

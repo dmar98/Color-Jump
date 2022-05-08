@@ -1,15 +1,6 @@
 //Written by Paul Bichler (D00242563)
 #include "RoboCatPCH.hpp"
 
-#include "LevelManager.hpp"
-
-std::unique_ptr<LevelLoader> LevelLoader::sInstance;
-
-void LevelLoader::StaticInit(LevelLoader* level_loader)
-{
-	sInstance.reset(level_loader);
-}
-
 //Written by Paul Bichler (D00242563)
 //The LevelLoader class is used to construct levels based on the level data CSV files in the LevelManager.
 //It uses the TileFactory class to create instances for the tile types specified in the level files.
