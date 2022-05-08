@@ -1,22 +1,30 @@
 //Written by Paul Bichler (D00242563)
 #include "RoboCatPCH.hpp"
 
+#include "LevelManager.hpp"
+
+std::unique_ptr<LevelLoader> LevelLoader::sInstance;
+
+void LevelLoader::StaticInit(LevelLoader* level_loader)
+{
+	sInstance.reset(level_loader);
+}
+
 //Written by Paul Bichler (D00242563)
 //The LevelLoader class is used to construct levels based on the level data CSV files in the LevelManager.
 //It uses the TileFactory class to create instances for the tile types specified in the level files.
-LevelLoader::LevelLoader(LevelManager::LevelData& level_data)
-	: m_level_data(level_data)
-{
-}
+LevelLoader::LevelLoader() = default;
 
 //Written by Paul Bichler (D00242563)
 //This method constructs the level from the CSV files in the level data member field.
 //Return a LevelInfo struct that holds all of the information about the level.
-LevelInfo LevelLoader::LoadLevel()
+LevelInfo LevelLoader::LoadLevel(LevelManager::LevelData& level_data)
 {
+	m_tile_size = level_data.m_tile_size;
+
 	LevelInfo level_info;
-	LoadLevelLayer(m_level_data.m_background_layer_path, level_info, false);
-	LoadLevelLayer(m_level_data.m_platform_layer_path, level_info, true);
+	LoadLevelLayer(level_data.m_background_layer_path, level_info, false);
+	LoadLevelLayer(level_data.m_platform_layer_path, level_info, true);
 
 	return level_info;
 }
@@ -84,17 +92,14 @@ void LevelLoader::LoadLevelLayer(const std::string& csv_path, LevelInfo& level_i
 				//Tiles that don't correspond to one of the types above have no special functionality,
 				//which is why they are created here with the base "Tile" class.
 				CreateTile(tile_type, spawn_pos, is_collider_layer);
-				/*GameObjectPtr tilePtr(m_tile_factory.CreateTile(tile_type, spawn_pos, is_collider_layer));
-				if (tilePtr.get() != nullptr)
-					World::sInstance->AddGameObject(tilePtr);*/
 			}
 			}
 
-			spawn_pos.mX += m_level_data.m_tile_size.x;
+			spawn_pos.mX += m_tile_size.x;
 		}
 
 		spawn_pos.mX = 0.f;
-		spawn_pos.mY += m_level_data.m_tile_size.y;
+		spawn_pos.mY += m_tile_size.y;
 	}
 }
 
@@ -141,8 +146,6 @@ void LevelLoader::AddPlatformParts(Platform* platform, const int row, const int 
 	const auto type = static_cast<ETileType>(m_level_data_vector[row][col]);
 
 	CreatePlatformPart(tile_type, spawn_pos, platform);
-	/*std::shared_ptr<PlatformPart> platform_part(m_tile_factory.CreatePlatformPart(tile_type, spawn_pos, platform));
-	World::sInstance->AddGameObject(platform_part);*/
 
 	//Is vertical platform
 	for (size_t i = row + 1; i < m_level_data_vector.size(); i++)
@@ -151,10 +154,8 @@ void LevelLoader::AddPlatformParts(Platform* platform, const int row, const int 
 		if (static_cast<ETileType>(m_level_data_vector[i][col]) != type)
 			break;
 
-		spawn_pos.mY += m_level_data.m_tile_size.y;
+		spawn_pos.mY += m_tile_size.y;
 		CreatePlatformPart(tile_type, spawn_pos, platform);
-		/*std::shared_ptr<PlatformPart> vertical_platform_part(m_tile_factory.CreatePlatformPart(tile_type, spawn_pos, platform));
-		World::sInstance->AddGameObject(vertical_platform_part);*/
 
 		//Set the tile type to -1 to prevent duplication
 		m_level_data_vector[i][col] = -1;
@@ -167,10 +168,8 @@ void LevelLoader::AddPlatformParts(Platform* platform, const int row, const int 
 		if (static_cast<ETileType>(m_level_data_vector[row][j]) != type)
 			break;
 
-		spawn_pos.mX += m_level_data.m_tile_size.x;
+		spawn_pos.mX += m_tile_size.x;
 		CreatePlatformPart(tile_type, spawn_pos, platform);
-		/*std::shared_ptr<PlatformPart> horizontal_platform_part(m_tile_factory.CreatePlatformPart(tile_type, spawn_pos, platform));
-		World::sInstance->AddGameObject(horizontal_platform_part);*/
 
 		//Set the tile type to -1 to prevent duplication
 		m_level_data_vector[row][j] = -1;

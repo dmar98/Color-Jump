@@ -1,9 +1,14 @@
 #include "RoboCatServerPCH.hpp"
 
-LevelLoaderServer::LevelLoaderServer(LevelManager::LevelData& level_data)
-	: LevelLoader(level_data)
+LevelLoaderServer::LevelLoaderServer()
+	: LevelLoader()
+{
+}
+
+LevelInfo LevelLoaderServer::LoadLevel(LevelManager::LevelData& level_data)
 {
 	m_tile_factory = std::make_unique<TileFactoryServer>(level_data.m_tile_size);
+	return LevelLoader::LoadLevel(level_data);
 }
 
 void LevelLoaderServer::CreateTile(ETileType tile_type, Vector3 spawn_pos, bool has_collider)

@@ -1,8 +1,7 @@
 //Written by Paul Bichler (D00242563)
 #include "RoboCatPCH.hpp"
 
-//Written by Paul Bichler (D00242563)
-TileFactory::TileFactory(const sf::Vector2u tile_size)
+TileFactory::TileFactory(sf::Vector2u tile_size)
 	: m_tile_size(tile_size)
 {
 }

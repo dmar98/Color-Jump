@@ -1,7 +1,7 @@
 #include "RoboCatServerPCH.hpp"
 #include "TileFactoryServer.hpp"
 
-TileFactoryServer::TileFactoryServer(sf::Vector2u tile_size) : TileFactory(tile_size)
+TileFactoryServer::TileFactoryServer(const sf::Vector2u tile_size) : TileFactory(tile_size)
 {
 }
 

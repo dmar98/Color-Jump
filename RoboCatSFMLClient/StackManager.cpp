@@ -50,6 +50,7 @@ StackManager::StackManager()
 	m_stack.RegisterState<JoinServerState>(StateID::kJoinSettings);
 	m_stack.RegisterState<SettingsState>(StateID::kSettings);
 	m_stack.RegisterState<LobbyState>(StateID::kLobby);
+	m_stack.RegisterState<MultiplayerGameState>(StateID::kNetworkGame);
 
 	m_stack.PushState(StateID::kTitle);
 }

@@ -28,9 +28,12 @@ struct LevelInfo
 class LevelLoader
 {
 public:
+	static std::unique_ptr<LevelLoader> sInstance;
+	static void StaticInit(LevelLoader* level_loader);
+
 	virtual ~LevelLoader() = default;
-	LevelLoader(LevelManager::LevelData& level_data);
-	LevelInfo LoadLevel();
+	LevelLoader();
+	virtual LevelInfo LoadLevel(LevelManager::LevelData& level_data);
 
 private:
 	virtual void LoadLevelLayer(const std::string& csv_path, LevelInfo& level_info, bool is_collider_layer);
@@ -43,7 +46,7 @@ protected:
 	virtual void CreatePlatformPart(ETileType tile_type, Vector3 spawn_pos, Platform* platform) = 0;
 
 protected:
-	LevelManager::LevelData& m_level_data;
+	sf::Vector2u m_tile_size;
 	std::unique_ptr<TileFactory> m_tile_factory;
 	std::vector<std::vector<int>> m_level_data_vector;
 };

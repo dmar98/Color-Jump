@@ -6,9 +6,9 @@ class SpriteComponent
 {
 public:
 	explicit SpriteComponent(GameObject* inGameObject);
-	~SpriteComponent();
+	virtual ~SpriteComponent();
 
-
+	void DrawSelf() const;
 	void SetTexture(TexturePtr inTexture, sf::IntRect subRect = {});
 	virtual sf::Sprite& GetSprite();
 

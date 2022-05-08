@@ -2,7 +2,7 @@
 #include "RoboCatClientPCH.hpp"
 
 //Written by Paul Bichler (D00242563)
-TileFactoryClient::TileFactoryClient(const sf::Vector2u tile_size)
+TileFactoryClient::TileFactoryClient(sf::Vector2u tile_size)
 	: TileFactory(tile_size)
 {
 	m_tile_map_columns = TextureManager::sInstance->GetTexture("LevelTileSet")->getSize().x / tile_size.x;

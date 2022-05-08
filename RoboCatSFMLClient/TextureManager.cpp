@@ -11,6 +11,7 @@ TextureManager::TextureManager()
 {
 	CacheTexture("background", "../Assets/Media/Textures/TitleScreen.png");
 	CacheTexture("button", "../Assets/Media/Textures/Buttons.png");
+	CacheTexture("LevelTileSet", "../Assets/Media/Textures/spritesheet.png");
 }
 
 TexturePtr TextureManager::GetTexture(const string& inTextureName)

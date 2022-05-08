@@ -1,8 +1,6 @@
 #include "RoboCatPCH.hpp"
 
-
-
-std::unique_ptr< World > World::sInstance;
+std::unique_ptr<World> World::sInstance;
 
 void World::StaticInit()
 {
@@ -51,6 +49,7 @@ void World::Update()
 		{
 			go->Update();
 		}
+
 		//you might suddenly want to die after your update, so check again
 		if (go->DoesWantToDie())
 		{
@@ -60,4 +59,16 @@ void World::Update()
 			--c;
 		}
 	}
+}
+
+void World::LoadLevel()
+{
+	LevelManager::sInstance->SetIsMultiplayer(true);
+	LevelManager::LevelData level_data = LevelManager::sInstance->GetCurrentLevelData();
+	LevelLoader::sInstance->LoadLevel(level_data);
+}
+
+void World::DisposeLevel()
+{
+	mGameObjects.clear();
 }

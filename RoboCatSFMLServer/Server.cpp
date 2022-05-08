@@ -10,6 +10,8 @@ bool Server::StaticInit()
 {
 	s_instance.reset(new Server());
 
+	LevelLoader::StaticInit(new LevelLoaderServer());
+
 	return true;
 }
 
