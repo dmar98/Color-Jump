@@ -2,16 +2,19 @@
 
 namespace
 {
-	const float kRespawnDelay = 3.f;
+	constexpr float kRespawnDelay = 3.f;
 }
 
-ClientProxy::ClientProxy(const SocketAddress& inSocketAddress, const string& inName, int inPlayerId) : 
-	mSocketAddress(inSocketAddress),
-	mName(inName),
-	mPlayerId(inPlayerId),
+ClientProxy::ClientProxy(const SocketAddress& inSocketAddress, string inName,
+                         const int inPlayerId) :
 	mDeliveryNotificationManager(false, true),
-	mIsLastMoveTimestampDirty(false),
-	mTimeToRespawn(0.f)
+	mSocketAddress(inSocketAddress),
+	mName(std::move(inName)),
+	mPlayerId(inPlayerId),
+	mTeamId(0),
+	mColor(0),
+	mTimeToRespawn(0.f),
+	mIsLastMoveTimestampDirty(false)
 {
 	UpdateLastPacketTime();
 }
@@ -22,18 +25,26 @@ void ClientProxy::UpdateLastPacketTime()
 	mLastPacketFromClientTime = Timing::sInstance.GetTimef();
 }
 
-void	ClientProxy::HandleCatDied()
+void ClientProxy::HandleCatDied()
 {
 	mTimeToRespawn = Timing::sInstance.GetFrameStartTime() + kRespawnDelay;
 }
 
-void	ClientProxy::RespawnCatIfNecessary()
+void ClientProxy::RespawnCatIfNecessary()
 {
 	if (mTimeToRespawn != 0.f && Timing::sInstance.GetFrameStartTime() > mTimeToRespawn)
 	{
-		static_cast<Server*> (Engine::s_instance.get())->SpawnCatForPlayer(mPlayerId);
+		dynamic_cast<Server*>(Engine::s_instance.get())->SpawnCatForPlayer(mPlayerId);
 		mTimeToRespawn = 0.f;
 	}
 }
 
+void ClientProxy::SetTeamID(const int team_id)
+{
+	mTeamId = team_id;
+}
 
+void ClientProxy::SetColor(const int color)
+{
+	mColor = color;
+}
