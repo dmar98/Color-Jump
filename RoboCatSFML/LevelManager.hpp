@@ -6,6 +6,9 @@
 class LevelManager
 {
 public:
+	static void StaticInit();
+	static std::unique_ptr<LevelManager> sInstance;
+
 	struct LevelData
 	{
 		LevelData(std::string platform_layer_path, std::string background_layer_path, sf::Vector2u tile_size);

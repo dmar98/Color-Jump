@@ -2,7 +2,9 @@
 class LevelLoaderClient : public LevelLoader
 {
 public:
-	LevelLoaderClient(LevelManager::LevelData& level_data);
+	LevelLoaderClient() = default;
+
+	LevelInfo LoadLevel(LevelManager::LevelData& level_data) override;
 
 protected:
 	void CreateTile(ETileType tile_type, Vector3 spawn_pos, bool has_collider) override;

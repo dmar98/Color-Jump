@@ -54,9 +54,6 @@
     <ClInclude Include="ReplicationManagerTransmissionData.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LevelLoader.hpp">
-      <Filter>Header Files\Level</Filter>
-    </ClInclude>
     <ClInclude Include="LevelManager.hpp">
       <Filter>Header Files\Level</Filter>
     </ClInclude>

@@ -66,4 +66,5 @@ void RenderManager::Render()
 	WindowManager::sInstance->setView(WindowManager::sInstance->getDefaultView());
 	StackManager::sInstance->Render();
 	WindowManager::sInstance->display();
+
 }

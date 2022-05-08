@@ -14,6 +14,11 @@ SpriteComponent::~SpriteComponent()
 	RenderManager::sInstance->RemoveComponent(this);
 }
 
+void SpriteComponent::DrawSelf() const
+{
+	WindowManager::sInstance->draw(m_sprite);
+}
+
 void SpriteComponent::SetTexture(TexturePtr inTexture, sf::IntRect subRect)
 {
 	auto tSize = inTexture->getSize();
