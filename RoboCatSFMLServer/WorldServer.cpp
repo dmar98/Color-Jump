@@ -18,3 +18,56 @@ void WorldServer::LoadLevel()
 	LevelLoaderServer loader{};
 	m_level_info = loader.LoadLevel(level_data);
 }
+
+Character* WorldServer::AddCharacterWithColor(sf::Int8 identifier, EColorType color, sf::IntRect rect, Vector3 spawn_pos)
+{
+	const auto player = new CharacterServer(color, rect);
+	const GameObjectPtr player_ptr = NetworkManagerServer::sInstance->RegisterAndReturn(player);
+
+	player->SetLocation(spawn_pos);
+	player->SetIdentifier(identifier);
+
+	m_players.emplace_back(player);
+	AddGameObject(player_ptr);
+	return player;
+}
+
+Character* WorldServer::AddCharacter(sf::Int8 identifier, sf::Int8 color, bool is_client_player)
+{
+	if (color == 1)
+	{
+		return AddCharacterWithColor(identifier, EColorType::kRed, m_level_info.m_red_player_rect,
+			m_level_info.m_red_player_spawn_pos);
+	}
+
+	return AddCharacterWithColor(identifier, EColorType::kBlue, m_level_info.m_blue_player_rect,
+	                             m_level_info.m_blue_player_spawn_pos);
+
+}
+
+Character* WorldServer::AddGhostCharacterWithColor(sf::Int8 identifier, EColorType color, const sf::IntRect& int_rect,
+	Vector3 spawn_pos)
+{
+	auto ghost_char = new CharacterServer(color, int_rect);
+	const GameObjectPtr ghost_ptr = NetworkManagerServer::sInstance->RegisterAndReturn(ghost_char);
+	ghost_char->SetLocation(spawn_pos);
+	ghost_char->SetIdentifier(identifier);
+
+	m_players.emplace_back(ghost_char);
+	AddGameObject(ghost_ptr);
+	return ghost_char;
+}
+
+Character* WorldServer::AddGhostCharacter(sf::Int8 identifier, sf::Int8 color)
+{
+	if (color == 1)
+	{
+		return AddGhostCharacterWithColor(identifier, EColorType::kRed,
+			m_level_info.m_red_player_rect,
+			m_level_info.m_red_player_spawn_pos);
+	}
+
+	return AddGhostCharacterWithColor(identifier, EColorType::kBlue,
+		m_level_info.m_blue_player_rect,
+		m_level_info.m_blue_player_spawn_pos);
+}

@@ -1,23 +1,20 @@
 #pragma once
+#include "DrawableComponent.hpp"
 
 using TexturePtr = shared_ptr<sf::Texture>;
 using FontPtr = shared_ptr<sf::Font>;
 
-class SpriteComponent
+class SpriteComponent : DrawableComponent
 {
 public:
 	explicit SpriteComponent(GameObject* inGameObject);
-	virtual ~SpriteComponent();
 
 	void SetTexture(TexturePtr inTexture, sf::IntRect subRect = {});
 	virtual sf::Sprite& GetSprite();
-
+	void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 protected:
 	sf::Sprite m_sprite;
-
-	//don't want circular reference...
-	GameObject* mGameObject;
 };
 
 using SpriteComponentPtr = shared_ptr<SpriteComponent>;

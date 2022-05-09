@@ -15,10 +15,10 @@ CharacterClient::CharacterClient(EColorType type, const sf::IntRect& texture_rec
 	m_jump_smoke_animation.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
 	                                 std::floor(bounds.top + 50.f));*/
 
-	m_name_text.setFont(*FontManager::sInstance->GetFont("carlito"));
-	m_name_text.setCharacterSize(15.f);
-	m_team_id_text.setFont(*FontManager::sInstance->GetFont("carlito"));
-	m_team_id_text.setCharacterSize(15.f);
+	m_name_text->SetFont(*FontManager::sInstance->GetFont("carlito"));
+	m_name_text->SetFontSize(15.f);
+	m_team_id_text->SetFont(*FontManager::sInstance->GetFont("carlito"));
+	m_team_id_text->SetFontSize(15.f);
 }
 
 void CharacterClient::InitRay()
@@ -49,41 +49,41 @@ void CharacterClient::Read(InputMemoryBitStream& inInputStream)
 	Character::Read(inInputStream);
 }
 
-void CharacterClient::SetColor()
+void CharacterClient::SetTransparent() const
 {
 	const auto& color = mSpriteComponent->GetSprite().getColor();
 	const auto& white = sf::Color(255, 255, 255, 50);
 	mSpriteComponent->GetSprite().setColor(sf::Color(color.r, color.g, color.b, 50));
-	m_name_text.setFillColor(white);
-	m_team_id_text.setFillColor(white);
+	m_name_text->SetColor(white);
+	m_team_id_text->SetColor(white);
 }
 
-void CharacterClient::ResetColor()
+void CharacterClient::SetOpaque() const
 {
 	const auto& color = mSpriteComponent->GetSprite().getColor();
 	const auto& white = sf::Color(255, 255, 255, 255);
 	mSpriteComponent->GetSprite().setColor(sf::Color(color.r, color.g, color.b, 255));
-	m_name_text.setFillColor(white);
-	m_team_id_text.setFillColor(white);
+	m_name_text->SetColor(white);
+	m_team_id_text->SetColor(white);
 }
 
 void CharacterClient::SetTeamIdentifier(sf::Int8 identifier)
 {
 	Character::SetTeamIdentifier(identifier);
 
-	m_team_id_text.setString(std::to_string(identifier));
-	const sf::FloatRect bounds = m_team_id_text.getLocalBounds();
-	m_team_id_text.setOrigin(std::floor(bounds.left + bounds.width / 2.f), mSpriteComponent->GetSprite().getOrigin().y - 5.0f);
+	m_team_id_text->SetText(std::to_string(identifier));
+	const sf::FloatRect bounds = m_team_id_text->GetText().getLocalBounds();
+	m_team_id_text->GetText().setOrigin(std::floor(bounds.left + bounds.width / 2.f), mSpriteComponent->GetSprite().getOrigin().y - 5.0f);
 }
 
 void CharacterClient::SetName(const std::string& name)
 {
 	Character::SetName(name);
 
+	m_name_text->SetText(name);
 	const auto sprite = mSpriteComponent->GetSprite();
-	m_name_text.setString(name);
-	const sf::FloatRect bounds = m_name_text.getLocalBounds();
-	m_name_text.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
+	const sf::FloatRect bounds = m_name_text->GetText().getLocalBounds();
+	m_name_text->GetText().setOrigin(std::floor(bounds.left + bounds.width / 2.f),
 						  sprite.getOrigin().y + sprite.getTextureRect().height / 2.f - 5.f);
 }
 

@@ -9,15 +9,15 @@ public:
 	void RenderComponents(const sf::View& camera) const;
 
 	//vert inefficient method of tracking scene graph...
-	void AddComponent(SpriteComponent* inComponent);
-	void RemoveComponent(SpriteComponent* inComponent);
-	int GetComponentIndex(SpriteComponent* inComponent) const;
+	void AddComponent(DrawableComponent* inComponent);
+	void RemoveComponent(DrawableComponent* inComponent);
+	int GetComponentIndex(DrawableComponent* inComponent) const;
 
 private:
 	RenderManager();
 
 	//this can't be only place that holds on to component- it has to live inside a GameObject in the world
-	vector<SpriteComponent*> mComponents;
+	vector<DrawableComponent*> mComponents;
 
 	sf::View view;
 };

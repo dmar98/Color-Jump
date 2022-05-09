@@ -59,3 +59,6 @@
 #include "TileFactoryClient.hpp"
 #include "CharacterClient.hpp"
 #include "RayGround.hpp"
+#include "DrawableComponent.hpp"
+#include "TextComponent.hpp"
+#include "GhostCharacterClient.hpp"

@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CharacterServer.hpp" />
     <ClInclude Include="ClientProxy.hpp" />
     <ClInclude Include="LevelLoaderServer.hpp" />
     <ClInclude Include="LevelManager.hpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="YarnServer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CharacterServer.cpp" />
     <ClCompile Include="ClientProxy.cpp" />
     <ClCompile Include="LevelLoaderServer.cpp" />
     <ClCompile Include="MouseServer.cpp" />

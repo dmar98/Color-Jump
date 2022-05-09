@@ -111,3 +111,4 @@ class GameObject;
 #include "LevelLoader.hpp"
 #include "TileFactory.hpp"
 #include "Character.hpp"
+#include "LeaderBoardManager.hpp"

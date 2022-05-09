@@ -1,12 +1,6 @@
 #pragma once
-
-//#include "Animation.hpp"
 #include "EColorType.hpp"
-//#include "Entity.hpp"
-
-#include <SFML/System/Time.hpp>
 #include "Platform.hpp"
-//#include "RayGround.hpp"
 
 class RayGround;
 
@@ -58,13 +52,9 @@ protected:
 	Character(EColorType type, const sf::IntRect& texture_rect);
 	void Update() override;
 
-private:
-	/*void DrawCurrent(sf::RenderTarget&, sf::RenderStates states) const override;*/
-
 protected:
 	EColorType m_type;
 	std::string m_name;
-	/*sf::Sprite m_sprite;*/
 	bool m_grounded;
 	Platform* m_current_platform;
 	RayGround* m_ray{};

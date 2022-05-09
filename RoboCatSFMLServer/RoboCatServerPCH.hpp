@@ -18,4 +18,5 @@
 #include "TileServer.hpp"
 #include "LevelLoaderServer.hpp"
 #include "TileFactoryServer.hpp"
+#include "CharacterServer.hpp"
 

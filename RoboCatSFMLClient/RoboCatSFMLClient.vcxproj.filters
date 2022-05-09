@@ -195,6 +195,15 @@
     <ClInclude Include="CharacterClient.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DrawableComponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextComponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostCharacterClient.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -330,6 +339,15 @@
       <Filter>Source Files\Player</Filter>
     </ClCompile>
     <ClCompile Include="CharacterClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawableComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostCharacterClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

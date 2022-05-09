@@ -1,17 +1,9 @@
 #include "RoboCatClientPCH.hpp"
 
 
-SpriteComponent::SpriteComponent(GameObject* inGameObject) :
-	mGameObject(inGameObject)
+SpriteComponent::SpriteComponent(GameObject* inGameObject)
+	: DrawableComponent(inGameObject)
 {
-	//and add yourself to the rendermanager...
-	RenderManager::sInstance->AddComponent(this);
-}
-
-SpriteComponent::~SpriteComponent()
-{
-	//don't render me, I'm dead!
-	RenderManager::sInstance->RemoveComponent(this);
 }
 
 void SpriteComponent::SetTexture(TexturePtr inTexture, sf::IntRect subRect)
@@ -23,17 +15,16 @@ void SpriteComponent::SetTexture(TexturePtr inTexture, sf::IntRect subRect)
 
 	m_sprite.setTexture(*inTexture);
 	m_sprite.setOrigin(tSize.x / 2, tSize.y / 2);
-	m_sprite.setScale(sf::Vector2f(1.f * mGameObject->GetScale(), 1.f * mGameObject->GetScale()));
+	m_sprite.setScale(sf::Vector2f(1.f * m_game_object->GetScale(), 1.f * m_game_object->GetScale()));
 }
 
 sf::Sprite& SpriteComponent::GetSprite()
 {
-	// Update the sprite based on the game object stuff.
-	auto pos = mGameObject->GetLocation();
-	auto rot = mGameObject->GetRotation();
-	m_sprite.setPosition(pos.mX, pos.mY);
-	m_sprite.setRotation(rot);
-
 	return m_sprite;
+}
+
+void SpriteComponent::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(m_sprite, states);
 }
 

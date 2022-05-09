@@ -15,12 +15,12 @@ void RenderManager::StaticInit()
 }
 
 
-void RenderManager::AddComponent(SpriteComponent* inComponent)
+void RenderManager::AddComponent(DrawableComponent* inComponent)
 {
 	mComponents.emplace_back(inComponent);
 }
 
-void RenderManager::RemoveComponent(SpriteComponent* inComponent)
+void RenderManager::RemoveComponent(DrawableComponent* inComponent)
 {
 	const int index = GetComponentIndex(inComponent);
 
@@ -35,7 +35,7 @@ void RenderManager::RemoveComponent(SpriteComponent* inComponent)
 	}
 }
 
-int RenderManager::GetComponentIndex(SpriteComponent* inComponent) const
+int RenderManager::GetComponentIndex(DrawableComponent* inComponent) const
 {
 	for (int i = 0, c = mComponents.size(); i < c; ++i)
 	{
@@ -56,9 +56,10 @@ void RenderManager::RenderComponents(const sf::View& camera) const
 	WindowManager::sInstance->setView(camera);
 
 	//Get the logical viewport so we can pass this to the SpriteComponents when it's draw time
-	for (SpriteComponent* c : mComponents)
+	for (DrawableComponent* c : mComponents)
 	{
-		WindowManager::sInstance->draw(c->GetSprite());
+		c->UpdatePosition();
+		WindowManager::sInstance->draw(*c);
 	}
 }
 

@@ -7,7 +7,7 @@ PlayerSpriteComponent::PlayerSpriteComponent(GameObject* inGameObject) :
 sf::Sprite& PlayerSpriteComponent::GetSprite()
 {
 	// Update the sprite based on the game object stuff.
-	auto pos = mGameObject->GetLocation();
+	/*auto pos = mGameObject->GetLocation();
 	auto rot = mGameObject->GetRotation();
 	m_sprite.setPosition(pos.mX, pos.mY);
 	m_sprite.setRotation(rot);
@@ -15,5 +15,6 @@ sf::Sprite& PlayerSpriteComponent::GetSprite()
 	Vector3 playerColor = player->GetColor();
 	m_sprite.setColor(sf::Color(playerColor.mX, playerColor.mY, playerColor.mZ, 255));
 
+	return m_sprite;*/
 	return m_sprite;
 }

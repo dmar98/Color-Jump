@@ -1,4 +1,6 @@
 #pragma once
+#include "TextComponent.hpp"
+
 class CharacterClient : public Character
 {
 public:
@@ -11,13 +13,14 @@ public:
 
 	void Read(InputMemoryBitStream& inInputStream) override;
 
-	void SetColor();
-	void ResetColor();
+	void SetTransparent() const;
+	void SetOpaque() const;
 
 	void SetTeamIdentifier(sf::Int8 identifier) override;
 	void SetName(const std::string& name) override;
 
 	sf::IntRect GetSize() const;
+	virtual sf::FloatRect GetBoundingRect() const;
 	void Jump() override;
 	void SetGrounded(Platform* platform) override;
 	void SetGrounded() override;
@@ -26,11 +29,13 @@ public:
 private:
 	void UpdateRay() const;
 	void CreateRay();
-	sf::FloatRect GetBoundingRect() const;
 
-	sf::Text m_name_text;
-	sf::Text m_team_id_text;
+	/*sf::Text m_name_text;
+	sf::Text m_team_id_text;*/
 	SpriteComponentPtr mSpriteComponent;
+	TextComponentPtr m_name_text;
+	TextComponentPtr m_team_id_text;
+
 	bool m_show_jump_animation{};
 	/*Animation m_jump_smoke_animation;*/
 };
