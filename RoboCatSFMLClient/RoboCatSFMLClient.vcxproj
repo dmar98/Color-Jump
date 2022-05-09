@@ -23,6 +23,7 @@
     <ClInclude Include="ButtonType.hpp" />
     <ClInclude Include="CharacterClient.hpp" />
     <ClInclude Include="Client.hpp" />
+    <ClInclude Include="CollisionHandler.hpp" />
     <ClInclude Include="Component.hpp" />
     <ClInclude Include="Container.hpp" />
     <ClInclude Include="DrawableComponent.hpp" />
@@ -75,6 +76,7 @@
     <ClCompile Include="CharacterClient.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientMain.cpp" />
+    <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="DrawableComponent.cpp" />

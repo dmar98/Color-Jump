@@ -10,9 +10,5 @@ public:
 	}
 
 	TileServer(sf::IntRect sub_rect, ETileType type);
-
-	/*sf::FloatRect GetBoundingRect() const override;*/
-	bool HandleCollision(EColorType color) override;
-
 };
 

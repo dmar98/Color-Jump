@@ -16,8 +16,7 @@ Platform* PlatformPart::GetPlatform() const
 	return m_parent;
 }
 
-////Written by Paul Bichler (D00242563)
-//sf::FloatRect PlatformPart::GetBoundingRect() const
-//{
-//	return GetWorldTransform().transformRect(m_sprite.getGlobalBounds());
-//}
+unsigned PlatformPart::GetCategory() const
+{
+	return Category::Type::kPlatform;
+}

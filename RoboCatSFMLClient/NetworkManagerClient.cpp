@@ -240,6 +240,49 @@ void NetworkManagerClient::SendTeamChangePacket()
 	SendPacket(packet, mServerAddress);
 }
 
+void NetworkManagerClient::SendPlatformInfo(sf::Int8 player_id, sf::Int8 platform_id, EPlatformType platform_type)
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Platform);
+	packet.Write(player_id);
+	packet.Write(platform_id);
+	packet.Write(platform_type);
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendCheckpointReached(sf::Int8 team_id, sf::Int8 platform_id)
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Checkpoint);
+	packet.Write(team_id);
+	packet.Write(platform_id);
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendGoalReached(sf::Int8 team_id)
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Goal);
+	packet.Write(team_id);
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendTeamDeath(sf::Int8 team_id)
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Team_Death);
+	packet.Write(team_id);
+
+	SendPacket(packet, mServerAddress);
+}
+
 void NetworkManagerClient::SendStartGamePacket()
 {
 	OutputMemoryBitStream packet;

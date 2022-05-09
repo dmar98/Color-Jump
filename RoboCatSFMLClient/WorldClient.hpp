@@ -1,4 +1,5 @@
 #pragma once
+#include "CharacterClient.hpp"
 
 class WorldClient : public World
 {
@@ -25,13 +26,17 @@ public:
 	void SetCheckpointToPlatformWithID(sf::Int8 platform_id);
 
 protected:
-	void HandleCollisions() override;
+	void CheckClientCollisions() const;
 
 private:
+	void OnReachedCheckpoint() const;
+	void OnReachedGoal() const;
+	void OnClientPlayerDeath() const;
+
 	sf::View m_camera;
 	Platform* m_checkpoint;
-	Character* m_client_player{};
-	Character* m_team_mate{};
+	CharacterClient* m_client_player {};
+	Character* m_team_mate {};
 	std::function<void()> m_lose_callback;
 };
 

@@ -52,6 +52,12 @@ public:
 
 	void SendReady(bool ready);
 	void SendTeamChangePacket();
+
+	void SendPlatformInfo(sf::Int8 player_id, sf::Int8 platform_id, EPlatformType platform_type);
+	void SendCheckpointReached(sf::Int8 team_id, sf::Int8 platform_id);
+	void SendGoalReached(sf::Int8 team_id);
+	void SendTeamDeath(sf::Int8 team_id);
+
 private:
 	NetworkManagerClient();
 	void Init(const SocketAddress& inServerAddress, const string& inName);

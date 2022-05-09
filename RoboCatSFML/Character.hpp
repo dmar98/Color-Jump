@@ -32,6 +32,7 @@ public:
 	sf::Int8 GetIdentifier() const;
 	sf::Int8 GetTeamIdentifier() const;
 	std::string GetName() const;
+	unsigned GetCategory() const override;
 
 	uint32_t Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const override;
 
@@ -65,5 +66,5 @@ protected:
 	sf::Int8 m_team_identifier{};
 
 	Vector3 m_velocity;
-	
+
 };

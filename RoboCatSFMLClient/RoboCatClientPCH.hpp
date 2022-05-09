@@ -62,3 +62,4 @@
 #include "DrawableComponent.hpp"
 #include "TextComponent.hpp"
 #include "GhostCharacterClient.hpp"
+#include "CollisionHandler.hpp"

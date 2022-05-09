@@ -2,7 +2,6 @@
 #include "EColorType.hpp"
 #include "ETileType.hpp"
 
-
 class Tile : public GameObject
 {
 public:
@@ -10,7 +9,7 @@ public:
 
 	ETileType GetType() const;
 	void SetActiveCollider(bool active);
-	virtual sf::FloatRect GetBoundingRect() const;
+	unsigned GetCategory() const override;
 	virtual bool HandleCollision(EColorType color);
 	virtual sf::IntRect GetSize() const;
 

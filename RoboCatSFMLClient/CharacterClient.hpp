@@ -20,18 +20,17 @@ public:
 	void SetName(const std::string& name) override;
 
 	sf::IntRect GetSize() const;
-	virtual sf::FloatRect GetBoundingRect() const;
+	sf::FloatRect GetBoundingRect() const override;
 	void Jump() override;
 	void SetGrounded(Platform* platform) override;
 	void SetGrounded() override;
-	void MoveOutOfCollision(const sf::Time dt, const sf::FloatRect& rect);
+	void MoveOutOfCollision(const sf::FloatRect& rect);
+	RayGround* GetRay() const;
 
 private:
 	void UpdateRay() const;
 	void CreateRay();
 
-	/*sf::Text m_name_text;
-	sf::Text m_team_id_text;*/
 	SpriteComponentPtr mSpriteComponent;
 	TextComponentPtr m_name_text;
 	TextComponentPtr m_team_id_text;

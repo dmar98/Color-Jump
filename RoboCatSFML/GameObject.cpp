@@ -1,13 +1,13 @@
 #include "RoboCatPCH.hpp"
 
-GameObject::GameObject() :
-	mIndexInWorld(-1),
+GameObject::GameObject(Category::Type category)
+	: mColor(Colors::White),
 	mCollisionRadius(1.f),
-	mDoesWantToDie(false),
 	mRotation(0.f),
-	mNetworkId(0),
-	mColor(Colors::White),
-	mScale(1.0f)
+	mScale(1.0f),
+	mIndexInWorld(-1),
+	mDoesWantToDie(false),
+	mNetworkId(0)
 {
 }
 
@@ -30,6 +30,16 @@ void GameObject::SetNetworkId(int inNetworkId)
 	//this doesn't put you in the map or remove you from it
 	mNetworkId = inNetworkId;
 
+}
+
+unsigned GameObject::GetCategory() const
+{
+	return static_cast<unsigned>(m_category);
+}
+
+sf::FloatRect GameObject::GetBoundingRect() const
+{
+	return sf::FloatRect{};
 }
 
 void GameObject::SetRotation(float inRotation)

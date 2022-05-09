@@ -25,13 +25,20 @@ void Tile::SetActiveCollider(bool active)
 }
 
 //Written by Paul Bichler (D00242563)
-sf::FloatRect Tile::GetBoundingRect() const
+//Returns the right category based on the tile type
+unsigned Tile::GetCategory() const
 {
-	/*if (!m_has_collider)
-		return SpriteNode::GetBoundingRect();
+	//Return the default category for non-collider tiles
+	if (!m_has_collider)
+		return Category::kPlatform;
 
-	return GetWorldTransform().transformRect(m_sprite.getGlobalBounds());*/
-	return sf::FloatRect();
+	switch (m_type)
+	{
+	case kSpikes:
+		return Category::kTrap;
+	default:
+		return Category::kPlatform;
+	}
 }
 
 bool Tile::HandleCollision(const EColorType color)

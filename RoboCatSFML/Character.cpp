@@ -172,6 +172,15 @@ std::string Character::GetName() const
 	return m_name;
 }
 
+unsigned Character::GetCategory() const
+{
+	if (m_type == EColorType::kRed)
+	{
+		return static_cast<int>(Category::kPlayerRed);
+	}
+	return static_cast<int>(Category::kPlayerBlue);
+}
+
 uint32_t Character::Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const
 {
 	return GameObject::Write(inOutputStream, inDirtyState);

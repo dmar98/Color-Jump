@@ -29,6 +29,16 @@ sf::FloatRect RayGround::GetBoundingRect() const
 	return {m_character->GetLocation().mX, m_character->GetLocation().mY, 2, 50};
 }
 
+unsigned RayGround::GetCategory() const
+{
+	if (m_character->GetCategory() == Category::Type::kPlayerRed)
+	{
+		return Category::Type::kRayRedPlayer;
+	}
+
+	return Category::Type::kRayBluePlayer;
+}
+
 void RayGround::SetFalling() const
 {
 	m_character->SetFalling();

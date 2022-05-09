@@ -13,32 +13,10 @@ TileClient::TileClient(const sf::IntRect sub_rect, const ETileType type)
 //Written by Paul Bichler (D00242563)
 sf::FloatRect TileClient::GetBoundingRect() const
 {
-	/*if (!m_has_collider)
-		return SpriteNode::GetBoundingRect();
+	if (!m_has_collider)
+		return GameObject::GetBoundingRect();
 
-	return GetWorldTransform().transformRect(m_sprite.getGlobalBounds());*/
-	return sf::FloatRect();
-}
-
-bool TileClient::HandleCollision(const EColorType color)
-{
-	switch (m_type)
-	{
-	case kHorizontalBluePlatformPart:
-	case kVerticalBluePlatformPart:
-		if (color != EColorType::kBlue)
-			return false;
-		break;
-	case kHorizontalRedPlatformPart:
-	case kVerticalRedPlatformPart:
-		if (color != EColorType::kRed)
-			return false;
-		break;
-	default:
-		break;
-	}
-
-	return true;
+	return m_SpriteComponent->GetSprite().getGlobalBounds();
 }
 
 sf::IntRect TileClient::GetSize() const

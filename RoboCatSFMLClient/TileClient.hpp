@@ -14,12 +14,10 @@ public:
 	TileClient(sf::IntRect sub_rect, ETileType type);
 
 	sf::FloatRect GetBoundingRect() const override;
-	bool HandleCollision(EColorType color) override;
 	sf::IntRect GetSize() const override;
 	void SetSpriteTexture(TexturePtr texture, sf::IntRect subRect) const;
 
 protected:
 	SpriteComponentPtr	m_SpriteComponent;
-
 };
 

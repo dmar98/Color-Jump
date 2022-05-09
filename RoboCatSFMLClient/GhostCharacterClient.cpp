@@ -16,3 +16,8 @@ sf::FloatRect GhostCharacterClient::GetBoundingRect() const
 	//Collisions of Ghost characters are not handled!
 	return {0,0,0,0};
 }
+
+unsigned GhostCharacterClient::GetCategory() const
+{
+	return Category::Type::kGhost;
+}

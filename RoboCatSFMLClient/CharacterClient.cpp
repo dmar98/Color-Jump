@@ -118,7 +118,7 @@ void CharacterClient::SetGrounded()
 	m_show_jump_animation = false;
 }
 
-void CharacterClient::MoveOutOfCollision(const sf::Time dt, const sf::FloatRect& rect)
+void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect)
 {
 	Vector3 velocity = GetVelocity();
 
@@ -132,8 +132,13 @@ void CharacterClient::MoveOutOfCollision(const sf::Time dt, const sf::FloatRect&
 
 	while (rect.intersects(GetBoundingRect()))
 	{
-		SetLocation(GetLocation() - normal_velocity + Vector3(0, 9.81f * dt.asSeconds(), 0));
+		SetLocation(GetLocation() - normal_velocity + Vector3(0, 9.81f * Timing::sInstance.GetDeltaTime(), 0));
 	}
+}
+
+RayGround* CharacterClient::GetRay() const
+{
+	return m_ray;
 }
 
 void CharacterClient::UpdateRay() const

@@ -22,6 +22,49 @@ void WorldClient::LoadLevel()
 void WorldClient::Update()
 {
 	World::Update();
+
+	CheckClientCollisions();
+}
+
+void WorldClient::CheckClientCollisions() const
+{
+	if(m_client_player == nullptr)
+		return;
+
+	const sf::FloatRect client_bounds = m_client_player->GetBoundingRect();
+	RayGround* client_ray = m_client_player->GetRay();
+	const sf::FloatRect client_ray_bounds = client_ray->GetBoundingRect();
+	std::set<GameObject::GOPair> ray_collision_pairs;
+
+	for(auto go : mGameObjects)
+	{
+		//Ignore yourself and your ray ground object
+		if(go.get() == m_client_player || go.get() == client_ray)
+			continue;
+
+		sf::FloatRect go_bounds = go->GetBoundingRect();
+
+		//Character Collisions
+		if(go_bounds.intersects(client_bounds))
+		{
+			//Client Character Collision!
+			const GameObject::GOPair collision_pair(go.get(), m_client_player);
+
+			if (CollisionHandler::PlatformCollision(collision_pair, [this] { OnReachedCheckpoint(); }, [this] { OnReachedGoal(); }, this))
+				continue;
+
+			CollisionHandler::TrapCollision(collision_pair, [this] { OnClientPlayerDeath(); });
+		}
+
+		//Ray Ground Collisions
+		if(go_bounds.intersects(client_ray_bounds))
+		{
+			//Client Ray Collision!
+			GameObject::GOPair collision_pair(go.get(), client_ray);
+			CollisionHandler::PlayerGroundRayCast(collision_pair);
+			
+		}
+	}
 }
 
 void WorldClient::SetCamera(sf::View camera)
@@ -66,7 +109,7 @@ Character* WorldClient::AddCharacter(sf::Int8 identifier, sf::Int8 color, bool i
 
 	if (is_client_player)
 	{
-		m_client_player = character;
+		m_client_player = dynamic_cast<CharacterClient*>(character);
 		UpdateCharacterTransparencies(character->GetTeamIdentifier());
 	}
 
@@ -167,33 +210,20 @@ void WorldClient::SetCheckpointToPlatformWithID(sf::Int8 platform_id)
 	}
 }
 
-void WorldClient::HandleCollisions()
+void WorldClient::OnReachedCheckpoint() const
 {
-	//std::set<SceneNode::Pair> collision_pairs;
-	//m_sceneGraph.CheckSceneCollision(m_sceneGraph, collision_pairs, [this](SceneNode& node)
-	//	{
-	//		const auto character = dynamic_cast<Character*>(&node);
-	//		const bool character_cond = character != nullptr;
+	Platform* current_platform = m_client_player->GetCurrentPlatform();
 
-	//		const auto ray_ground = dynamic_cast<RayGround*>(&node);
-	//		const bool ray_cond = ray_ground != nullptr;
+	if (m_team_mate != nullptr && current_platform == m_team_mate->GetCurrentPlatform() && current_platform != m_checkpoint)
+		NetworkManagerClient::sInstance->SendCheckpointReached(m_client_player->GetTeamIdentifier(), current_platform->GetID());
+}
 
-	//		//check collisions only for players and RayGround objects
-	//		return character_cond || ray_cond;
-	//	});
+void WorldClient::OnReachedGoal() const
+{
+	NetworkManagerClient::sInstance->SendGoalReached(GetClientCharacter()->GetTeamIdentifier());
+}
 
-	//std::set<SceneNode::Pair> player_pair;
-
-	//for (const SceneNode::Pair& pair : collision_pairs)
-	//{
-	//	if (CollisionHandler::PlatformCollision(dt, pair, [this] { OnReachedCheckpoint(); }, [this] { OnReachedGoal(); }, this))
-	//		continue;
-
-	//	CollisionHandler::TrapCollision(pair, [this] { OnClientPlayerDeath(); });
-
-	//	//Get All Ground Ray Casts for player one and two
-	//	CollisionHandler::GetGroundRayCasts(player_pair, pair, Category::kRay);
-	//}
-
-	//CollisionHandler::PlayerGroundRayCast(player_pair);
+void WorldClient::OnClientPlayerDeath() const
+{
+	NetworkManagerClient::sInstance->SendTeamDeath(m_client_player->GetTeamIdentifier());
 }

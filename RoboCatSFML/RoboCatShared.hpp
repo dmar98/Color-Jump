@@ -112,3 +112,4 @@ class GameObject;
 #include "TileFactory.hpp"
 #include "Character.hpp"
 #include "LeaderBoardManager.hpp"
+#include "Category.hpp"

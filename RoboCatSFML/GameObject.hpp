@@ -1,18 +1,18 @@
+#pragma once
 #define CLASS_IDENTIFICATION(in_code, in_class) \
 enum {kClassId = in_code}; \
 virtual uint32_t GetClassId() const {return kClassId;} \
 static GameObject* CreateInstance() { return static_cast<GameObject*>(new in_class());}
+#include "Category.hpp"
 
 class GameObject
 {
 public:
+	typedef std::pair<GameObject*, GameObject*> GOPair;
 	CLASS_IDENTIFICATION('GOBJ', GameObject)
 
-	GameObject();
-
-	virtual ~GameObject()
-	{
-	}
+	GameObject(Category::Type category = Category::kNone);
+	virtual ~GameObject() = default;
 
 	virtual RoboCat* GetAsCat() { return nullptr; }
 
@@ -49,7 +49,6 @@ public:
 
 	Vector3 GetForwardVector() const;
 
-
 	void SetColor(const Vector3& inColor) { mColor = inColor; }
 	const Vector3& GetColor() const { return mColor; }
 
@@ -58,6 +57,9 @@ public:
 
 	int GetNetworkId() const { return mNetworkId; }
 	void SetNetworkId(int inNetworkId);
+
+	virtual unsigned int GetCategory() const;
+	virtual sf::FloatRect GetBoundingRect() const;
 
 	virtual uint32_t Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const
 	{
@@ -81,6 +83,7 @@ private:
 	bool mDoesWantToDie;
 
 	int mNetworkId;
+	Category::Type m_category;
 };
 
 using GameObjectPtr = shared_ptr<GameObject>;
