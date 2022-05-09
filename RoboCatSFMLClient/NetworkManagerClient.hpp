@@ -11,21 +11,21 @@ public:
 		NCS_Platform_Update,
 		NCS_Player_Update,
 		NCS_Goal_Reached,
-		NCS_Team_Change,
 		NCS_Start_Network_Game,
 		NCS_Team_Death,
 		NCS_Checkpoint_Reached,
-		NCS_Welcomed,
 		NCS_State,
-		NCS_Size
+		NCS_Size,
+		
 	};
+
 	static NetworkManagerClient* sInstance;
 
 	static void StaticInit(const SocketAddress& inServerAddress, const string& inName);
 
 
 	void SendOutgoingPackets();
-	
+
 	void ProcessPacket(InputMemoryBitStream& inInputStream,
 	                   const SocketAddress& inFromAddress) override;
 
@@ -44,59 +44,65 @@ public:
 		return mPlayerId;
 	}
 
-	float GetLastMoveProcessedByServerTimestamp() const
-	{
-		return mLastMoveProcessedByServerTimestamp;
-	}
-
 	void SetTeamID(int team_id);
 	void SetName(const string& name);
-	void SetPlayerColor(int i);
+	void SetPlayerColor(EColorType color);
+	void SendReadyPacket();
+	int GetTeamID() const { return mTeamID; }
 
+	void SendReady(bool ready);
+	void SendTeamChangePacket();
 private:
 	NetworkManagerClient();
 	void Init(const SocketAddress& inServerAddress, const string& inName);
 
-	void UpdateInfoPacket(NetworkClientState p_enum, const std::function<void()>& p_function);
 
 	void UpdateSayingHello();
 	void UpdateSendingQuit();
 	void UpdateSendingPlatform();
 	void UpdateSendingPlayer();
 	void UpdateSendingGoalReached();
-	void UpdateSendingTeamChange();
 	void UpdateSendingStartGame();
 	void UpdateSendingTeamDeath();
 	void UpdateSendingCheckpoint();
+	void UpdateSendingWaitState();
 
 	void SendHelloPacket();
 	void SendQuitPacket();
 	void SendPlatformPacket();
 	void SendPlayerPacket();
 	void SendGoalPacket();
-	void SendTeamChangePacket();
+	
 	void SendStartGamePacket();
 	void SendTeamDeathPacket();
 	void SendCheckpointPacket();
+	void SendStatePacket();
 
 	void HandleWelcomePacket(InputMemoryBitStream& inInputStream);
-	void HandleStatePacket(InputMemoryBitStream& inInputStream);
-	void ReadLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& inInputStream);
-	
+	void HandleStatePacket() const;
+	void HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const;
+	static void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
+	void HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream) const;
+	void HandleInitialStatePacket(InputMemoryBitStream& input_memory_bit_stream);
+	void HandleReadyChange(InputMemoryBitStream& input_memory_bit_stream);
+
+	static void RemovePlayer(int player_id);
+	static void AddPlayer(int player_id, const std::string& name, bool ready = false);
+	static void MovePlayer(int player_id, int team_id);
+	static void MovePlayerBack(int playerId);
+	static void SetName(int player_id, const std::string& name);
+
 	void HandleTeamChange(InputMemoryBitStream& inInputStream);
+	static void HandleStartPacket();
+	static void HandleStartCountdownPacket();
 
-	void HandleGameObjectState(InputMemoryBitStream& inInputStream);
-	static void HandleScoreBoardState(InputMemoryBitStream& inInputStream);
-
+	void UpdateInfoPacket(NetworkClientState p_enum, const std::function<void()>& p_function);
 	void UpdateInfoUpdatePacket(NetworkClientState p_enum, const std::function<void()>& p_function);
 
-	void UpdateSendingInputPacket();
 	void UpdateSendingPosition();
 
 	void SendInputPacket();
 	void SendPositionPacket();
-
-	void DestroyGameObjectsInMap(const IntToGameObjectMap& inObjectsToDestroy);
 
 	DeliveryNotificationManager mDeliveryNotificationManager;
 
@@ -104,6 +110,7 @@ private:
 
 	NetworkClientState mState = NetworkClientState::NCS_Uninitialized;
 	
+
 
 public:
 	void SetState(NetworkClientState m_state);
@@ -113,10 +120,8 @@ private:
 	string mName;
 	int mPlayerId{};
 	int mTeamID{};
-	int mColor;
-
-	float mLastMoveProcessedByServerTimestamp{};
+	EColorType mColor;
+	bool mReady{};
 
 	WeightedTimedMovingAverage mAvgRoundTripTime;
-	float mLastRoundTripTime;
 };

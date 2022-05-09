@@ -13,8 +13,7 @@ constexpr int UNPAIRED_POS_Y = TEAM_POS_Y - 20;
 LobbyState::LobbyState():
 	m_player_input_name(PlayerDataManager::sInstance->GetName()),
 	m_start_countdown(false),
-	m_start_countdown_timer(sf::seconds(5.f)),
-	m_player_id(-1),
+	m_start_countdown_timer(5),
 	m_game_started(false),
 	m_connected(true)
 {
@@ -44,23 +43,34 @@ auto LobbyState::HandleTeamButtonPressed(int id)
 	return [this, id]
 	{
 		HandleTeamChoice(id);
+		Unready();
 	};
 }
 
-auto LobbyState::HandleStartGamePressed() const
+void LobbyState::Unready()
+{
+	if (m_ready)
+	{
+		m_ready = !m_ready;
+		NetworkManagerClient::sInstance->SendReady(m_ready);
+	}
+}
+
+auto LobbyState::HandleReadyPressed()
 {
 	return [this]
 	{
+		m_ready = !m_ready;
+		NetworkManagerClient::sInstance->SendReady(m_ready);
 	};
 }
 
-auto LobbyState::IsHostAndInTeam()
+auto LobbyState::IsValidTeamPresent() const
 {
 	return [this]
 	{
-		return m_team_selections[m_player_team_selection[m_player_id]].size() == 2 && !
-			m_start_countdown &&
-			!m_game_started;
+		return NetworkManagerClient::sInstance->GetTeamID() != 0 && !m_start_countdown && !
+			m_game_started;
 	};
 }
 
@@ -69,12 +79,16 @@ auto LobbyState::HandleLeaveTeamButtonPress()
 	return [this]
 	{
 		HandleTeamChoice(0);
+		Unready();
 	};
 }
 
-auto LobbyState::IsInATeam()
+auto LobbyState::IsInATeam() const
 {
-	return [this] { return m_player_team_selection[m_player_id] != 0; };
+	return [this]
+	{
+		return NetworkManagerClient::sInstance->GetTeamID() != 0 && !m_start_countdown;
+	};
 }
 
 auto LobbyState::HandleBackButtonPressed() const
@@ -95,20 +109,36 @@ std::map<int, std::vector<int>>::mapped_type LobbyState::GetPlayerTeam(
 
 void LobbyState::HandleTeamChoice(const int team_id)
 {
-	NetworkManagerClient::sInstance->SetTeamID(team_id);
-	const int player_id = NetworkManagerClient::sInstance->GetPlayerId();
-	if (GetPlayerTeam(player_id).empty())
+	if (TeamHasPlace(team_id) || team_id == 0)
 	{
-		NetworkManagerClient::sInstance->SetPlayerColor(0);
+		NetworkManagerClient::sInstance->SetTeamID(team_id);
+		const int player_id = NetworkManagerClient::sInstance->GetPlayerId();
+		if (GetPlayerTeam(player_id).empty())
+		{
+			NetworkManagerClient::sInstance->SetPlayerColor(EColorType::kBlue);
+		}
+		else
+		{
+			NetworkManagerClient::sInstance->SetPlayerColor(EColorType::kRed);
+		}
+
+		NetworkManagerClient::sInstance->SendTeamChangePacket();
 	}
-	else
+}
+
+std::map<int, vector<int>>::mapped_type LobbyState::GetTeam(const int id)
+{
+	return m_team_selections[id];
+}
+
+bool LobbyState::TeamHasPlace(const int id)
+{
+	if (GetTeam(id).size() < 2)
 	{
-		NetworkManagerClient::sInstance->SetPlayerColor(1);
+		return true;
 	}
 
-
-	NetworkManagerClient::sInstance->SetState(
-		NetworkManagerClient::NetworkClientState::NCS_Team_Change);
+	return false;
 }
 
 void LobbyState::SendClientDisconnect()
@@ -162,8 +192,8 @@ void LobbyState::CreateUI()
 		m_gui_container.Pack(button);
 	}
 
-	Utility::CreateButton(button, UNPAIRED_POS_X, FOOTER_POS_Y, "Start game",
-	                      HandleStartGamePressed(), IsHostAndInTeam());
+	Utility::CreateButton(button, UNPAIRED_POS_X, FOOTER_POS_Y, "Ready",
+	                      HandleReadyPressed(), IsValidTeamPresent());
 	m_gui_container.Pack(button);
 
 	Utility::CreateButton(button, TEAM_COL_1_POS_X, FOOTER_POS_Y, "Leave Team",
@@ -176,12 +206,12 @@ void LobbyState::CreateUI()
 
 	Utility::CreateLabel(label, UNPAIRED_POS_X, FOOTER_POS_Y + 15,
 	                     "Game starts in...",
-	                     30);
+	                     30, false);
 	label->SetDrawPredicate([this] { return m_start_countdown; });
 	m_gui_container.Pack(label);
 
 	Utility::CreateLabel(m_start_countdown_label, UNPAIRED_POS_X + 250, FOOTER_POS_Y + 15,
-	                     std::to_string(m_start_countdown_timer.asSeconds()), 30);
+	                     std::to_string(static_cast<int>(m_start_countdown_timer)), 30, false);
 	m_start_countdown_label->SetDrawPredicate([this] { return m_start_countdown; });
 	m_gui_container.Pack(m_start_countdown_label);
 }
@@ -200,10 +230,21 @@ void LobbyState::Draw()
 	}
 }
 
-bool LobbyState::Update(float dt)
+bool LobbyState::Update(const float dt)
 {
 	NetworkManagerClient::sInstance->ProcessIncomingPackets();
 	NetworkManagerClient::sInstance->SendOutgoingPackets();
+
+	if (m_start_countdown)
+	{
+		if (m_start_countdown_timer > 0)
+		{
+			m_start_countdown_timer -= dt;
+			m_start_countdown_label->SetText(
+				std::to_string(static_cast<int>(m_start_countdown_timer)));
+		}
+	}
+
 	return true;
 }
 
@@ -260,7 +301,7 @@ void LobbyState::OnStackPopped()
 	State::OnStackPopped();
 }
 
-void LobbyState::MovePlayer(int player_id, int team_id)
+void LobbyState::MovePlayer(int player_id, const int team_id)
 {
 	if (m_player_team_selection[player_id] != 0)
 	{
@@ -289,14 +330,31 @@ void LobbyState::MovePlayer(int player_id, int team_id)
 	m_player_team_selection[player_id] = team_id;
 }
 
-void LobbyState::AddPlayer(const int id, const std::string& label_text)
+void LobbyState::RemovePlayer(const int player_id)
+{
+	auto& team_selection = m_team_selections[m_player_team_selection[player_id]];
+	const auto remove = std::remove(team_selection.begin(), team_selection.end(), player_id);
+	team_selection.erase(remove, team_selection.end());
+
+	m_player_team_selection.erase(player_id);
+	m_gui_container.Pull(m_players[player_id]);
+	m_players[player_id].reset();
+	m_players.erase(player_id);
+}
+
+
+void LobbyState::AddPlayer(const int id, const std::string& label_text, const bool ready)
 {
 	GUI::Label::Ptr label;
 	Utility::CreateLabel(label, UNPAIRED_POS_X, UNPAIRED_POS_Y + 30 * id,
 	                     label_text, 20, false);
-	m_gui_container.Pack(label);
-	m_players.try_emplace(id, label);
-	m_player_team_selection.try_emplace(id, 0);
+
+	if (m_players.try_emplace(id, label).second)
+	{
+		m_gui_container.Pack(label);
+		m_player_team_selection.try_emplace(id, 0);
+		label->SetTextColor(ready);
+	}
 }
 
 sf::Vector2f LobbyState::GetTeamPos(const int i)
@@ -314,7 +372,7 @@ void LobbyState::MovePlayerBack(const int id)
 	{
 		m_team_selections[m_player_team_selection[id]].erase(
 			std::remove(m_team_selections[m_player_team_selection[id]].begin(),
-				m_team_selections[m_player_team_selection[id]].end(), id),
+			            m_team_selections[m_player_team_selection[id]].end(), id),
 			m_team_selections[m_player_team_selection[id]].end());
 	}
 
@@ -322,11 +380,46 @@ void LobbyState::MovePlayerBack(const int id)
 	m_player_team_selection[id] = 0;
 }
 
+void LobbyState::SetName(const int player_id, const string& name)
+{
+	m_players[player_id]->SetText(name);
+}
+
+void LobbyState::Start()
+{
+	if (m_team_selections[m_player_team_selection[NetworkManagerClient::sInstance->GetPlayerId()]].
+		size() == 2)
+	{
+		m_game_started = true;
+		RequestStackClear();
+		RequestStackPush(StateID::kNetworkGame);
+		return;
+	}
+
+	RequestStackPop();
+	RequestStackPush(StateID::kMenu);
+}
+
+auto LobbyState::GetLabel(const int player_id)
+{
+	return m_players[player_id];
+}
+
+void LobbyState::SetReady(const int player_id, const bool ready)
+{
+	GetLabel(player_id)->SetTextColor(ready);
+}
+
+void LobbyState::StartCountDown()
+{
+	m_start_countdown = true;
+}
+
 sf::Vector2f LobbyState::GetUnpairedPos(const int i)
 {
 	constexpr int x = UNPAIRED_POS_X;
 	const int y = UNPAIRED_POS_Y + 30 * i;
-	
 
-	return { static_cast<float>(x), static_cast<float>(y) };
+
+	return {static_cast<float>(x), static_cast<float>(y)};
 }

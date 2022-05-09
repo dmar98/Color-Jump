@@ -1,3 +1,4 @@
+#pragma once
 class ClientProxy
 {
 public:
@@ -7,7 +8,8 @@ public:
 	int GetPlayerId() const { return mPlayerId; }
 	const string& GetName() const { return mName; }
 	int GetTeamID() const { return mTeamId; }
-	int GetColor() const { return mColor; }
+	bool GetReady() const { return mReady; }
+	EColorType GetColor() const { return mColor; }
 	void SetInputState(const InputState& inInputState) { mInputState = inInputState; }
 	const InputState& GetInputState() const { return mInputState; }
 
@@ -21,20 +23,12 @@ public:
 
 	ReplicationManagerServer& GetReplicationManagerServer() { return mReplicationManagerServer; }
 
-	const MoveList& GetUnprocessedMoveList() const { return mUnprocessedMoveList; }
-	MoveList& GetUnprocessedMoveList() { return mUnprocessedMoveList; }
-
-	void SetIsLastMoveTimestampDirty(const bool inIsDirty)
-	{
-		mIsLastMoveTimestampDirty = inIsDirty;
-	}
-
-	bool IsLastMoveTimestampDirty() const { return mIsLastMoveTimestampDirty; }
-
 	void HandleCatDied();
 	void RespawnCatIfNecessary();
 	void SetTeamID(int team_id);
-	void SetColor(int color);
+	void SetColor(EColorType color);
+	void SetName(const string& name);
+	void SetIsReady(bool ready);
 
 
 private:
@@ -45,15 +39,14 @@ private:
 	string mName;
 	int mPlayerId;
 	int mTeamId;
-	int mColor;
+	EColorType mColor;
+	bool mReady{};
+
 
 	InputState mInputState;
 
 	float mLastPacketFromClientTime{};
 	float mTimeToRespawn;
-
-	MoveList mUnprocessedMoveList;
-	bool mIsLastMoveTimestampDirty;
 };
 
 using ClientProxyPtr = shared_ptr<ClientProxy>;

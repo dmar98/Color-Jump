@@ -16,8 +16,10 @@ public:
 		PT_Start_Game_Countdown,
 		PT_Team_Death,
 		PT_Checkpoint,
-		PT_Welcomed,
-		PT_State
+		PT_State_Lobby,
+		PT_Player_Connect,
+		PT_Initial_State,
+		PT_Ready
 	};
 
 	static constexpr int kMaxPacketsPerFrameCount = 10;

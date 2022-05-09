@@ -26,21 +26,6 @@ void RoboCatServer::Update()
 		ClientProxyPtr client = NetworkManagerServer::sInstance->GetClientProxy(GetPlayerId());
 		if (client)
 		{
-			MoveList& moveList = client->GetUnprocessedMoveList();
-			for (const Move& unprocessedMove : moveList)
-			{
-				const InputState& currentState = unprocessedMove.GetInputState();
-
-				float deltaTime = unprocessedMove.GetDeltaTime();
-
-				ProcessInput(deltaTime, currentState);
-				SimulateMovement(deltaTime);
-
-				//LOG( "Server Move Time: %3.4f deltaTime: %3.4f left rot at %3.4f", unprocessedMove.GetTimestamp(), deltaTime, GetRotation() );
-
-			}
-
-			moveList.Clear();
 		}
 	}
 	else

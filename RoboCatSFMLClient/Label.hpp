@@ -10,6 +10,7 @@ namespace GUI
 		void SetText(const std::string& text);
 		void HandleEvent(const sf::Event& event) override;
 		sf::Text& GetText();
+		void SetTextColor(bool color);
 
 	private:
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
