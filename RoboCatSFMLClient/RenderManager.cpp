@@ -65,7 +65,7 @@ void RenderManager::RenderComponents(const sf::View& camera) const
 
 void RenderManager::Render()
 {
-	WindowManager::sInstance->clear(sf::Color(100, 149, 237, 255));
+	WindowManager::sInstance->clear(sf::Color(0, 37, 97, 255));
 	StackManager::sInstance->Render();
 	WindowManager::sInstance->display();
 

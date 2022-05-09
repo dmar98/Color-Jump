@@ -15,6 +15,7 @@ TextureManager::TextureManager()
 	CacheTexture("Tutorial 1", "../Assets/Media/Textures/Tutorial_Color_Collisions.png");
 	CacheTexture("Tutorial 2", "../Assets/Media/Textures/Tutorial_Impact_Platforms.png");
 	CacheTexture("Tutorial 3", "../Assets/Media/Textures/Tutorial_Checkpoints.png");
+	CacheTexture("Tutorial 3", "../Assets/Media/Textures/Tutorial_Checkpoints.png");
 }
 
 TexturePtr TextureManager::GetTexture(const string& inTextureName)

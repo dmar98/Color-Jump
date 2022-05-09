@@ -15,13 +15,25 @@ void WorldClient::LoadLevel()
 	LevelManager::sInstance->SetIsMultiplayer(true);
 	LevelManager::LevelData level_data = LevelManager::sInstance->GetCurrentLevelData();
 
-	LevelLoaderClient loader {};
+	LevelLoaderClient loader{};
 	m_level_info = loader.LoadLevel(level_data);
 }
 
 void WorldClient::Update()
 {
 	World::Update();
+
+	if (m_client_player != nullptr)
+	{
+		sf::Vector2f camera_pos = m_camera.getCenter();
+		camera_pos.x = m_client_player->GetLocation().mX;
+		m_camera.setCenter(camera_pos);
+	}
+
+	for (const auto& m_game_object : mGameObjects)
+	{
+		m_game_object->Update();
+	}
 }
 
 void WorldClient::SetCamera(sf::View camera)
@@ -36,7 +48,8 @@ sf::View& WorldClient::GetCamera()
 	return m_camera;
 }
 
-Character* WorldClient::AddCharacterWithColor(sf::Int8 identifier, EColorType color, sf::IntRect rect, Vector3 spawn_pos)
+Character* WorldClient::AddCharacterWithColor(sf::Int8 identifier, EColorType color,
+                                              sf::IntRect rect, Vector3 spawn_pos)
 {
 	const std::shared_ptr<CharacterClient> player(new CharacterClient(color, rect));
 	player->InitRay();
@@ -49,19 +62,21 @@ Character* WorldClient::AddCharacterWithColor(sf::Int8 identifier, EColorType co
 	return player.get();
 }
 
-Character* WorldClient::AddCharacter(sf::Int8 identifier, sf::Int8 color, bool is_client_player)
+Character* WorldClient::AddCharacter(int identifier, int color, bool is_client_player)
 {
 	Character* character;
 
 	if (color == 1)
 	{
-		character = AddCharacterWithColor(identifier, EColorType::kRed, m_level_info.m_red_player_rect,
-			m_level_info.m_red_player_spawn_pos);
+		character = AddCharacterWithColor(identifier, EColorType::kRed,
+		                                  m_level_info.m_red_player_rect,
+		                                  m_level_info.m_red_player_spawn_pos);
 	}
 	else
 	{
-		character = AddCharacterWithColor(identifier, EColorType::kBlue, m_level_info.m_blue_player_rect,
-			m_level_info.m_blue_player_spawn_pos);
+		character = AddCharacterWithColor(identifier, EColorType::kBlue,
+		                                  m_level_info.m_blue_player_rect,
+		                                  m_level_info.m_blue_player_spawn_pos);
 	}
 
 	if (is_client_player)
@@ -73,10 +88,12 @@ Character* WorldClient::AddCharacter(sf::Int8 identifier, sf::Int8 color, bool i
 	return character;
 }
 
-Character* WorldClient::AddGhostCharacterWithColor(sf::Int8 identifier, EColorType color, const sf::IntRect& int_rect,
-	const Vector3 spawn_pos)
+Character* WorldClient::AddGhostCharacterWithColor(const int identifier, EColorType color,
+                                                   const sf::IntRect& int_rect,
+                                                   const Vector3 spawn_pos)
 {
-	const std::shared_ptr<GhostCharacterClient> ghost_char(new GhostCharacterClient(color, int_rect));
+	const std::shared_ptr<GhostCharacterClient> ghost_char(
+		new GhostCharacterClient(color, int_rect));
 	ghost_char->SetLocation(spawn_pos);
 	ghost_char->SetIdentifier(identifier);
 
@@ -85,18 +102,18 @@ Character* WorldClient::AddGhostCharacterWithColor(sf::Int8 identifier, EColorTy
 	return ghost_char.get();
 }
 
-Character* WorldClient::AddGhostCharacter(sf::Int8 identifier, sf::Int8 color)
+Character* WorldClient::AddGhostCharacter(const int identifier, const int color)
 {
 	if (color == 1)
 	{
 		return AddGhostCharacterWithColor(identifier, EColorType::kRed,
-			m_level_info.m_red_player_rect,
-			m_level_info.m_red_player_spawn_pos);
+		                                  m_level_info.m_red_player_rect,
+		                                  m_level_info.m_red_player_spawn_pos);
 	}
 
 	return AddGhostCharacterWithColor(identifier, EColorType::kBlue,
-		m_level_info.m_blue_player_rect,
-		m_level_info.m_blue_player_spawn_pos);
+	                                  m_level_info.m_blue_player_rect,
+	                                  m_level_info.m_blue_player_spawn_pos);
 }
 
 Character* WorldClient::GetClientCharacter() const
@@ -114,7 +131,7 @@ Character* WorldClient::GetTeammate() const
 	return m_team_mate;
 }
 
-void WorldClient::UpdateCharacterTransparencies(sf::Int8 team_id) const
+void WorldClient::UpdateCharacterTransparencies(const int team_id) const
 {
 	for (Character* player : m_players)
 	{
@@ -156,7 +173,7 @@ void WorldClient::RespawnClientCharacter() const
 	}
 }
 
-void WorldClient::SetCheckpointToPlatformWithID(sf::Int8 platform_id)
+void WorldClient::SetCheckpointToPlatformWithID(const int platform_id)
 {
 	Platform* new_checkpoint = m_level_info.GetPlatformWithID(platform_id);
 
@@ -164,6 +181,56 @@ void WorldClient::SetCheckpointToPlatformWithID(sf::Int8 platform_id)
 	{
 		m_checkpoint = new_checkpoint;
 		m_checkpoint->SetType(EPlatformType::kCheckpointActivated);
+	}
+}
+
+Character* WorldClient::GetCharacter(const int player_id) const
+{
+	for (Character* character : m_players)
+	{
+		if (character->GetIdentifier() == player_id)
+		{
+			return character;
+		}
+	}
+	return nullptr;
+}
+
+void WorldClient::SetPlatformOnCharacter(Character* character, const int platform_id) const
+{
+	for (const auto& platform : m_level_info.platforms)
+	{
+		if (platform->GetID() == platform_id)
+		{
+			character->SetGrounded(platform.get());
+			break;
+		}
+	}
+}
+
+void WorldClient::UpdatePlatform(const int id, const int platform_id,
+                                 const EPlatformType platform_type)
+{
+	for (auto& platform : m_level_info.platforms)
+	{
+		if (platform->GetID() == platform_id)
+		{
+			if (platform_type == EPlatformType::kCheckpointActivated)
+			{
+				if (GetClientCharacter()->GetIdentifier() == id)
+				{
+					platform->SetType(platform_type);
+				}
+			}
+			else
+			{
+				platform->SetType(platform_type);
+			}
+
+			//Initialize the first checkpoint (spawn platform)
+			if (m_checkpoint == nullptr)
+				m_checkpoint = platform.get();
+		}
 	}
 }
 

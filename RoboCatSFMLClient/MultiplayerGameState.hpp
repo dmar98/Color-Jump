@@ -12,21 +12,25 @@ public:
 	bool HandleEvent(const sf::Event& event) override;
 	void Draw() override;
 
+	void HandleGameEnd(int team_id);
+	void HandlePlatformChange(int player_id, int platform_id, int platform_color) const;
+	void HandleTeamRespawn(int team_id) const;
+	void HandleTeamCheckpointSet(int team_id, int platform_id) const;
+	void SpawnClientPlayer(int identifier, int team_id, int color, const std::string& name) const;
+	void SpawnGhostPlayer(int identifier, int team_id, int color, const std::string& name) const;
+
 private:
 	void SendClientDisconnect(sf::Int8 identifier) const;
 	void HandleClientUpdate(InputMemoryBitStream& packet) const;
-	void SpawnClientPlayer(sf::Int8 identifier, sf::Int8 team_id, sf::Int8 color, std::string name);
-	void SpawnGhostPlayer(sf::Int8 identifier, sf::Int8 team_id, sf::Int8 color, const std::string& name);
 	void HandlePlayerDisconnect(InputMemoryBitStream& packet);
-	void HandleUpdatePlatformColors(InputMemoryBitStream& packet);
-	void HandleMission(InputMemoryBitStream& packet);
-	void HandleTeamRespawn(InputMemoryBitStream& packet) const;
-	void HandleTeamCheckpointSet(InputMemoryBitStream& packet);
+	
+	
 	void HandlePacket(sf::Int8 packet_type, InputMemoryBitStream& packet);
 
 	static void Debug(const std::string& message);
 
 	WorldClient* m_world_client;
 	/*std::map<int, PlayerPtr> m_players;*/
-	sf::Int8 m_local_player_identifier {};
+	bool m_game_over;
+	float m_completion_time;
 };

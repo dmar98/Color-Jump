@@ -20,6 +20,7 @@ public:
 
 	void Countdown(float dt);
 	void NotifyGameStart(const ClientProxyPtr& client);
+	void NotifySpawnCharacters();
 
 private:
 	NetworkManagerServer();
