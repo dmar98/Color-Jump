@@ -12,9 +12,8 @@ ClientProxy::ClientProxy(const SocketAddress& inSocketAddress, string inName,
 	mName(std::move(inName)),
 	mPlayerId(inPlayerId),
 	mTeamId(0),
-	mColor(0),
-	mTimeToRespawn(0.f),
-	mIsLastMoveTimestampDirty(false)
+	mColor(EColorType::kBlue),
+	mTimeToRespawn(0.f)
 {
 	UpdateLastPacketTime();
 }
@@ -44,7 +43,17 @@ void ClientProxy::SetTeamID(const int team_id)
 	mTeamId = team_id;
 }
 
-void ClientProxy::SetColor(const int color)
+void ClientProxy::SetColor(const EColorType color)
 {
 	mColor = color;
+}
+
+void ClientProxy::SetName(const string& name)
+{
+	mName = name;
+}
+
+void ClientProxy::SetIsReady(const bool ready)
+{
+	mReady = ready;
 }

@@ -13,7 +13,6 @@ bool Server::StaticInit()
 
 Server::Server()
 {
-
 	GameObjectRegistry::sInstance->RegisterCreationFunction('RCAT', RoboCatServer::StaticCreate);
 	GameObjectRegistry::sInstance->RegisterCreationFunction('MOUS', MouseServer::StaticCreate);
 	GameObjectRegistry::sInstance->RegisterCreationFunction('YARN', YarnServer::StaticCreate);
@@ -49,7 +48,6 @@ bool Server::InitNetworkManager()
 
 namespace
 {
-
 	void CreateRandomMice(int inMouseCount)
 	{
 		Vector3 mouseMin(100.f, 100.f, 0.f);
@@ -64,8 +62,6 @@ namespace
 			go->SetLocation(mouseLocation);
 		}
 	}
-
-
 }
 
 
@@ -84,17 +80,13 @@ void Server::DoFrame()
 
 	NetworkManagerServer::sInstance->CheckForDisconnects();
 
-	NetworkManagerServer::sInstance->RespawnCats();
-
 	Engine::DoFrame();
 
-	NetworkManagerServer::sInstance->SendOutgoingPackets();
-
+	NetworkManagerServer::sInstance->Countdown(Timing::sInstance.GetDeltaTime());
 }
 
 void Server::HandleNewClient(ClientProxyPtr inClientProxy)
 {
-
 	int playerId = inClientProxy->GetPlayerId();
 
 	ScoreBoardManager::sInstance->AddEntry(playerId, inClientProxy->GetName());
@@ -103,7 +95,8 @@ void Server::HandleNewClient(ClientProxyPtr inClientProxy)
 
 void Server::SpawnCatForPlayer(int inPlayerId)
 {
-	RoboCatPtr cat = std::static_pointer_cast<RoboCat>(GameObjectRegistry::sInstance->CreateGameObject('RCAT'));
+	RoboCatPtr cat = std::static_pointer_cast<RoboCat>(
+		GameObjectRegistry::sInstance->CreateGameObject('RCAT'));
 	cat->SetColor(ScoreBoardManager::sInstance->GetEntry(inPlayerId)->GetColor());
 	cat->SetPlayerId(inPlayerId);
 	//gotta pick a better spawn location than this...
@@ -142,5 +135,4 @@ RoboCatPtr Server::GetCatForPlayer(int inPlayerId)
 	}
 
 	return nullptr;
-
 }

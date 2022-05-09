@@ -26,6 +26,18 @@ namespace GUI
 		return m_text;
 	}
 
+	void Label::SetTextColor(const bool color)
+	{
+		if (color)
+		{
+			m_text.setFillColor(sf::Color::Green);
+		}
+		else
+		{
+			m_text.setFillColor(sf::Color::White);
+		}
+	}
+
 	void Label::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		states.transform *= getTransform();

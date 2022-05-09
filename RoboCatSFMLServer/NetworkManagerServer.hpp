@@ -1,4 +1,5 @@
-class NetworkManagerServer : public NetworkManager
+#pragma once
+class NetworkManagerServer final : public NetworkManager
 {
 public:
 	static NetworkManagerServer* sInstance;
@@ -8,8 +9,6 @@ public:
 	void ProcessPacket(InputMemoryBitStream& inInputStream,
 	                   const SocketAddress& inFromAddress) override;
 	void HandleConnectionReset(const SocketAddress& inFromAddress) override;
-
-	void SendOutgoingPackets();
 	void CheckForDisconnects();
 
 	void RegisterGameObject(const GameObjectPtr& inGameObject);
@@ -17,35 +16,54 @@ public:
 	void UnregisterGameObject(const GameObject* inGameObject);
 	void SetStateDirty(int inNetworkId, uint32_t inDirtyState) const;
 
-	void RespawnCats() const;
-
 	ClientProxyPtr GetClientProxy(int inPlayerId) const;
+
+	void Countdown(float dt);
+	void NotifyGameStart(const ClientProxyPtr& client);
 
 private:
 	NetworkManagerServer();
 
 	void HandlePacketFromNewClient(InputMemoryBitStream& inInputStream,
 	                               const SocketAddress& inFromAddress);
-	void HandleTeamChange(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& in_input_stream);
-	auto NotifyOfTeamChange( const ClientProxyPtr& inClientProxy);
+	void HandleTeamChange(const ClientProxyPtr& inClientProxy,
+	                      InputMemoryBitStream& in_input_stream);
+
+	void HandlePlayerNameChange(const ClientProxyPtr& client_proxy,
+	                            InputMemoryBitStream& input_memory_bit_stream);
+	void HandleGoalReached(InputMemoryBitStream& inInputStream);
+	void HandleTeamDeath(InputMemoryBitStream& inInputStream);
+	void HandleCheckpoint(InputMemoryBitStream& inInputStream);
+	void HandlePlatformChange(InputMemoryBitStream& inInputStream);
+	void NotifyCountDown(const ClientProxyPtr& client);
+	void CheckIfAllReady();
+	void HandleReadyPacket(const ClientProxyPtr& client_proxy, InputMemoryBitStream& inInputStream);
 	void ProcessPacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream);
 
+	void SendInitialState(const ClientProxyPtr& client_proxy);
 	void SendWelcomePacket(const ClientProxyPtr& inClientProxy);
-	void SendPacketToAll(const std::function<void(const ClientProxyPtr& inClientProxy)>& p_function) const;
-	void UpdateAllClients();
+	void NotifyPlayerJoin(const ClientProxyPtr& inClientProxy, int player_id, const string&
+	                      name);
+	void SendPacketToAll(
+		const std::function<void(const ClientProxyPtr& inClientProxy)>& p_function) const;
 
 	static void AddWorldStateToPacket(OutputMemoryBitStream& inOutputStream);
-	static void AddScoreBoardStateToPacket(OutputMemoryBitStream& inOutputStream);
 
 	void SendStatePacketToClient(const ClientProxyPtr& inClientProxy);
-	static void WriteLastMoveTimestampIfDirty(OutputMemoryBitStream& inOutputStream,
-	                                          const ClientProxyPtr& inClientProxy);
-
-	static void HandleInputPacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream);
-
 	void HandleClientDisconnected(const ClientProxyPtr& inClientProxy);
 
 	int GetNewNetworkId();
+
+
+	void NotifyOfTeamChange(const ClientProxyPtr& inClientProxy, int player_id, int team_id);
+	void NotifyPlayerNameChange(const ClientProxyPtr& inClientProxy, int player_id, const string&
+	                            name);
+	void NotifyGoalReached(const ClientProxyPtr& inClientProxy, int team_id);
+	void NotifyTeamRespawn(const ClientProxyPtr& inClientProxy, int team_id);
+	void NotifyCheckpointReached(const ClientProxyPtr& inClientProxy, int team_id, int platform_id);
+	void NotifyPlatformUpdate(const ClientProxyPtr& inClientProxy, int team_id, int platform_id,
+	                          int platform_color);
+	void NotifyReadyChange(const ClientProxyPtr& inClientProxy, int player_id, bool ready);
 
 	using IntToClientMap = unordered_map<int, ClientProxyPtr>;
 	using AddressToClientMap = unordered_map<SocketAddress, ClientProxyPtr>;
@@ -55,8 +73,10 @@ private:
 
 	int mNewPlayerId;
 	int mNewNetworkId;
-	
+
 	float mClientDisconnectTimeout;
+	bool m_start_countdown;
+	float m_start_countdown_timer;
 };
 
 
