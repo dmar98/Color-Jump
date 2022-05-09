@@ -16,7 +16,8 @@ public:
 		NCS_Checkpoint_Reached,
 		NCS_State,
 		NCS_Size,
-		
+
+		NCS_Game_State,
 	};
 
 	static NetworkManagerClient* sInstance;
@@ -61,6 +62,13 @@ public:
 private:
 	NetworkManagerClient();
 	void Init(const SocketAddress& inServerAddress, const string& inName);
+	static void HandleGameWon(InputMemoryBitStream& inInputStream);
+	static void HandlePlatformPacket(InputMemoryBitStream& inInputStream);
+	static void HandleTeamDeathPacket(InputMemoryBitStream& inInputStream);
+	static void HandleCheckpointPacket(InputMemoryBitStream& inInputStream);
+	static void ReadGhostData(InputMemoryBitStream& inInputStream);
+	static void ReadPlayerData(InputMemoryBitStream& inInputStream);
+	static void HandleSpawnPacket(InputMemoryBitStream& inInputStream);
 
 
 	void UpdateSayingHello();
@@ -99,7 +107,7 @@ private:
 	static void SetName(int player_id, const std::string& name);
 
 	void HandleTeamChange(InputMemoryBitStream& inInputStream);
-	static void HandleStartPacket();
+	void HandleStartPacket();
 	static void HandleStartCountdownPacket();
 
 	void UpdateInfoPacket(NetworkClientState p_enum, const std::function<void()>& p_function);

@@ -142,12 +142,12 @@ void Character::StopMovement()
 	SetVelocity(Vector3(0, 9.81f, 0));
 }
 
-void Character::SetIdentifier(const sf::Int8 identifier)
+void Character::SetIdentifier(const int identifier)
 {
 	m_identifier = identifier;
 }
 
-void Character::SetTeamIdentifier(const sf::Int8 identifier)
+void Character::SetTeamIdentifier(const int identifier)
 {
 	m_team_identifier = identifier;
 }
@@ -157,12 +157,12 @@ void Character::SetName(const std::string& name)
 	m_name = name;
 }
 
-sf::Int8 Character::GetIdentifier() const
+int Character::GetIdentifier() const
 {
 	return m_identifier;
 }
 
-sf::Int8 Character::GetTeamIdentifier() const
+int Character::GetTeamIdentifier() const
 {
 	return m_team_identifier;
 }
@@ -196,6 +196,7 @@ void Character::SetGrounded()
 
 void Character::Update()
 {
+	SetLocation(GetLocation() + m_velocity * Timing::sInstance.GetDeltaTime());
 	Accelerate(-m_velocity.mX * 0.5f, 0);
 	if (!m_grounded)
 	{

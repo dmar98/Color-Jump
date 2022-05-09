@@ -15,7 +15,7 @@ struct LevelInfo
 
 	std::vector<std::unique_ptr<Platform>> platforms;
 
-	Platform* GetPlatformWithID(const sf::Int8 platform_id) const
+	Platform* GetPlatformWithID(const int platform_id) const
 	{
 		for (const auto& platform : platforms)
 			if (platform->GetID() == platform_id)

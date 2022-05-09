@@ -19,7 +19,8 @@ public:
 		PT_State_Lobby,
 		PT_Player_Connect,
 		PT_Initial_State,
-		PT_Ready
+		PT_Ready,
+		PT_Spawn
 	};
 
 	static constexpr int kMaxPacketsPerFrameCount = 10;

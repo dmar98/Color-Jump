@@ -11,7 +11,7 @@ public:
 	typedef std::pair<GameObject*, GameObject*> GOPair;
 	CLASS_IDENTIFICATION('GOBJ', GameObject)
 
-	GameObject(Category::Type category = Category::kNone);
+	GameObject();
 	virtual ~GameObject() = default;
 
 	virtual RoboCat* GetAsCat() { return nullptr; }

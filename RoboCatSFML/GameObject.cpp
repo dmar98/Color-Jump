@@ -1,6 +1,6 @@
 #include "RoboCatPCH.hpp"
 
-GameObject::GameObject(Category::Type category)
+GameObject::GameObject()
 	: mColor(Colors::White),
 	mCollisionRadius(1.f),
 	mRotation(0.f),

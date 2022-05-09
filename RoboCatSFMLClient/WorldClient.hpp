@@ -13,17 +13,20 @@ public:
 	sf::View& GetCamera();
 
 	Character* AddCharacterWithColor(sf::Int8 identifier, EColorType color, sf::IntRect rect, Vector3 spawn_pos) override;
-	Character* AddCharacter(sf::Int8 identifier, sf::Int8 color, bool is_client_player) override;
-	Character* AddGhostCharacterWithColor(sf::Int8 identifier, EColorType color, const sf::IntRect& int_rect, Vector3 spawn_pos) override;
-	Character* AddGhostCharacter(sf::Int8 identifier, sf::Int8 color) override;
+	Character* AddCharacter(int identifier, int color, bool is_client_player) override;
+	Character* AddGhostCharacterWithColor(const int identifier, EColorType color, const sf::IntRect& int_rect, const Vector3 spawn_pos) override;
+	Character* AddGhostCharacter(int identifier, int color) override;
 	Character* GetClientCharacter() const;
 	void SetTeammate(Character* character);
 	Character* GetTeammate() const;
 
-	void UpdateCharacterTransparencies(sf::Int8 team_id) const;
+	void UpdateCharacterTransparencies(const int team_id) const;
 	void UpdateCharacterTransparencies() const;
 	void RespawnClientCharacter() const;
-	void SetCheckpointToPlatformWithID(sf::Int8 platform_id);
+	void SetCheckpointToPlatformWithID(int platform_id);
+	Character* GetCharacter(int player_id) const;
+	void SetPlatformOnCharacter(Character* character, int platform_id) const;
+	void UpdatePlatform(int id, int platform_id, EPlatformType platform_type);
 
 protected:
 	void CheckClientCollisions() const;

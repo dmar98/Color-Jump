@@ -10,6 +10,7 @@ Engine::Engine() : m_should_keep_running(true)
 
 	GameObjectRegistry::StaticInit();
 	ScoreBoardManager::StaticInit();
+	LeaderBoardManager::StaticInit();
 	LevelManager::StaticInit();
 }
 

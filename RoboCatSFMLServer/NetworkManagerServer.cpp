@@ -216,8 +216,6 @@ void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
 	case PacketType::PT_Goal:
 		HandleGoalReached(inInputStream);
 		break;
-	case PacketType::PT_Start_Game: break;
-	case PacketType::PT_Start_Game_Countdown: break;
 	case PacketType::PT_Team_Death:
 		HandleTeamDeath(inInputStream);
 		break;
@@ -229,6 +227,9 @@ void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
 		break;
 	case PacketType::PT_Player_Connect:
 	case PacketType::PT_Initial_State:
+	case PacketType::PT_Start_Game:
+	case PacketType::PT_Start_Game_Countdown:
+	case PacketType::PT_Spawn: 
 		break;
 	default:
 		LOG("Unknown packet type received from %s",
@@ -368,7 +369,7 @@ void NetworkManagerServer::HandleTeamChange(const ClientProxyPtr& inClientProxy,
 	EColorType color;
 	in_input_stream.Read(player_id);
 	in_input_stream.Read(team_id);
-	in_input_stream.Read(color, 1);
+	in_input_stream.Read(color);
 
 	inClientProxy->SetTeamID(team_id);
 	inClientProxy->SetColor(color);
@@ -537,6 +538,9 @@ void NetworkManagerServer::Countdown(const float dt)
 			};
 
 			SendPacketToAll(p_function);
+
+			Sleep(1000);
+			NotifySpawnCharacters();
 		}
 	}
 }
@@ -548,6 +552,52 @@ void NetworkManagerServer::NotifyGameStart(const ClientProxyPtr& client)
 	packet.Write(PacketType::PT_Start_Game);
 
 	SendPacket(packet, client->GetSocketAddress());
+}
+
+void NetworkManagerServer::NotifySpawnCharacters()
+{
+	for (const auto& it : mAddressToClientMap)
+	{
+		//process any timed out packets while we're going through the list
+		it.second->GetDeliveryNotificationManager().ProcessTimedOutPackets();
+
+		OutputMemoryBitStream packet;
+
+		packet.Write(PacketType::PT_Spawn);
+		const int size = mPlayerIdToClientMap.size();
+		packet.Write(size - 1);
+
+		for (int i = 0; i < size; ++i)
+		{
+			int id = it.second->GetPlayerId();
+
+			for (const auto& player_info : mPlayerIdToClientMap)
+			{
+				if (player_info.first == id)
+				{
+					continue;
+				}
+
+				const shared_ptr<ClientProxy> client_proxy = player_info.second;
+
+				packet.Write(player_info.first);
+				packet.Write(client_proxy->GetTeamID());
+				packet.Write(client_proxy->GetColor());
+				packet.Write(client_proxy->GetName());
+			}
+
+			const shared_ptr<ClientProxy> proxy = mPlayerIdToClientMap[id];
+
+			packet.Write(id);
+			packet.Write(proxy->GetTeamID());
+			packet.Write(proxy->GetColor());
+			packet.Write(proxy->GetName());
+
+			SendPacket(packet, it.second->GetSocketAddress());
+		}
+	}
+
+	
 }
 
 void NetworkManagerServer::CheckForDisconnects()

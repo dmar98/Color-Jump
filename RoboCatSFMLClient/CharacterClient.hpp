@@ -16,7 +16,7 @@ public:
 	void SetTransparent() const;
 	void SetOpaque() const;
 
-	void SetTeamIdentifier(sf::Int8 identifier) override;
+	void SetTeamIdentifier(const int identifier) override;
 	void SetName(const std::string& name) override;
 
 	sf::IntRect GetSize() const;

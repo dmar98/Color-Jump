@@ -4,7 +4,7 @@ CharacterClient::CharacterClient(EColorType type, const sf::IntRect& texture_rec
 	: Character(type, texture_rect)
 {
 	mSpriteComponent.reset(new SpriteComponent(this));
-	mSpriteComponent->SetTexture(TextureManager::sInstance->GetTexture("LevelTileSet"));
+	mSpriteComponent->SetTexture(TextureManager::sInstance->GetTexture("LevelTileSet"), texture_rect);
 
 	/*m_jump_smoke_animation.SetFrameSize(sf::Vector2i(256, 256));
 	m_jump_smoke_animation.SetNumFrames(16);
@@ -14,9 +14,10 @@ CharacterClient::CharacterClient(EColorType type, const sf::IntRect& texture_rec
 	const sf::FloatRect bounds = m_jump_smoke_animation.GetLocalBounds();
 	m_jump_smoke_animation.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
 	                                 std::floor(bounds.top + 50.f));*/
-
+	m_name_text.reset(new TextComponent(this));
 	m_name_text->SetFont(*FontManager::sInstance->GetFont("carlito"));
 	m_name_text->SetFontSize(15.f);
+	m_team_id_text.reset(new TextComponent(this));
 	m_team_id_text->SetFont(*FontManager::sInstance->GetFont("carlito"));
 	m_team_id_text->SetFontSize(15.f);
 }
@@ -67,13 +68,14 @@ void CharacterClient::SetOpaque() const
 	m_team_id_text->SetColor(white);
 }
 
-void CharacterClient::SetTeamIdentifier(sf::Int8 identifier)
+void CharacterClient::SetTeamIdentifier(const int identifier)
 {
 	Character::SetTeamIdentifier(identifier);
 
 	m_team_id_text->SetText(std::to_string(identifier));
 	const sf::FloatRect bounds = m_team_id_text->GetText().getLocalBounds();
-	m_team_id_text->GetText().setOrigin(std::floor(bounds.left + bounds.width / 2.f), mSpriteComponent->GetSprite().getOrigin().y - 5.0f);
+	m_team_id_text->GetText().setOrigin(std::floor(bounds.left + bounds.width / 2.f),
+	                                    mSpriteComponent->GetSprite().getOrigin().y - 5.0f);
 }
 
 void CharacterClient::SetName(const std::string& name)
@@ -84,7 +86,8 @@ void CharacterClient::SetName(const std::string& name)
 	const auto sprite = mSpriteComponent->GetSprite();
 	const sf::FloatRect bounds = m_name_text->GetText().getLocalBounds();
 	m_name_text->GetText().setOrigin(std::floor(bounds.left + bounds.width / 2.f),
-						  sprite.getOrigin().y + sprite.getTextureRect().height / 2.f - 5.f);
+	                                 sprite.getOrigin().y + sprite.getTextureRect().height / 2.f -
+	                                 5.f);
 }
 
 sf::IntRect CharacterClient::GetSize() const

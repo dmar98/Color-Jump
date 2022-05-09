@@ -9,7 +9,7 @@ class Character : public GameObject
 public:
 	CLASS_IDENTIFICATION('CHAR', GameObject)
 
-		enum ECharacterReplicationState
+	enum ECharacterReplicationState
 	{
 		ECRS_Pose = 1 << 0,
 		ECRS_Color = 1 << 1,
@@ -18,19 +18,22 @@ public:
 		ECRS_AllState = ECRS_Pose | ECRS_Color | ECRS_PlayerId
 	};
 
-	static	GameObject* StaticCreate(EColorType type, const sf::IntRect& texture_rect) { return new Character(type, texture_rect); }
+	static GameObject* StaticCreate(EColorType type, const sf::IntRect& texture_rect)
+	{
+		return new Character(type, texture_rect);
+	}
 
-	uint32_t GetAllStateMask()	const override { return ECRS_AllState; }
+	uint32_t GetAllStateMask() const override { return ECRS_AllState; }
 	void SetVelocity(const Vector3& inVelocity);
 	const Vector3& GetVelocity() const;
 	void Accelerate(float vx, float vy);
 	void ProcessInput(float inDeltaTime, const InputState& inInputState);
 
-	void SetIdentifier(sf::Int8 identifier);
-	virtual void SetTeamIdentifier(sf::Int8 identifier);
+	void SetIdentifier(const int identifier);
+	virtual void SetTeamIdentifier(int identifier);
 	virtual void SetName(const std::string& name);
-	sf::Int8 GetIdentifier() const;
-	sf::Int8 GetTeamIdentifier() const;
+	int GetIdentifier() const;
+	int GetTeamIdentifier() const;
 	std::string GetName() const;
 	unsigned GetCategory() const override;
 
@@ -62,9 +65,8 @@ protected:
 	bool m_can_jump;
 
 	/*SoundPlayer& m_sounds;*/
-	sf::Int8 m_identifier{};
-	sf::Int8 m_team_identifier{};
+	int m_identifier{};
+	int m_team_identifier{};
 
 	Vector3 m_velocity;
-
 };

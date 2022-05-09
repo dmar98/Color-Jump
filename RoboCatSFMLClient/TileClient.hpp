@@ -1,5 +1,4 @@
 #pragma once
-#include "EColorType.hpp"
 #include "ETileType.hpp"
 
 
