@@ -14,3 +14,8 @@ void PlatformPartClient::SetTexture(const TexturePtr texture, const sf::IntRect 
 {
 	m_sprite_component->SetTexture(texture, sub_rect);
 }
+
+sf::FloatRect PlatformPartClient::GetBoundingRect() const
+{
+	return m_sprite_component->getTransform().transformRect(m_sprite_component->GetSprite().getLocalBounds());
+}

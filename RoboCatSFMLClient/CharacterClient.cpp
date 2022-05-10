@@ -158,5 +158,5 @@ void CharacterClient::CreateRay()
 
 sf::FloatRect CharacterClient::GetBoundingRect() const
 {
-	return mSpriteComponent->GetSprite().getGlobalBounds();
+	return mSpriteComponent->getTransform().transformRect(mSpriteComponent->GetSprite().getLocalBounds());
 }

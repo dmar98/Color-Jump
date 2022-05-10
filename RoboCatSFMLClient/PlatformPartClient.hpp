@@ -9,4 +9,5 @@ private:
 public:
 	PlatformPartClient(sf::IntRect sub_rect, PlatformClient* platform, ETileType type);
 	void SetTexture(TexturePtr texture, sf::IntRect sub_rect) const;
+	sf::FloatRect GetBoundingRect() const override;
 };

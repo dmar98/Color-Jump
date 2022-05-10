@@ -29,8 +29,10 @@ sf::IntRect TileFactoryClient::GetSubRect(const ETileType tile_type, Vector3& sp
 PlatformPart* TileFactoryClient::CreatePlatformPart(const ETileType tile_type, Vector3 spawn_pos, Platform* parent) const
 {
 	const sf::IntRect sub_rect = GetSubRect(tile_type, spawn_pos);
+	PlatformClient* platform_client = dynamic_cast<PlatformClient*>(parent);
 
-	const auto platform_part = new PlatformPartClient(sub_rect, dynamic_cast<PlatformClient*>(parent), tile_type);
+	const auto platform_part = new PlatformPartClient(sub_rect, platform_client, tile_type);
+	platform_part->SetActiveCollider(true);
 	platform_part->SetLocation(spawn_pos);
 	parent->AddPlatformPart(platform_part);
 

@@ -3,7 +3,6 @@
 enum {kClassId = in_code}; \
 virtual uint32_t GetClassId() const {return kClassId;} \
 static GameObject* CreateInstance() { return static_cast<GameObject*>(new in_class());}
-#include "Category.hpp"
 
 class GameObject
 {
@@ -83,7 +82,6 @@ private:
 	bool mDoesWantToDie;
 
 	int mNetworkId;
-	Category::Type m_category;
 };
 
 using GameObjectPtr = shared_ptr<GameObject>;

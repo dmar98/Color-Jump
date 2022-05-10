@@ -7,6 +7,14 @@ LevelInfo LevelLoaderClient::LoadLevel(LevelManager::LevelData& level_data)
 	return LevelLoader::LoadLevel(level_data);
 }
 
+void LevelLoaderClient::CreatePlatform(LevelInfo& level_info, ETileType tile_type, int row, int col, Vector3 spawn_pos,
+	sf::Int8 platform_id)
+{
+	std::unique_ptr<PlatformClient> platform(new PlatformClient(platform_id, static_cast<EPlatformType>(tile_type)));
+	AddPlatformParts(platform.get(), row, col, tile_type, spawn_pos);
+	level_info.platforms.emplace_back(std::move(platform));
+}
+
 void LevelLoaderClient::CreateTile(ETileType tile_type, Vector3 spawn_pos, bool has_collider)
 {
 	const GameObjectPtr tilePtr(m_tile_factory->CreateTile(tile_type, spawn_pos, has_collider));

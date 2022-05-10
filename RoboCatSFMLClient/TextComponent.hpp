@@ -1,5 +1,5 @@
 #pragma once
-class TextComponent : DrawableComponent
+class TextComponent : public DrawableComponent
 {
 public:
 	TextComponent(GameObject* game_object);

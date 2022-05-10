@@ -1,4 +1,5 @@
 #include "RoboCatPCH.hpp"
+#include <SFML/Graphics/Shape.hpp>
 
 GameObject::GameObject()
 	: mColor(Colors::White),
@@ -34,7 +35,7 @@ void GameObject::SetNetworkId(int inNetworkId)
 
 unsigned GameObject::GetCategory() const
 {
-	return static_cast<unsigned>(m_category);
+	return Category::Type::kNone;
 }
 
 sf::FloatRect GameObject::GetBoundingRect() const

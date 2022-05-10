@@ -32,13 +32,11 @@ public:
 	virtual ~LevelLoader() = default;
 	virtual LevelInfo LoadLevel(LevelManager::LevelData& level_data);
 
-private:
+protected:
 	virtual void LoadLevelLayer(const std::string& csv_path, LevelInfo& level_info, bool is_collider_layer);
 	std::vector<std::vector<int>> LevelDataToVector(const std::string& csv_path) const;
-	void CreatePlatform(LevelInfo& level_info, ETileType tile_type, int row, int col, Vector3 spawn_pos, sf::Int8 platform_id);
+	virtual void CreatePlatform(LevelInfo& level_info, ETileType tile_type, int row, int col, Vector3 spawn_pos, sf::Int8 platform_id);
 	void AddPlatformParts(Platform* platform, int row, int col, ETileType tile_type, Vector3 spawn_pos);
-
-protected:
 	virtual void CreateTile(ETileType tile_type, Vector3 spawn_pos, bool has_collider) = 0;
 	virtual void CreatePlatformPart(ETileType tile_type, Vector3 spawn_pos, Platform* platform) = 0;
 

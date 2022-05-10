@@ -16,7 +16,11 @@ void TextComponent::InitText(const string& text, const sf::Font& font, unsigned 
 void TextComponent::SetText(const string& text)
 {
 	m_text.setString(text);
-	Utility::CentreOrigin(m_text);
+	/*Utility::CentreOrigin(m_text);*/
+	const sf::FloatRect bounds = m_text.getLocalBounds();
+	m_text.setOrigin(std::floor(bounds.left - bounds.width / 2.f), std::floor(bounds.top - bounds.height / 2.f));
+	setOrigin(m_text.getOrigin());
+	m_text.setScale(sf::Vector2f(m_game_object->GetScale(), m_game_object->GetScale()));
 }
 
 void TextComponent::SetFontSize(unsigned font_size)

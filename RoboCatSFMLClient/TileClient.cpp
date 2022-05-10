@@ -16,7 +16,7 @@ sf::FloatRect TileClient::GetBoundingRect() const
 	if (!m_has_collider)
 		return GameObject::GetBoundingRect();
 
-	return m_SpriteComponent->GetSprite().getGlobalBounds();
+	return m_SpriteComponent->getTransform().transformRect(m_SpriteComponent->GetSprite().getLocalBounds());
 }
 
 sf::IntRect TileClient::GetSize() const

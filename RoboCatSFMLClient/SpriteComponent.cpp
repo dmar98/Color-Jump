@@ -12,7 +12,8 @@ void SpriteComponent::SetTexture(TexturePtr inTexture, sf::IntRect subRect)
 		m_sprite.setTextureRect(subRect);
 
 	m_sprite.setTexture(*inTexture);
-	Utility::CentreOrigin(m_sprite);
+	/*Utility::CentreOrigin(m_sprite);
+	setOrigin(m_sprite.getOrigin());*/
 	m_sprite.setScale(sf::Vector2f(m_game_object->GetScale(), m_game_object->GetScale()));
 }
 
@@ -24,5 +25,20 @@ sf::Sprite& SpriteComponent::GetSprite()
 void SpriteComponent::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(m_sprite, states);
+	sf::FloatRect bounds = getTransform().transformRect(m_sprite.getLocalBounds());
+	sf::FloatRect bounds2 = m_game_object->GetBoundingRect();
+	DrawBoundingRect(target, states, bounds2);
+}
+
+void SpriteComponent::DrawBoundingRect(sf::RenderTarget& target, sf::RenderStates states,
+	const sf::FloatRect& bounding_rect) const
+{
+	sf::RectangleShape shape;
+	shape.setPosition(sf::Vector2f(bounding_rect.left, bounding_rect.top));
+	shape.setSize(sf::Vector2f(bounding_rect.width, bounding_rect.height));
+	shape.setFillColor(sf::Color::Transparent);
+	shape.setOutlineColor(sf::Color::Green);
+	shape.setOutlineThickness(1.f);
+	target.draw(shape);
 }
 
