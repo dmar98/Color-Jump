@@ -18,7 +18,7 @@ void DrawableComponent::UpdatePosition()
 {
 	const auto pos = m_game_object->GetLocation();
 	const auto rot = m_game_object->GetRotation();
-	setPosition(pos.mX, pos.mY);
+	setPosition(pos.mX + m_offset.x, pos.mY + m_offset.y);
 	setRotation(rot);
 }
 
@@ -34,4 +34,9 @@ void DrawableComponent::draw(sf::RenderTarget& target, sf::RenderStates states) 
 
 	states.transform *= getTransform();
 	DrawCurrent(target, states);
+}
+
+void DrawableComponent::SetOffset(const sf::Vector2f& offset)
+{
+	m_offset = offset;
 }

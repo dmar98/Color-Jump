@@ -1,3 +1,4 @@
+#pragma once
 class Mouse : public GameObject
 {
 public:

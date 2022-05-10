@@ -44,11 +44,25 @@ void Utility::CentreOrigin(sf::Sprite& sprite)
 	                 std::floor(bounds.top + bounds.height / 2.f));
 }
 
+void Utility::CentreOrigin(SpriteComponent& component)
+{
+	const sf::FloatRect bounds = component.GetSprite().getLocalBounds();
+	component.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
+		std::floor(bounds.top + bounds.height / 2.f));
+}
+
 void Utility::CentreOrigin(sf::Text& text)
 {
 	const sf::FloatRect bounds = text.getLocalBounds();
 	text.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
 	               std::floor(bounds.top + bounds.height / 2.f));
+}
+
+void Utility::CentreOrigin(TextComponent& component)
+{
+	const sf::FloatRect bounds = component.GetText().getLocalBounds();
+	component.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
+		std::floor(bounds.top + bounds.height / 2.f));
 }
 
 std::string Utility::ToString(const sf::Keyboard::Key key)

@@ -1,12 +1,8 @@
 #include "RoboCatClientPCH.hpp"
 
-#include "LevelLoaderClient.hpp"
-
 WorldClient::WorldClient()
 	: World(),
-	  m_checkpoint(nullptr),
-	  m_client_player(nullptr),
-	  m_team_mate(nullptr)
+	  m_checkpoint(nullptr)
 {
 }
 
@@ -40,7 +36,7 @@ void WorldClient::Update()
 
 void WorldClient::CheckClientCollisions() const
 {
-	if(m_client_player == nullptr)
+	if (m_client_player == nullptr)
 		return;
 
 	const sf::FloatRect client_bounds = m_client_player->GetBoundingRect();
@@ -48,33 +44,36 @@ void WorldClient::CheckClientCollisions() const
 	const sf::FloatRect client_ray_bounds = client_ray->GetBoundingRect();
 	std::set<GameObject::GOPair> ray_collision_pairs;
 
-	for(auto go : mGameObjects)
+	for (const auto& go : mGameObjects)
 	{
 		//Ignore yourself and your ray ground object
-		if(go.get() == m_client_player || go.get() == client_ray)
+		if (go.get() == m_client_player || go.get() == client_ray)
 			continue;
 
 		sf::FloatRect go_bounds = go->GetBoundingRect();
 
 		//Character Collisions
-		if(go_bounds.intersects(client_bounds))
+		if (go_bounds.intersects(client_bounds))
 		{
 			//Client Character Collision!
 			const GameObject::GOPair collision_pair(go.get(), m_client_player);
 
-			if (CollisionHandler::PlatformCollision(collision_pair, [this] { OnReachedCheckpoint(); }, [this] { OnReachedGoal(); }, this))
+			if (CollisionHandler::PlatformCollision(collision_pair,
+			                                        [this] { OnReachedCheckpoint(); }, [this]
+			                                        {
+				                                        OnReachedGoal();
+			                                        }, this))
 				continue;
 
 			CollisionHandler::TrapCollision(collision_pair, [this] { OnClientPlayerDeath(); });
 		}
 
 		//Ray Ground Collisions
-		if(go_bounds.intersects(client_ray_bounds))
+		if (go_bounds.intersects(client_ray_bounds))
 		{
 			//Client Ray Collision!
 			GameObject::GOPair collision_pair(go.get(), client_ray);
 			CollisionHandler::PlayerGroundRayCast(collision_pair);
-			
 		}
 	}
 }
@@ -91,13 +90,13 @@ sf::View& WorldClient::GetCamera()
 	return m_camera;
 }
 
-Character* WorldClient::AddCharacterWithColor(sf::Int8 identifier, EColorType color,
-                                              sf::IntRect rect, Vector3 spawn_pos)
+Character* WorldClient::AddCharacterWithColor(const int player_id, const EColorType color,
+                                              const sf::IntRect rect, const Vector3 spawn_pos)
 {
 	const std::shared_ptr<CharacterClient> player(new CharacterClient(color, rect));
 	player->InitRay();
 	player->SetLocation(spawn_pos);
-	player->SetIdentifier(identifier);
+	player->SetIdentifier(player_id);
 
 	m_players.emplace_back(player.get());
 	AddGameObject(player);
@@ -105,33 +104,19 @@ Character* WorldClient::AddCharacterWithColor(sf::Int8 identifier, EColorType co
 	return player.get();
 }
 
-Character* WorldClient::AddCharacter(int identifier, int color, bool is_client_player)
+Character* WorldClient::AddCharacter(const int player_id, const EColorType color)
 {
-	Character* character;
+	Character* character = AddCharacterWithColor(player_id, color,
+	                                             m_level_info.m_red_player_rect,
+	                                             m_level_info.m_red_player_spawn_pos);
 
-	if (color == 1)
-	{
-		character = AddCharacterWithColor(identifier, EColorType::kRed,
-		                                  m_level_info.m_red_player_rect,
-		                                  m_level_info.m_red_player_spawn_pos);
-	}
-	else
-	{
-		character = AddCharacterWithColor(identifier, EColorType::kBlue,
-		                                  m_level_info.m_blue_player_rect,
-		                                  m_level_info.m_blue_player_spawn_pos);
-	}
-
-	if (is_client_player)
-	{
-		m_client_player = dynamic_cast<CharacterClient*>(character);
-		UpdateCharacterTransparencies(character->GetTeamIdentifier());
-	}
+	m_client_player = dynamic_cast<CharacterClient*>(character);
+	UpdateCharacterTransparencies(character->GetTeamIdentifier());
 
 	return character;
 }
 
-Character* WorldClient::AddGhostCharacterWithColor(const int identifier, EColorType color,
+Character* WorldClient::AddGhostCharacterWithColor(const int identifier, const EColorType color,
                                                    const sf::IntRect& int_rect,
                                                    const Vector3 spawn_pos)
 {
@@ -145,16 +130,9 @@ Character* WorldClient::AddGhostCharacterWithColor(const int identifier, EColorT
 	return ghost_char.get();
 }
 
-Character* WorldClient::AddGhostCharacter(const int identifier, const int color)
+Character* WorldClient::AddGhostCharacter(const int player_id, const EColorType color)
 {
-	if (color == 1)
-	{
-		return AddGhostCharacterWithColor(identifier, EColorType::kRed,
-		                                  m_level_info.m_red_player_rect,
-		                                  m_level_info.m_red_player_spawn_pos);
-	}
-
-	return AddGhostCharacterWithColor(identifier, EColorType::kBlue,
+	return AddGhostCharacterWithColor(player_id, color,
 	                                  m_level_info.m_blue_player_rect,
 	                                  m_level_info.m_blue_player_spawn_pos);
 }
@@ -205,8 +183,8 @@ void WorldClient::RespawnClientCharacter() const
 	const auto& parts = m_checkpoint->GetParts();
 	const PlatformPart* part = parts[parts.size() / 2];
 	Vector3 position = part->GetLocation();
-	position.mY -= static_cast<CharacterClient*>(m_client_player)->GetSize().height - 15.f;
-	position.mX += part->GetSize().width / 2;
+	position.mY -= static_cast<float>(m_client_player->GetSize().height - 15);
+	position.mX += static_cast<float>(part->GetSize().width) / 2.f;
 	m_client_player->SetLocation(position);
 
 	//Reset all platforms to their initial type
@@ -231,7 +209,7 @@ Character* WorldClient::GetCharacter(const int player_id) const
 {
 	for (Character* character : m_players)
 	{
-		if (character->GetIdentifier() == player_id)
+		if (character->GetPlayerID() == player_id)
 		{
 			return character;
 		}
@@ -260,7 +238,7 @@ void WorldClient::UpdatePlatform(const int id, const int platform_id,
 		{
 			if (platform_type == EPlatformType::kCheckpointActivated)
 			{
-				if (GetClientCharacter()->GetIdentifier() == id)
+				if (GetClientCharacter()->GetPlayerID() == id)
 				{
 					platform->SetType(platform_type);
 				}
@@ -281,8 +259,10 @@ void WorldClient::OnReachedCheckpoint() const
 {
 	Platform* current_platform = m_client_player->GetCurrentPlatform();
 
-	if (m_team_mate != nullptr && current_platform == m_team_mate->GetCurrentPlatform() && current_platform != m_checkpoint)
-		NetworkManagerClient::sInstance->SendCheckpointReached(m_client_player->GetTeamIdentifier(), current_platform->GetID());
+	if (m_team_mate != nullptr && current_platform == m_team_mate->GetCurrentPlatform() &&
+		current_platform != m_checkpoint)
+		NetworkManagerClient::sInstance->SendCheckpointReached(
+			m_client_player->GetTeamIdentifier(), current_platform->GetID());
 }
 
 void WorldClient::OnReachedGoal() const

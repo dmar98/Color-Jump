@@ -1,6 +1,4 @@
 #pragma once
-#include "TextComponent.hpp"
-
 class CharacterClient : public Character
 {
 public:

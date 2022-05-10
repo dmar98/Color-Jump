@@ -1,10 +1,4 @@
 #pragma once
-#include <SFML/Graphics/Rect.hpp>
-
-#include "LevelManager.hpp"
-#include "TileFactory.hpp"
-
-#include <memory>
 
 struct LevelInfo
 {

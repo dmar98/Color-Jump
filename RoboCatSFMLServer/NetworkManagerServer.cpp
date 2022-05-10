@@ -8,7 +8,8 @@ NetworkManagerServer::NetworkManagerServer() :
 	mNewNetworkId(1),
 	mClientDisconnectTimeout(3.f),
 	m_start_countdown(false),
-	m_start_countdown_timer(5)
+	m_start_countdown_timer(5),
+	m_game_started(false)
 {
 }
 
@@ -111,7 +112,7 @@ void NetworkManagerServer::HandlePlatformChange(InputMemoryBitStream& inInputStr
 {
 	int player_id;
 	int platform_id;
-	int platform_color;
+	EPlatformType platform_color;
 
 	inInputStream.Read(player_id);
 	inInputStream.Read(platform_id);
@@ -225,16 +226,20 @@ void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
 	case PacketType::PT_Ready:
 		HandleReadyPacket(inClientProxy, inInputStream);
 		break;
+	case PacketType::PT_Game_State: 
+		SendGameStatePacket(inClientProxy);
+		break;
 	case PacketType::PT_Player_Connect:
 	case PacketType::PT_Initial_State:
 	case PacketType::PT_Start_Game:
 	case PacketType::PT_Start_Game_Countdown:
-	case PacketType::PT_Spawn: 
+	case PacketType::PT_Spawn:
 		break;
 	default:
 		LOG("Unknown packet type received from %s",
 		    inClientProxy->GetSocketAddress().ToString().c_str())
 		break;
+	
 	}
 }
 
@@ -324,23 +329,23 @@ void NetworkManagerServer::NotifyCheckpointReached(const ClientProxyPtr& inClien
 	packet.Write(team_id);
 	packet.Write(platform_id);
 
-	LOG("Server Checpoint, Team %d has reached checkpoint with id %d", team_id, platform_id)
+	LOG("Server Checpoint: Team %d has reached checkpoint with id %d", team_id, platform_id)
 
 	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
 
 void NetworkManagerServer::NotifyPlatformUpdate(const ClientProxyPtr& inClientProxy,
-                                                const int team_id, const int platform_id,
-                                                const int platform_color)
+                                                const int player_id, const int platform_id,
+                                                const EPlatformType platform_color)
 {
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Platform);
-	packet.Write(team_id);
+	packet.Write(player_id);
 	packet.Write(platform_id);
 	packet.Write(platform_color);
 
-	LOG("Server Platform, Member of team %d has stepped on platform with id %d", team_id,
+	LOG("Server Platform: Player %d has stepped on platform %d", player_id,
 	    platform_id)
 
 	SendPacket(packet, inClientProxy->GetSocketAddress());
@@ -483,6 +488,15 @@ void NetworkManagerServer::SendStatePacketToClient(const ClientProxyPtr& inClien
 	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
 
+void NetworkManagerServer::SendGameStatePacket(const ClientProxyPtr& inClientProxy)
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Game_State);
+
+	SendPacket(packet, inClientProxy->GetSocketAddress());
+}
+
 //should we ask the server for this? or run through the world ourselves?
 void NetworkManagerServer::AddWorldStateToPacket(OutputMemoryBitStream& inOutputStream)
 {
@@ -524,7 +538,7 @@ ClientProxyPtr NetworkManagerServer::GetClientProxy(const int inPlayerId) const
 
 void NetworkManagerServer::Countdown(const float dt)
 {
-	if (m_start_countdown)
+	if (m_start_countdown && !m_game_started)
 	{
 		if (m_start_countdown_timer > 0)
 		{
@@ -532,6 +546,8 @@ void NetworkManagerServer::Countdown(const float dt)
 		}
 		else
 		{
+			m_game_started = true;
+
 			auto p_function = [this](const ClientProxyPtr& client)
 			{
 				NotifyGameStart(client);
@@ -539,7 +555,7 @@ void NetworkManagerServer::Countdown(const float dt)
 
 			SendPacketToAll(p_function);
 
-			Sleep(1000);
+			Sleep(500);
 			NotifySpawnCharacters();
 		}
 	}
@@ -596,8 +612,6 @@ void NetworkManagerServer::NotifySpawnCharacters()
 			SendPacket(packet, it.second->GetSocketAddress());
 		}
 	}
-
-	
 }
 
 void NetworkManagerServer::CheckForDisconnects()

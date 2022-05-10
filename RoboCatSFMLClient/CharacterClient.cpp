@@ -4,7 +4,8 @@ CharacterClient::CharacterClient(EColorType type, const sf::IntRect& texture_rec
 	: Character(type, texture_rect)
 {
 	mSpriteComponent.reset(new SpriteComponent(this));
-	mSpriteComponent->SetTexture(TextureManager::sInstance->GetTexture("LevelTileSet"), texture_rect);
+	mSpriteComponent->SetTexture(TextureManager::sInstance->GetTexture("LevelTileSet"),
+	                             texture_rect);
 
 	/*m_jump_smoke_animation.SetFrameSize(sf::Vector2i(256, 256));
 	m_jump_smoke_animation.SetNumFrames(16);
@@ -73,9 +74,9 @@ void CharacterClient::SetTeamIdentifier(const int identifier)
 	Character::SetTeamIdentifier(identifier);
 
 	m_team_id_text->SetText(std::to_string(identifier));
-	const sf::FloatRect bounds = m_team_id_text->GetText().getLocalBounds();
-	m_team_id_text->GetText().setOrigin(std::floor(bounds.left + bounds.width / 2.f),
-	                                    mSpriteComponent->GetSprite().getOrigin().y - 5.0f);
+	const auto& sprite = mSpriteComponent->GetSprite();
+
+	m_team_id_text->SetOffset(sf::Vector2f(0, -sprite.getLocalBounds().height / 4 ));
 }
 
 void CharacterClient::SetName(const std::string& name)
@@ -83,11 +84,8 @@ void CharacterClient::SetName(const std::string& name)
 	Character::SetName(name);
 
 	m_name_text->SetText(name);
-	const auto sprite = mSpriteComponent->GetSprite();
-	const sf::FloatRect bounds = m_name_text->GetText().getLocalBounds();
-	m_name_text->GetText().setOrigin(std::floor(bounds.left + bounds.width / 2.f),
-	                                 sprite.getOrigin().y + sprite.getTextureRect().height / 2.f -
-	                                 5.f);
+	const auto& sprite = mSpriteComponent->GetSprite();
+	m_name_text->SetOffset(sf::Vector2f(0, -sprite.getLocalBounds().height / 2 - 10));
 }
 
 sf::IntRect CharacterClient::GetSize() const
@@ -135,7 +133,9 @@ void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect)
 
 	while (rect.intersects(GetBoundingRect()))
 	{
-		SetLocation(GetLocation() - normal_velocity + Vector3(0, 9.81f * Timing::sInstance.GetDeltaTime(), 0));
+		SetLocation(
+			GetLocation() - normal_velocity + Vector3(0, 9.81f * Timing::sInstance.GetDeltaTime(),
+			                                          0));
 	}
 }
 
@@ -158,5 +158,6 @@ void CharacterClient::CreateRay()
 
 sf::FloatRect CharacterClient::GetBoundingRect() const
 {
-	return mSpriteComponent->getTransform().transformRect(mSpriteComponent->GetSprite().getLocalBounds());
+	return mSpriteComponent->getTransform().transformRect(
+		mSpriteComponent->GetSprite().getLocalBounds());
 }

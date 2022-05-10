@@ -55,13 +55,14 @@ using std::unordered_map;
 using std::string;
 using std::unordered_set;
 
-class RoboCat;
-class GameObject;
 
-#include "SFML\System.hpp"
-#include "SFML\Window.hpp"
-#include "SFML\Graphics.hpp"
-#include "SFML\Audio.hpp"
+class GameObject;
+class RoboCat;
+
+#include "SFML/System.hpp"
+#include "SFML/Window.hpp"
+#include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 
 #include "RoboMath.hpp"
 
@@ -89,7 +90,6 @@ class GameObject;
 #include "GameObject.hpp"
 #include "GameObjectRegistry.hpp"
 #include "RoboCat.hpp"
-#include "World.hpp"
 #include "Timing.hpp"
 #include "Mouse.hpp"
 #include "Yarn.hpp"
@@ -108,8 +108,10 @@ class GameObject;
 #include "EColorType.hpp"
 #include "ETileType.hpp"
 #include "LevelManager.hpp"
-#include "LevelLoader.hpp"
 #include "TileFactory.hpp"
+#include "LevelLoader.hpp"
 #include "Character.hpp"
 #include "LeaderBoardManager.hpp"
 #include "Category.hpp"
+
+#include "World.hpp"

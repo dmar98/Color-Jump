@@ -2,6 +2,8 @@
 #define _USE_MATH_DEFINES
 #include "RoboCatShared.hpp"
 
+class CharacterClient;
+
 #include "StateID.hpp"
 #include "ButtonType.hpp"
 #include "PlayerAction.hpp"
@@ -9,9 +11,11 @@
 #include "SFML/Graphics.hpp"
 
 #include "Component.hpp"
+#include "DrawableComponent.hpp"
 #include "Button.hpp"
 #include "Label.hpp"
 #include "Container.hpp"
+#include "TextComponent.hpp"
 
 #include "Utility.hpp"
 #include "KeyBinding.hpp"
@@ -51,15 +55,16 @@
 #include "Client.hpp"
 #include "PlayerDataManager.hpp"
 
-#include "WorldClient.hpp"
+#include "CharacterClient.hpp"
+#include "GhostCharacterClient.hpp"
+
 #include "LevelLoaderClient.hpp"
 #include "TileClient.hpp"
 #include "PlatformClient.hpp"
 #include "PlatformPartClient.hpp"
 #include "TileFactoryClient.hpp"
-#include "CharacterClient.hpp"
 #include "RayGround.hpp"
-#include "DrawableComponent.hpp"
-#include "TextComponent.hpp"
-#include "GhostCharacterClient.hpp"
+
 #include "CollisionHandler.hpp"
+
+#include "WorldClient.hpp"

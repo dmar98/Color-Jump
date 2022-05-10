@@ -1,6 +1,7 @@
+#pragma once
 class ReplicationManagerServer;
 
-class ReplicationManagerTransmissionData : public TransmissionData
+class ReplicationManagerTransmissionData final : public TransmissionData
 {
 public:
 

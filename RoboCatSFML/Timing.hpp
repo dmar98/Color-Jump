@@ -1,7 +1,7 @@
+#pragma once
 class Timing
 {
 public:
-
 	Timing();
 
 	void Update();
@@ -21,12 +21,9 @@ public:
 	static Timing sInstance;
 
 private:
-	float		mDeltaTime;
-	uint64_t	mDeltaTick;
+	float mDeltaTime;
 
-	double		mLastFrameStartTime;
-	float		mFrameStartTimef;
-	double		mPerfCountDuration;
-
+	double mLastFrameStartTime;
+	float mFrameStartTimef;
+	double mPerfCountDuration;
 };
-

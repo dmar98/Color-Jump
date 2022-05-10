@@ -1,6 +1,4 @@
 #pragma once
-#include "Character.hpp"
-#include "LevelLoader.hpp"
 
 /*
 * the world tracks all the live game objects. Fairly inefficient for now, but not that much of a problem
@@ -23,10 +21,10 @@ public:
 	virtual void Update();
 	virtual void LoadLevel() = 0;
 
-	virtual Character* AddCharacterWithColor(sf::Int8 identifier, EColorType color, sf::IntRect rect, Vector3 spawn_pos) = 0;
-	virtual Character* AddCharacter(int identifier, int color, bool is_client_player) = 0;
+	virtual Character* AddCharacterWithColor(int identifier, EColorType color, sf::IntRect rect, Vector3 spawn_pos) = 0;
+	virtual Character* AddCharacter(int identifier, EColorType color) = 0;
 	virtual Character* AddGhostCharacterWithColor(const int identifier, EColorType color, const sf::IntRect& int_rect, const Vector3 spawn_pos) = 0;
-	virtual Character* AddGhostCharacter(int identifier, int color) = 0;
+	virtual Character* AddGhostCharacter(const int identifier, const EColorType color) = 0;
 
 protected:
 	World();

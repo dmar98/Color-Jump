@@ -1,3 +1,4 @@
+#pragma once
 enum EInputAction
 {
 	EIA_Pressed,

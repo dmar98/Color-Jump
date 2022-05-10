@@ -137,7 +137,7 @@ void Platform::Update()
 	}
 }
 
-sf::Int8 Platform::GetID() const
+int Platform::GetID() const
 {
 	return m_id;
 }

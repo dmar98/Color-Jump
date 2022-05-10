@@ -47,31 +47,29 @@ void MultiplayerGameState::HandleClientUpdate(InputMemoryBitStream& packet) cons
 {
 }
 
-void MultiplayerGameState::SpawnClientPlayer(const int identifier, const int team_id,
-                                             const int color,
+void MultiplayerGameState::SpawnClientPlayer(const int player_id, const int team_id,
+                                             const EColorType color,
                                              const std::string& name) const
 {
-	Debug("Self spawn.");
-
-	const auto character = m_world_client->AddCharacter(identifier, color, true);
+	const auto character = m_world_client->AddCharacter(player_id, color);
 	character->SetTeamIdentifier(team_id);
 	character->SetName(name);
 
-	LeaderBoardManager::sInstance->AddPlayer(team_id, identifier, name);
-	/*m_players[identifier].reset(new Player(m_socket, identifier, GetContext().m_keys1));*/
+	LeaderBoardManager::sInstance->AddPlayer(team_id, player_id, name);
+	/*m_players[player_id].reset(new Player(m_socket, player_id, GetContext().m_keys1));*/
 	m_world_client->UpdateCharacterTransparencies(team_id);
 }
 
-void MultiplayerGameState::SpawnGhostPlayer(const int identifier, const int team_id,
-                                            const int color,
+void MultiplayerGameState::SpawnGhostPlayer(const int player_id, const int team_id,
+                                            const EColorType color,
                                             const std::string& name) const
 {
-	const auto ghost = m_world_client->AddGhostCharacter(identifier, color);
+	const auto ghost = m_world_client->AddGhostCharacter(player_id, color);
 	ghost->SetTeamIdentifier(team_id);
 	ghost->SetName(name);
 
-	LeaderBoardManager::sInstance->AddPlayer(team_id, identifier, name);
-	/*m_players[identifier].reset(new Player(m_socket, identifier, nullptr));*/
+	LeaderBoardManager::sInstance->AddPlayer(team_id, player_id, name);
+	/*m_players[player_id].reset(new Player(m_socket, player_id, nullptr));*/
 }
 
 void MultiplayerGameState::HandlePlayerDisconnect(InputMemoryBitStream& packet)
@@ -79,7 +77,7 @@ void MultiplayerGameState::HandlePlayerDisconnect(InputMemoryBitStream& packet)
 }
 
 void MultiplayerGameState::HandlePlatformChange(const int player_id, const int platform_id,
-                                                int platform_color) const
+                                                const EPlatformType platform_color) const
 {
 	const auto client_char = m_world_client->GetClientCharacter();
 	const auto send_char = m_world_client->GetCharacter(player_id);
@@ -88,14 +86,13 @@ void MultiplayerGameState::HandlePlatformChange(const int player_id, const int p
 	{
 		//Update the current platform on the character that belongs to your team mate
 		//(this will later be needed to check for checkpoints and goal tiles)
-		if (client_char->GetIdentifier() != player_id)
+		if (client_char->GetPlayerID() != player_id)
 		{
 			m_world_client->SetPlatformOnCharacter(send_char, platform_id);
 			m_world_client->SetTeammate(send_char);
 		}
 
-		m_world_client->UpdatePlatform(send_char->GetIdentifier(), platform_id,
-		                               static_cast<EPlatformType>(platform_color));
+		m_world_client->UpdatePlatform(send_char->GetPlayerID(), platform_id, platform_color);
 	}
 }
 

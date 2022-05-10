@@ -1,5 +1,4 @@
 #pragma once
-
 class CollisionHandler
 {
 	static bool CheckPlatform(const Platform* platform, EColorType character);

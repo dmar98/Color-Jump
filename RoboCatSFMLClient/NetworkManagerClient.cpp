@@ -81,7 +81,7 @@ void NetworkManagerClient::HandlePlatformPacket(InputMemoryBitStream& inInputStr
 {
 	int player_id;
 	int platform_id;
-	int platform_color;
+	EPlatformType platform_color;
 
 	inInputStream.Read(player_id);
 	inInputStream.Read(platform_id);
@@ -116,7 +116,7 @@ void NetworkManagerClient::ReadGhostData(InputMemoryBitStream& inInputStream)
 {
 	int player_id;
 	int team_id;
-	int color;
+	EColorType color;
 	std::string name;
 	int player_count;
 
@@ -138,7 +138,7 @@ void NetworkManagerClient::ReadPlayerData(InputMemoryBitStream& inInputStream)
 {
 	int player_id;
 	int team_id;
-	int color;
+	EColorType color;
 	std::string name;
 	inInputStream.Read(player_id);
 	inInputStream.Read(team_id);
@@ -151,8 +151,12 @@ void NetworkManagerClient::ReadPlayerData(InputMemoryBitStream& inInputStream)
 
 void NetworkManagerClient::HandleSpawnPacket(InputMemoryBitStream& inInputStream)
 {
-	ReadGhostData(inInputStream);
-	ReadPlayerData(inInputStream);
+	if (mState == NetworkClientState::NCS_Spawn)
+	{
+		mState = NetworkClientState::NCS_Game_State;
+		ReadGhostData(inInputStream);
+		ReadPlayerData(inInputStream);
+	}
 }
 
 void NetworkManagerClient::ProcessPacket(InputMemoryBitStream& inInputStream,
@@ -207,6 +211,9 @@ void NetworkManagerClient::ProcessPacket(InputMemoryBitStream& inInputStream,
 	case PacketType::PT_Ready:
 		HandleReadyChange(inInputStream);
 		break;
+	case PacketType::PT_Game_State: 
+		HandleGameStatePacket();
+		break;
 	default:
 		break;
 	}
@@ -220,14 +227,8 @@ void NetworkManagerClient::SendOutgoingPackets()
 	case NetworkClientState::NCS_Saying_Hello:
 		UpdateSayingHello();
 		break;
-	case NetworkClientState::NCS_Position_Update:
-		UpdateSendingPosition();
-		break;
 	case NetworkClientState::NCS_Quit:
 		UpdateSendingQuit();
-		break;
-	case NetworkClientState::NCS_Platform_Update:
-		UpdateSendingPlatform();
 		break;
 	case NetworkClientState::NCS_Player_Update:
 		UpdateSendingPlayer();
@@ -247,10 +248,15 @@ void NetworkManagerClient::SendOutgoingPackets()
 	case NetworkClientState::NCS_State:
 		UpdateSendingWaitState();
 		break;
+	case NetworkClientState::NCS_Game_State:
+		UpdateSendingGameState();
+		break;
 	case NetworkClientState::NCS_Uninitialized:
+	case NetworkClientState::NCS_Spawn:
 	case NetworkClientState::NCS_Size:
 	default:
 		break;
+
 	}
 }
 
@@ -291,19 +297,6 @@ void NetworkManagerClient::SendQuitPacket()
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendPlatformPacket()
-{
-	OutputMemoryBitStream packet;
-
-	packet.Write(PacketType::PT_Platform);
-	packet.Write(mPlayerId);
-	//packet.Write(mPlatformId);
-	//packet.Write(platform);
-
-
-	SendPacket(packet, mServerAddress);
-}
-
 void NetworkManagerClient::SendPlayerPacket()
 {
 	OutputMemoryBitStream packet;
@@ -337,7 +330,8 @@ void NetworkManagerClient::SendTeamChangePacket()
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendPlatformInfo(sf::Int8 player_id, sf::Int8 platform_id, EPlatformType platform_type)
+void NetworkManagerClient::SendPlatformInfo(const int player_id, const int platform_id,
+                                            const EPlatformType platform_type)
 {
 	OutputMemoryBitStream packet;
 
@@ -349,7 +343,7 @@ void NetworkManagerClient::SendPlatformInfo(sf::Int8 player_id, sf::Int8 platfor
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendCheckpointReached(sf::Int8 team_id, sf::Int8 platform_id)
+void NetworkManagerClient::SendCheckpointReached(const int team_id, int platform_id)
 {
 	OutputMemoryBitStream packet;
 
@@ -360,7 +354,7 @@ void NetworkManagerClient::SendCheckpointReached(sf::Int8 team_id, sf::Int8 plat
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendGoalReached(sf::Int8 team_id)
+void NetworkManagerClient::SendGoalReached(int team_id)
 {
 	OutputMemoryBitStream packet;
 
@@ -370,7 +364,7 @@ void NetworkManagerClient::SendGoalReached(sf::Int8 team_id)
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendTeamDeath(sf::Int8 team_id)
+void NetworkManagerClient::SendTeamDeath(const int team_id)
 {
 	OutputMemoryBitStream packet;
 
@@ -420,20 +414,18 @@ void NetworkManagerClient::SendStatePacket()
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendPositionPacket()
+void NetworkManagerClient::SendGameStatePacket()
 {
-	// todo
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Game_State);
+
+	SendPacket(packet, mServerAddress);
 }
 
 void NetworkManagerClient::UpdateSendingQuit()
 {
 	UpdateInfoPacket(NetworkClientState::NCS_Quit, [this] { SendQuitPacket(); });
-}
-
-
-void NetworkManagerClient::UpdateSendingPlatform()
-{
-	UpdateInfoPacket(NetworkClientState::NCS_Platform_Update, [this] { SendPlatformPacket(); });
 }
 
 void NetworkManagerClient::UpdateSendingPlayer()
@@ -468,6 +460,12 @@ void NetworkManagerClient::UpdateSendingWaitState()
 	                 [this] { SendStatePacket(); });
 }
 
+void NetworkManagerClient::UpdateSendingGameState()
+{
+	UpdateInfoUpdatePacket(NetworkClientState::NCS_Game_State,
+		[this] { SendGameStatePacket(); });
+}
+
 void NetworkManagerClient::HandleWelcomePacket(InputMemoryBitStream& inInputStream)
 {
 	if (mState == NetworkClientState::NCS_Saying_Hello)
@@ -486,6 +484,11 @@ void NetworkManagerClient::HandleWelcomePacket(InputMemoryBitStream& inInputStre
 void NetworkManagerClient::HandleStatePacket() const
 {
 	LOG("'%s' is waiting in the lobby", mName.c_str())
+}
+
+void NetworkManagerClient::HandleGameStatePacket() const
+{
+	LOG("'%s' is in the game", mName.c_str())
 }
 
 void NetworkManagerClient::HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const
@@ -604,7 +607,7 @@ void NetworkManagerClient::HandleStartPacket()
 	if (mState == NetworkClientState::NCS_State)
 	{
 		dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->Start();
-		mState = NetworkClientState::NCS_Game_State;
+		mState = NetworkClientState::NCS_Spawn;
 	}
 }
 
@@ -631,12 +634,6 @@ void NetworkManagerClient::HandleReadyChange(InputMemoryBitStream& input_memory_
 void NetworkManagerClient::SetState(const NetworkClientState m_state)
 {
 	mState = m_state;
-}
-
-void NetworkManagerClient::UpdateSendingPosition()
-{
-	UpdateInfoUpdatePacket(NetworkClientState::NCS_Position_Update,
-	                       [this] { SendPositionPacket(); });
 }
 
 void NetworkManagerClient::UpdateInfoUpdatePacket(const NetworkClientState p_enum,

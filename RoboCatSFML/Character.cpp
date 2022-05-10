@@ -157,7 +157,7 @@ void Character::SetName(const std::string& name)
 	m_name = name;
 }
 
-int Character::GetIdentifier() const
+int Character::GetPlayerID() const
 {
 	return m_identifier;
 }

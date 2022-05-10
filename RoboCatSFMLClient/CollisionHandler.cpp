@@ -189,8 +189,8 @@ void CollisionHandler::GroundPlayerAndChangePlatformColor(Character& player, Pla
 	//Ground players
 	if (platform->HandlePlayerCollisionAndChangeColor(player.GetCharacterType()))
 	{
-		const sf::Int8 player_id = player.GetIdentifier();
-		const sf::Int8 platform_id = platform->GetID();
+		const int player_id = player.GetPlayerID();
+		const int platform_id = platform->GetID();
 		const auto platform_type = platform->GetPlatformType();
 
 		NetworkManagerClient::sInstance->SendPlatformInfo(player_id, platform_id, platform_type);

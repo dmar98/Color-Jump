@@ -272,7 +272,7 @@ bool LobbyState::HandleEvent(const sf::Event& event)
 			}
 			else if (event.text.unicode != '\n' && event.text.unicode != '\r')
 			{
-				m_player_input_name += event.text.unicode;
+				m_player_input_name += static_cast<char>(event.text.unicode);
 				m_player_input_name = m_player_input_name.substr(0, 15);
 			}
 
@@ -380,9 +380,14 @@ void LobbyState::MovePlayerBack(const int id)
 	m_player_team_selection[id] = 0;
 }
 
+std::map<int, GUI::Label::Ptr>::mapped_type LobbyState::GetPlayer(const int player_id)
+{
+	return m_players[player_id];
+}
+
 void LobbyState::SetName(const int player_id, const string& name)
 {
-	m_players[player_id]->SetText(name);
+	GetPlayer(player_id)->SetText(name);
 }
 
 void LobbyState::Start()

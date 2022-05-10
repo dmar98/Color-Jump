@@ -6,18 +6,16 @@ public:
 	{
 		NCS_Uninitialized,
 		NCS_Saying_Hello,
-		NCS_Position_Update,
 		NCS_Quit,
-		NCS_Platform_Update,
 		NCS_Player_Update,
 		NCS_Goal_Reached,
 		NCS_Start_Network_Game,
 		NCS_Team_Death,
 		NCS_Checkpoint_Reached,
 		NCS_State,
-		NCS_Size,
-
 		NCS_Game_State,
+		NCS_Spawn,
+		NCS_Size,
 	};
 
 	static NetworkManagerClient* sInstance;
@@ -54,10 +52,10 @@ public:
 	void SendReady(bool ready);
 	void SendTeamChangePacket();
 
-	void SendPlatformInfo(sf::Int8 player_id, sf::Int8 platform_id, EPlatformType platform_type);
-	void SendCheckpointReached(sf::Int8 team_id, sf::Int8 platform_id);
-	void SendGoalReached(sf::Int8 team_id);
-	void SendTeamDeath(sf::Int8 team_id);
+	void SendPlatformInfo(int player_id, int platform_id, EPlatformType platform_type);
+	void SendCheckpointReached(int team_id, int platform_id);
+	void SendGoalReached(int team_id);
+	void SendTeamDeath(int team_id);
 
 private:
 	NetworkManagerClient();
@@ -68,22 +66,21 @@ private:
 	static void HandleCheckpointPacket(InputMemoryBitStream& inInputStream);
 	static void ReadGhostData(InputMemoryBitStream& inInputStream);
 	static void ReadPlayerData(InputMemoryBitStream& inInputStream);
-	static void HandleSpawnPacket(InputMemoryBitStream& inInputStream);
+	void HandleSpawnPacket(InputMemoryBitStream& inInputStream);
 
 
 	void UpdateSayingHello();
 	void UpdateSendingQuit();
-	void UpdateSendingPlatform();
 	void UpdateSendingPlayer();
 	void UpdateSendingGoalReached();
 	void UpdateSendingStartGame();
 	void UpdateSendingTeamDeath();
 	void UpdateSendingCheckpoint();
 	void UpdateSendingWaitState();
+	void UpdateSendingGameState();
 
 	void SendHelloPacket();
 	void SendQuitPacket();
-	void SendPlatformPacket();
 	void SendPlayerPacket();
 	void SendGoalPacket();
 	
@@ -91,9 +88,11 @@ private:
 	void SendTeamDeathPacket();
 	void SendCheckpointPacket();
 	void SendStatePacket();
+	void SendGameStatePacket();
 
 	void HandleWelcomePacket(InputMemoryBitStream& inInputStream);
 	void HandleStatePacket() const;
+	void HandleGameStatePacket() const;
 	void HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const;
 	static void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
 	void HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream) const;
@@ -113,10 +112,7 @@ private:
 	void UpdateInfoPacket(NetworkClientState p_enum, const std::function<void()>& p_function);
 	void UpdateInfoUpdatePacket(NetworkClientState p_enum, const std::function<void()>& p_function);
 
-	void UpdateSendingPosition();
-
 	void SendInputPacket();
-	void SendPositionPacket();
 
 	DeliveryNotificationManager mDeliveryNotificationManager;
 

@@ -2,7 +2,6 @@
 
 class LobbyState final : public State
 {
-
 	auto HandleTutorialPress() const;
 	auto HandleTeamButtonPressed(int id);
 	auto HandleReadyPressed();
@@ -10,6 +9,7 @@ class LobbyState final : public State
 	auto HandleLeaveTeamButtonPress();
 	auto IsInATeam() const;
 	auto HandleBackButtonPressed() const;
+	auto GetLabel(int player_id);
 
 	std::map<int, std::vector<int>>::mapped_type GetPlayerTeam(int player_id);
 
@@ -17,7 +17,7 @@ class LobbyState final : public State
 
 	void HandleTeamChoice(int team_id);
 	std::map<int, vector<int>>::mapped_type GetTeam(int id);
-	bool TeamHasPlace(const int id);
+	bool TeamHasPlace(int id);
 
 	static sf::Vector2f GetUnpairedPos(int i);
 	static void SendClientDisconnect();
@@ -34,11 +34,11 @@ public:
 	void OnStackPopped() override;
 	void MovePlayer(int player_id, int team_id);
 	void RemovePlayer(int player_id);
-	void AddPlayer(const int id, const std::string& label_text, bool ready);
+	void AddPlayer(int id, const std::string& label_text, bool ready);
 	void MovePlayerBack(int id);
+	std::map<int, GUI::Label::Ptr>::mapped_type GetPlayer(int player_id);
 	void SetName(int player_id, const string& name);
 	void Start();
-	auto GetLabel(int player_id);
 	void SetReady(int player_id, bool ready);
 	void StartCountDown();
 	static sf::Vector2f GetTeamPos(int i);
@@ -52,7 +52,7 @@ private:
 
 	bool m_start_countdown;
 	float m_start_countdown_timer;
-	
+
 	std::map<int, int> m_player_team_selection;
 
 	bool m_game_started;
@@ -65,4 +65,3 @@ private:
 
 	bool m_ready{};
 };
-

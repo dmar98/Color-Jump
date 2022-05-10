@@ -1,27 +1,26 @@
+#pragma once
 class Move
 {
 public:
+	Move();
 
-	Move() {}
-
-	Move(const InputState& inInputState, float inTimestamp, float inDeltaTime) :
+	Move(const InputState& inInputState, const float inTimestamp, const float inDeltaTime) :
 		mInputState(inInputState),
 		mTimestamp(inTimestamp),
 		mDeltaTime(inDeltaTime)
-	{}
+	{
+	}
 
 
-	const InputState& GetInputState()	const { return mInputState; }
-	float GetTimestamp()	const { return mTimestamp; }
-	float GetDeltaTime()	const { return mDeltaTime; }
+	const InputState& GetInputState() const { return mInputState; }
+	float GetTimestamp() const { return mTimestamp; }
+	float GetDeltaTime() const { return mDeltaTime; }
 
 	bool Write(OutputMemoryBitStream& inOutputStream) const;
 	bool Read(InputMemoryBitStream& inInputStream);
 
 private:
-	InputState	mInputState;
-	float		mTimestamp;
-	float		mDeltaTime;
+	InputState mInputState;
+	float mTimestamp;
+	float mDeltaTime;
 };
-
-

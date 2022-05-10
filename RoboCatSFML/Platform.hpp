@@ -19,7 +19,7 @@ public:
 	void ResetToInitialType();
 
 	virtual void Update();
-	sf::Int8 GetID() const;
+	int GetID() const;
 	std::vector<PlatformPart*>& GetParts();
 
 protected:
@@ -28,6 +28,6 @@ protected:
 	std::vector<PlatformPart*> m_platform_parts;
 	bool m_is_pulse{};
 	float m_current_pulse_cooldown;
-	sf::Int8 m_id;
+	int m_id;
 };
 

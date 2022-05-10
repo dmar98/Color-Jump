@@ -51,6 +51,7 @@ private:
 	static void AddWorldStateToPacket(OutputMemoryBitStream& inOutputStream);
 
 	void SendStatePacketToClient(const ClientProxyPtr& inClientProxy);
+	void SendGameStatePacket(const ClientProxyPtr& inClientProxy);
 	void HandleClientDisconnected(const ClientProxyPtr& inClientProxy);
 
 	int GetNewNetworkId();
@@ -62,8 +63,8 @@ private:
 	void NotifyGoalReached(const ClientProxyPtr& inClientProxy, int team_id);
 	void NotifyTeamRespawn(const ClientProxyPtr& inClientProxy, int team_id);
 	void NotifyCheckpointReached(const ClientProxyPtr& inClientProxy, int team_id, int platform_id);
-	void NotifyPlatformUpdate(const ClientProxyPtr& inClientProxy, int team_id, int platform_id,
-	                          int platform_color);
+	void NotifyPlatformUpdate(const ClientProxyPtr& inClientProxy, const int player_id, const int platform_id,
+	                          const EPlatformType platform_color);
 	void NotifyReadyChange(const ClientProxyPtr& inClientProxy, int player_id, bool ready);
 
 	using IntToClientMap = unordered_map<int, ClientProxyPtr>;
@@ -78,6 +79,7 @@ private:
 	float mClientDisconnectTimeout;
 	bool m_start_countdown;
 	float m_start_countdown_timer;
+	bool m_game_started;
 };
 
 

@@ -16,6 +16,10 @@ ScoreBoardManager::ScoreBoardManager()
 	mDefaultColors.push_back(Colors::LightGreen);
 }
 
+ScoreBoardManager::Entry::Entry(): mPlayerId(0), mScore(0)
+{
+}
+
 ScoreBoardManager::Entry::Entry(uint32_t inPlayerId, const string& inPlayerName, const Vector3& inColor) :
 	mPlayerId(inPlayerId),
 	mPlayerName(inPlayerName),
@@ -111,7 +115,6 @@ bool ScoreBoardManager::Read(InputMemoryBitStream& inInputStream)
 
 	return true;
 }
-
 
 bool ScoreBoardManager::Entry::Write(OutputMemoryBitStream& inOutputStream) const
 {

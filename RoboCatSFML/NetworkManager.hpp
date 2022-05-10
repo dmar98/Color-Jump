@@ -20,7 +20,8 @@ public:
 		PT_Player_Connect,
 		PT_Initial_State,
 		PT_Ready,
-		PT_Spawn
+		PT_Spawn,
+		PT_Game_State
 	};
 
 	static constexpr int kMaxPacketsPerFrameCount = 10;

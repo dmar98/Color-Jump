@@ -1,4 +1,5 @@
 #pragma once
+#include "SpriteComponent.hpp"
 
 class Utility
 {
@@ -8,7 +9,9 @@ class Utility
 public:
 	static int RandomInt(int exclusive_max);
 	static void CentreOrigin(sf::Sprite& sprite);
+	static void CentreOrigin(SpriteComponent& component);
 	static void CentreOrigin(sf::Text& text);
+	static void CentreOrigin(TextComponent& component);
 	static std::string ToString(sf::Keyboard::Key key);
 	static double ToRadians(int degrees);
 	static sf::Vector2f UnitVector(sf::Vector2f vector);

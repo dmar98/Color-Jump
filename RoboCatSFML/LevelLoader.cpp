@@ -48,13 +48,13 @@ void LevelLoader::LoadLevelLayer(const std::string& csv_path, LevelInfo& level_i
 			{
 				//Do not swap these lines as for red the spawn position is set in GetSubRect
 				level_info.m_red_player_rect = m_tile_factory->GetSubRect(kRedPlayer, spawn_pos);
-				level_info.m_red_player_spawn_pos = spawn_pos;
+				level_info.m_red_player_spawn_pos = spawn_pos - Vector3(m_tile_size.x / 2.f, 0, 0);
 			}
 			break;
 			case kBluePlayer:
 			{
 				//Do not swap these lines as for blue the spawn position is set before GetSubRect
-				level_info.m_blue_player_spawn_pos = spawn_pos;
+				level_info.m_blue_player_spawn_pos = spawn_pos - Vector3(m_tile_size.x / 2.f, 0, 0);
 				level_info.m_blue_player_rect = m_tile_factory->GetSubRect(kBluePlayer, spawn_pos);
 			}
 			break;

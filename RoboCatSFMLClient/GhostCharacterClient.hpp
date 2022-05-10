@@ -1,5 +1,5 @@
 #pragma once
-class GhostCharacterClient : public CharacterClient
+class GhostCharacterClient final : public CharacterClient
 {
 public:
 	GhostCharacterClient(EColorType type, const sf::IntRect& texture_rect);

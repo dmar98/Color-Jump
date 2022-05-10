@@ -15,5 +15,8 @@ protected:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	GameObject* m_game_object;
 	std::function<bool()> m_draw_predicate;
+	sf::Vector2f m_offset;
+public:
+	void SetOffset(const sf::Vector2f& offset);
 };
 

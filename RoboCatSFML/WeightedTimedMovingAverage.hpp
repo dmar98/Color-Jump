@@ -1,20 +1,19 @@
+#pragma once
 class WeightedTimedMovingAverage
 {
 public:
-
-	WeightedTimedMovingAverage(float inDuration = 5.f) :
-		mDuration(inDuration),
-		mValue(0.f)
+	explicit WeightedTimedMovingAverage(const float inDuration = 5.f) :
+		mTimeLastEntryMade(Timing::sInstance.GetTimef()), mValue(0.f),
+		mDuration(inDuration)
 	{
-		mTimeLastEntryMade = Timing::sInstance.GetTimef();
 	}
 
-	void UpdatePerSecond(float inValue)
+	void UpdatePerSecond(const float inValue)
 	{
-		float time = Timing::sInstance.GetTimef();
-		float timeSinceLastEntry = time - mTimeLastEntryMade;
+		const float time = Timing::sInstance.GetTimef();
+		const float timeSinceLastEntry = time - mTimeLastEntryMade;
 
-		float valueOverTime = inValue / timeSinceLastEntry;
+		const float valueOverTime = inValue / timeSinceLastEntry;
 
 		//now update our value by whatever amount of the duration that was..
 		float fractionOfDuration = (timeSinceLastEntry / mDuration);
@@ -25,10 +24,10 @@ public:
 		mTimeLastEntryMade = time;
 	}
 
-	void Update(float inValue)
+	void Update(const float inValue)
 	{
-		float time = Timing::sInstance.GetTimef();
-		float timeSinceLastEntry = time - mTimeLastEntryMade;
+		const float time = Timing::sInstance.GetTimef();
+		const float timeSinceLastEntry = time - mTimeLastEntryMade;
 
 		//now update our value by whatever amount of the duration that was..
 		float fractionOfDuration = (timeSinceLastEntry / mDuration);
@@ -42,9 +41,7 @@ public:
 	float GetValue() const { return mValue; }
 
 private:
-
-	float			mTimeLastEntryMade;
-	float			mValue;
-	float			mDuration;
-
+	float mTimeLastEntryMade;
+	float mValue;
+	float mDuration;
 };

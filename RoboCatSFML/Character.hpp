@@ -1,6 +1,4 @@
 #pragma once
-#include "EColorType.hpp"
-#include "Platform.hpp"
 
 class RayGround;
 
@@ -18,7 +16,7 @@ public:
 		ECRS_AllState = ECRS_Pose | ECRS_Color | ECRS_PlayerId
 	};
 
-	static GameObject* StaticCreate(EColorType type, const sf::IntRect& texture_rect)
+	static GameObject* StaticCreate(const EColorType type, const sf::IntRect& texture_rect)
 	{
 		return new Character(type, texture_rect);
 	}
@@ -29,10 +27,10 @@ public:
 	void Accelerate(float vx, float vy);
 	void ProcessInput(float inDeltaTime, const InputState& inInputState);
 
-	void SetIdentifier(const int identifier);
+	void SetIdentifier(int identifier);
 	virtual void SetTeamIdentifier(int identifier);
 	virtual void SetName(const std::string& name);
-	int GetIdentifier() const;
+	int GetPlayerID() const;
 	int GetTeamIdentifier() const;
 	std::string GetName() const;
 	unsigned GetCategory() const override;
@@ -56,7 +54,6 @@ protected:
 	Character(EColorType type, const sf::IntRect& texture_rect);
 	void Update() override;
 
-protected:
 	EColorType m_type;
 	std::string m_name;
 	bool m_grounded;

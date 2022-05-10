@@ -1,5 +1,9 @@
 #include "RoboCatPCH.hpp"
 
+Move::Move(): mTimestamp(0), mDeltaTime(0)
+{
+}
+
 bool Move::Write(OutputMemoryBitStream& inOutputStream) const
 {
 	mInputState.Write(inOutputStream);

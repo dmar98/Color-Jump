@@ -13,18 +13,20 @@ public:
 	void Draw() override;
 
 	void HandleGameEnd(int team_id);
-	void HandlePlatformChange(int player_id, int platform_id, int platform_color) const;
+	void HandlePlatformChange(int player_id, int platform_id, EPlatformType platform_color) const;
 	void HandleTeamRespawn(int team_id) const;
 	void HandleTeamCheckpointSet(int team_id, int platform_id) const;
-	void SpawnClientPlayer(int identifier, int team_id, int color, const std::string& name) const;
-	void SpawnGhostPlayer(int identifier, int team_id, int color, const std::string& name) const;
+	void SpawnClientPlayer(int player_id, int team_id, EColorType color,
+	                       const std::string& name) const;
+	void SpawnGhostPlayer(int player_id, int team_id, EColorType color,
+	                      const std::string& name) const;
 
 private:
 	void SendClientDisconnect(sf::Int8 identifier) const;
 	void HandleClientUpdate(InputMemoryBitStream& packet) const;
 	void HandlePlayerDisconnect(InputMemoryBitStream& packet);
-	
-	
+
+
 	void HandlePacket(sf::Int8 packet_type, InputMemoryBitStream& packet);
 
 	static void Debug(const std::string& message);

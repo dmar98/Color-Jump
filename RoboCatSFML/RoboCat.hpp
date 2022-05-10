@@ -1,3 +1,4 @@
+#pragma once
 class RoboCat : public GameObject
 {
 public:
@@ -14,13 +15,13 @@ public:
 	};
 
 
-	static	GameObject* StaticCreate() { return new RoboCat(); }
+	static GameObject* StaticCreate() { return new RoboCat(); }
 
-	virtual uint32_t GetAllStateMask()	const override { return ECRS_AllState; }
+	uint32_t GetAllStateMask() const override { return ECRS_AllState; }
 
-	virtual	RoboCat* GetAsCat() override { return this; }
+	RoboCat* GetAsCat() override { return this; }
 
-	virtual void Update() override;
+	void Update() override;
 
 	void ProcessInput(float inDeltaTime, const InputState& inInputState);
 	void SimulateMovement(float inDeltaTime);
@@ -40,34 +41,30 @@ protected:
 	RoboCat();
 
 private:
+	void AdjustVelocityByThrust(float inDeltaTime);
+
+	Vector3 mVelocity;
 
 
-	void	AdjustVelocityByThrust(float inDeltaTime);
-
-	Vector3				mVelocity;
-
-
-	float				mMaxLinearSpeed;
-	float				mMaxRotationSpeed;
+	float mMaxLinearSpeed;
+	float mMaxRotationSpeed;
 
 	//bounce fraction when hitting various things
-	float				mWallRestitution;
-	float				mCatRestitution;
+	float mWallRestitution;
+	float mCatRestitution;
 
 
-	uint32_t			mPlayerId;
+	uint32_t mPlayerId;
 
 protected:
-
 	///move down here for padding reasons...
 
-	float				mLastMoveTimestamp;
+	float mLastMoveTimestamp;
 
-	float				mThrustDir;
-	int					mHealth;
+	float mThrustDir;
+	int mHealth;
 
-	bool				mIsShooting;
+	bool mIsShooting;
 };
 
-typedef shared_ptr< RoboCat >	RoboCatPtr;
-
+using RoboCatPtr = shared_ptr<RoboCat>;

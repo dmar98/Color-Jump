@@ -9,10 +9,10 @@ class SpriteComponent : public DrawableComponent
 public:
 	explicit SpriteComponent(GameObject* inGameObject);
 
-	void SetTexture(TexturePtr inTexture, sf::IntRect subRect = {});
+	void SetTexture(const TexturePtr& inTexture, sf::IntRect subRect = {});
 	virtual sf::Sprite& GetSprite();
 	void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
-	void DrawBoundingRect(sf::RenderTarget& target, sf::RenderStates states, const sf::FloatRect& bounding_rect) const;
+	static void DrawBoundingRect(sf::RenderTarget& target, sf::RenderStates states, const sf::FloatRect& bounding_rect);
 
 protected:
 	sf::Sprite m_sprite;

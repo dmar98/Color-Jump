@@ -1,7 +1,6 @@
 #pragma once
-#include "CharacterClient.hpp"
 
-class WorldClient : public World
+class WorldClient final : public World
 {
 public:
 	WorldClient();
@@ -12,15 +11,15 @@ public:
 	void SetCamera(sf::View camera);
 	sf::View& GetCamera();
 
-	Character* AddCharacterWithColor(sf::Int8 identifier, EColorType color, sf::IntRect rect, Vector3 spawn_pos) override;
-	Character* AddCharacter(int identifier, int color, bool is_client_player) override;
-	Character* AddGhostCharacterWithColor(const int identifier, EColorType color, const sf::IntRect& int_rect, const Vector3 spawn_pos) override;
-	Character* AddGhostCharacter(int identifier, int color) override;
+	Character* AddCharacterWithColor(int player_id, EColorType color, sf::IntRect rect, Vector3 spawn_pos) override;
+	Character* AddCharacter(int player_id, EColorType color) override;
+	Character* AddGhostCharacterWithColor(int identifier, EColorType color, const sf::IntRect& int_rect, const Vector3 spawn_pos) override;
+	Character* AddGhostCharacter(int player_id, EColorType color) override;
 	Character* GetClientCharacter() const;
 	void SetTeammate(Character* character);
 	Character* GetTeammate() const;
 
-	void UpdateCharacterTransparencies(const int team_id) const;
+	void UpdateCharacterTransparencies(int team_id) const;
 	void UpdateCharacterTransparencies() const;
 	void RespawnClientCharacter() const;
 	void SetCheckpointToPlatformWithID(int platform_id);
@@ -38,7 +37,7 @@ private:
 
 	sf::View m_camera;
 	Platform* m_checkpoint;
-	CharacterClient* m_client_player {};
+	CharacterClient* m_client_player;
 	Character* m_team_mate {};
 	std::function<void()> m_lose_callback;
 };
