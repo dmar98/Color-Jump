@@ -186,6 +186,22 @@ void NetworkManagerServer::HandleReadyPacket(const ClientProxyPtr& client_proxy,
 	CheckIfAllReady();
 }
 
+void NetworkManagerServer::HandleGameStatePacket(const ClientProxyPtr& client_proxy,
+                                                 InputMemoryBitStream& inInputStream)
+{
+	int player_id;
+	float x;
+	float y;
+
+	inInputStream.Read(player_id);
+	inInputStream.Read(x);
+	inInputStream.Read(y);
+
+	client_proxy->SetPosition(x, y);
+
+	SendGameStatePacket(client_proxy, inInputStream);
+}
+
 void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
                                          InputMemoryBitStream& inInputStream)
 {
@@ -226,8 +242,11 @@ void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
 	case PacketType::PT_Ready:
 		HandleReadyPacket(inClientProxy, inInputStream);
 		break;
-	case PacketType::PT_Game_State: 
-		SendGameStatePacket(inClientProxy, inInputStream);
+	case PacketType::PT_Game_State:
+		if (inClientProxy->GetDeliveryNotificationManager().ReadAndProcessState(inInputStream))
+		{
+			HandleGameStatePacket(inClientProxy, inInputStream);
+		}
 		break;
 	case PacketType::PT_Player_Connect:
 	case PacketType::PT_Initial_State:
@@ -494,17 +513,6 @@ void NetworkManagerServer::SendStatePacketToClient(const ClientProxyPtr& inClien
 
 void NetworkManagerServer::SendGameStatePacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream)
 {
-	
-	int player_id;
-	float x;
-	float y;
-
-	inInputStream.Read(player_id);
-	inInputStream.Read(x);
-	inInputStream.Read(y);
-
-	inClientProxy->SetPosition(x, y);
-
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Game_State);

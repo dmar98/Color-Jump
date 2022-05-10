@@ -357,12 +357,12 @@ void NetworkManagerClient::SendCheckpointReached(const int team_id, int platform
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendGoalReached(int team_id)
+void NetworkManagerClient::SendGoalReached()
 {
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Goal);
-	packet.Write(team_id);
+	packet.Write(mTeamID);
 
 	SendPacket(packet, mServerAddress);
 }
@@ -441,11 +441,6 @@ void NetworkManagerClient::SendStatePacket()
 
 void NetworkManagerClient::SendGameStatePacket()
 {
-	OutputMemoryBitStream packet;
-
-	packet.Write(PacketType::PT_Game_State);
-
-	SendPacket(packet, mServerAddress);
 }
 
 void NetworkManagerClient::UpdateSendingQuit()

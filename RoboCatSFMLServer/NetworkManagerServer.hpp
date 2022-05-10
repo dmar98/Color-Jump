@@ -39,6 +39,7 @@ private:
 	void NotifyCountDown(const ClientProxyPtr& client);
 	void CheckIfAllReady();
 	void HandleReadyPacket(const ClientProxyPtr& client_proxy, InputMemoryBitStream& inInputStream);
+	void HandleGameStatePacket(const ClientProxyPtr& client_proxy, InputMemoryBitStream& inInputStream);
 	void ProcessPacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream);
 
 	void SendInitialState(const ClientProxyPtr& client_proxy);

@@ -54,7 +54,7 @@ public:
 
 	void SendPlatformInfo(int player_id, int platform_id, EPlatformType platform_type);
 	void SendCheckpointReached(int team_id, int platform_id);
-	void SendGoalReached(int team_id);
+	void SendGoalReached();
 	void SendTeamDeath(int team_id);
 	void SendGameDisconnect();
 	void SendPlayerPositionPacket(float x, float y);

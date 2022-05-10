@@ -302,9 +302,9 @@ void WorldClient::OnReachedCheckpoint() const
 			m_client_player->GetTeamIdentifier(), current_platform->GetID());
 }
 
-void WorldClient::OnReachedGoal() const
+void WorldClient::OnReachedGoal()
 {
-	NetworkManagerClient::sInstance->SendGoalReached(GetClientCharacter()->GetTeamIdentifier());
+	NetworkManagerClient::sInstance->SendGoalReached();
 }
 
 void WorldClient::OnClientPlayerDeath() const
@@ -323,4 +323,15 @@ void WorldClient::Debug(const std::string& message) const
 {
 	const string in_format = "World Client: " + message;
 	LOG(in_format.c_str(), 0)
+}
+
+void WorldClient::RemoveCharacter(const int player_id)
+{
+	Character* character = GetCharacter(player_id);
+
+	if (character)
+	{
+		character->SetIsDead(true);
+		m_players.erase(std::find(m_players.begin(), m_players.end(), character));
+	}
 }
