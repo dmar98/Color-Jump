@@ -17,6 +17,12 @@ void Character::Accelerate(const float vx, const float vy)
 	m_velocity.mY += vy;
 }
 
+void Character::Accelerate(const sf::Vector2f vector2)
+{
+	m_velocity.mX += vector2.x;
+	m_velocity.mY += vector2.y;
+}
+
 void Character::ProcessInput(float inDeltaTime, const InputState& inInputState)
 {
 	////process our input....

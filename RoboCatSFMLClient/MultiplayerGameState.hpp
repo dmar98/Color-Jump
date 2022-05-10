@@ -17,13 +17,13 @@ public:
 	void HandleTeamRespawn(int team_id) const;
 	void HandleTeamCheckpointSet(int team_id, int platform_id) const;
 	void SpawnClientPlayer(int player_id, int team_id, EColorType color,
-	                       const std::string& name) const;
+	                       const std::string& name);
 	void SpawnGhostPlayer(int player_id, int team_id, EColorType color,
-	                      const std::string& name) const;
+		const std::string& name);
+	void UpdatePlayers(int player_id, float x, float y) const;
 
 private:
-	void SendClientDisconnect(sf::Int8 identifier) const;
-	void HandleClientUpdate(InputMemoryBitStream& packet) const;
+	static void SendClientDisconnect();
 	void HandlePlayerDisconnect(InputMemoryBitStream& packet);
 
 
@@ -35,4 +35,7 @@ private:
 	/*std::map<int, PlayerPtr> m_players;*/
 	bool m_game_over;
 	float m_completion_time;
+
+	using PlayerPtr = std::unique_ptr<Player>;
+	std::map<int, PlayerPtr> m_players; 
 };

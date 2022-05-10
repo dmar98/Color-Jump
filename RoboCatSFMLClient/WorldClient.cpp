@@ -19,6 +19,21 @@ void WorldClient::Update()
 {
 	World::Update();
 
+	while (!m_command_queue.IsEmpty())
+	{
+		Command command = m_command_queue.Pop();
+		for (auto& go : mGameObjects)
+		{
+			const unsigned int category = go->GetCategory();
+			if (category == command.category)
+			{
+				command.action(*go);
+				break;
+			}
+		}
+	}
+
+
 	if (m_client_player != nullptr)
 	{
 		sf::Vector2f camera_pos = m_camera.getCenter();
@@ -90,51 +105,56 @@ sf::View& WorldClient::GetCamera()
 	return m_camera;
 }
 
-Character* WorldClient::AddCharacterWithColor(const int player_id, const EColorType color,
-                                              const sf::IntRect rect, const Vector3 spawn_pos)
+Character* WorldClient::AddCharacter(const int player_id, const EColorType color)
 {
-	const std::shared_ptr<CharacterClient> player(new CharacterClient(color, rect));
+	Debug("Player " + std::to_string(player_id) + " color is " + std::to_string(
+		static_cast<int>(color)));
+	
+	std::shared_ptr<CharacterClient> player;
+	if (color == EColorType::kRed)
+	{
+		player.reset(new CharacterClient(color, m_level_info.m_red_player_rect));
+		player->SetLocation(m_level_info.m_red_player_spawn_pos);
+	}
+	else
+	{
+		player.reset(new CharacterClient(color, m_level_info.m_blue_player_rect));
+		player->SetLocation(m_level_info.m_blue_player_spawn_pos);
+	}
+
 	player->InitRay();
-	player->SetLocation(spawn_pos);
 	player->SetIdentifier(player_id);
 
 	m_players.emplace_back(player.get());
 	AddGameObject(player);
 
-	return player.get();
-}
-
-Character* WorldClient::AddCharacter(const int player_id, const EColorType color)
-{
-	Character* character = AddCharacterWithColor(player_id, color,
-	                                             m_level_info.m_red_player_rect,
-	                                             m_level_info.m_red_player_spawn_pos);
-
+	Character* character = m_players.back();
 	m_client_player = dynamic_cast<CharacterClient*>(character);
 	UpdateCharacterTransparencies(character->GetTeamIdentifier());
-
 	return character;
-}
-
-Character* WorldClient::AddGhostCharacterWithColor(const int identifier, const EColorType color,
-                                                   const sf::IntRect& int_rect,
-                                                   const Vector3 spawn_pos)
-{
-	const std::shared_ptr<GhostCharacterClient> ghost_char(
-		new GhostCharacterClient(color, int_rect));
-	ghost_char->SetLocation(spawn_pos);
-	ghost_char->SetIdentifier(identifier);
-
-	m_players.emplace_back(ghost_char.get());
-	AddGameObject(ghost_char);
-	return ghost_char.get();
 }
 
 Character* WorldClient::AddGhostCharacter(const int player_id, const EColorType color)
 {
-	return AddGhostCharacterWithColor(player_id, color,
-	                                  m_level_info.m_blue_player_rect,
-	                                  m_level_info.m_blue_player_spawn_pos);
+
+	std::shared_ptr<GhostCharacterClient> ghost_char;
+	if (color == EColorType::kRed)
+	{
+		ghost_char.reset(new GhostCharacterClient(color, m_level_info.m_red_player_rect));
+		ghost_char->SetLocation(m_level_info.m_red_player_spawn_pos);
+	}
+	else
+	{
+		ghost_char.reset(new GhostCharacterClient(color, m_level_info.m_blue_player_rect));
+		ghost_char->SetLocation(m_level_info.m_blue_player_spawn_pos);
+	}
+
+	
+	ghost_char->SetIdentifier(player_id);
+
+	m_players.emplace_back(ghost_char.get());
+	AddGameObject(ghost_char);
+	return m_players.back();
 }
 
 Character* WorldClient::GetClientCharacter() const
@@ -273,4 +293,16 @@ void WorldClient::OnReachedGoal() const
 void WorldClient::OnClientPlayerDeath() const
 {
 	NetworkManagerClient::sInstance->SendTeamDeath(m_client_player->GetTeamIdentifier());
+}
+
+
+CommandQueue& WorldClient::GetCommandQueue()
+{
+	return m_command_queue;
+}
+
+void WorldClient::Debug(const std::string& message) const
+{
+	const string in_format = "World Client: " + message;
+	LOG(in_format.c_str(), 0)
 }

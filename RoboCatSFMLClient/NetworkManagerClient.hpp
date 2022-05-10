@@ -50,12 +50,14 @@ public:
 	int GetTeamID() const { return mTeamID; }
 
 	void SendReady(bool ready);
-	void SendTeamChangePacket();
+	void SendTeamChangePacket(int team_id, EColorType color);
 
 	void SendPlatformInfo(int player_id, int platform_id, EPlatformType platform_type);
 	void SendCheckpointReached(int team_id, int platform_id);
 	void SendGoalReached(int team_id);
 	void SendTeamDeath(int team_id);
+	void SendGameDisconnect();
+	void SendPlayerPositionPacket(float x, float y);
 
 private:
 	NetworkManagerClient();
@@ -92,7 +94,7 @@ private:
 
 	void HandleWelcomePacket(InputMemoryBitStream& inInputStream);
 	void HandleStatePacket() const;
-	void HandleGameStatePacket() const;
+	void HandleGameStatePacket(InputMemoryBitStream& inInputStream) const;
 	void HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const;
 	static void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
 	void HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream) const;

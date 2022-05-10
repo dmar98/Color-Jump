@@ -11,15 +11,15 @@ class LobbyState final : public State
 	auto HandleBackButtonPressed() const;
 	auto GetLabel(int player_id);
 
-	std::map<int, std::vector<int>>::mapped_type GetPlayerTeam(int player_id);
+	std::map<int, vector<int>>::mapped_type GetTeam(int team_id);
 
 	void Unready();
 
 	void HandleTeamChoice(int team_id);
-	std::map<int, vector<int>>::mapped_type GetTeam(int id);
 	bool TeamHasPlace(int id);
 
 	static sf::Vector2f GetUnpairedPos(int i);
+	void Debug(const std::string& message) const;
 	static void SendClientDisconnect();
 	void SendPlayerName() const;
 

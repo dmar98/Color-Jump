@@ -17,19 +17,58 @@ void MultiplayerGameState::OnStackPopped()
 
 bool MultiplayerGameState::Update(const float dt)
 {
-	NetworkManagerClient::sInstance->ProcessIncomingPackets();
 	NetworkManagerClient::sInstance->SendOutgoingPackets();
 
 	m_world_client->Update();
 
+	if (InputManager::sInstance->GetPassFocus())
+	{
+		CommandQueue& commands = m_world_client->GetCommandQueue();
+		for (const auto& pair : m_players)
+		{
+			pair.second->HandleRealtimeInput(commands);
+		}
+	}
+
+	NetworkManagerClient::sInstance->ProcessIncomingPackets();
+
+
+	const Character* character = m_world_client->GetCharacter(
+		NetworkManagerClient::sInstance->GetPlayerId());
+
+	if (character)
+	{
+		NetworkManagerClient::sInstance->SendPlayerPositionPacket(
+			character->GetLocation().mX, character->GetLocation().mY);
+	}
+
 	if (!m_game_over)
 		m_completion_time += dt;
+
+
+	if (!m_game_over)
+		m_completion_time += dt;
+
 
 	return false;
 }
 
 bool MultiplayerGameState::HandleEvent(const sf::Event& event)
 {
+	if (event.type == sf::Event::Closed)
+	{
+		SendClientDisconnect();
+	}
+
+	if (event.type == sf::Event::GainedFocus)
+	{
+		InputManager::sInstance->SetPassFocus(true);
+	}
+	else if (event.type == sf::Event::LostFocus)
+	{
+		InputManager::sInstance->SetPassFocus(false);
+	}
+
 	return false;
 }
 
@@ -39,37 +78,46 @@ void MultiplayerGameState::Draw()
 	RenderManager::sInstance->RenderComponents(m_world_client->GetCamera());
 }
 
-void MultiplayerGameState::SendClientDisconnect(sf::Int8 identifier) const
+void MultiplayerGameState::SendClientDisconnect()
 {
-}
-
-void MultiplayerGameState::HandleClientUpdate(InputMemoryBitStream& packet) const
-{
+	NetworkManagerClient::sInstance->SendGameDisconnect();
 }
 
 void MultiplayerGameState::SpawnClientPlayer(const int player_id, const int team_id,
                                              const EColorType color,
-                                             const std::string& name) const
+                                             const std::string& name)
 {
 	const auto character = m_world_client->AddCharacter(player_id, color);
 	character->SetTeamIdentifier(team_id);
 	character->SetName(name);
 
 	LeaderBoardManager::sInstance->AddPlayer(team_id, player_id, name);
-	/*m_players[player_id].reset(new Player(m_socket, player_id, GetContext().m_keys1));*/
+	m_players[player_id].reset(new Player(player_id, KeyBinding::sInstance.get()));
 	m_world_client->UpdateCharacterTransparencies(team_id);
 }
 
 void MultiplayerGameState::SpawnGhostPlayer(const int player_id, const int team_id,
                                             const EColorType color,
-                                            const std::string& name) const
+                                            const std::string& name)
 {
 	const auto ghost = m_world_client->AddGhostCharacter(player_id, color);
 	ghost->SetTeamIdentifier(team_id);
 	ghost->SetName(name);
 
 	LeaderBoardManager::sInstance->AddPlayer(team_id, player_id, name);
-	/*m_players[player_id].reset(new Player(m_socket, player_id, nullptr));*/
+	m_players[player_id].reset(new Player(player_id));
+}
+
+void MultiplayerGameState::UpdatePlayers(const int player_id, const float x, const float y) const
+{
+	const Vector3 position(x, y, 0);
+	Character* character = m_world_client->GetCharacter(player_id);
+	if (character)
+	{
+		const Vector3 interpolated_position = character->GetLocation() + (
+			position - character->GetLocation()) * 0.5f;
+		character->SetLocation(interpolated_position);
+	}
 }
 
 void MultiplayerGameState::HandlePlayerDisconnect(InputMemoryBitStream& packet)

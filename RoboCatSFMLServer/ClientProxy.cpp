@@ -57,3 +57,8 @@ void ClientProxy::SetIsReady(const bool ready)
 {
 	mReady = ready;
 }
+
+void ClientProxy::SetPosition(const float x, const float y)
+{
+	m_position = sf::Vector2f(x, y);
+}

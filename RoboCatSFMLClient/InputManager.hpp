@@ -18,6 +18,10 @@ public:
 	}
 
 	void Update();
+	bool m_pass_focus;
+
+	bool GetPassFocus() const {return m_pass_focus;}
+	void SetPassFocus(bool pass_focus);
 
 private:
 	InputState mCurrentState;

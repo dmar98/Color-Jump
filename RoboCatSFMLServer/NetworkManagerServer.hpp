@@ -51,7 +51,7 @@ private:
 	static void AddWorldStateToPacket(OutputMemoryBitStream& inOutputStream);
 
 	void SendStatePacketToClient(const ClientProxyPtr& inClientProxy);
-	void SendGameStatePacket(const ClientProxyPtr& inClientProxy);
+	void SendGameStatePacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream);
 	void HandleClientDisconnected(const ClientProxyPtr& inClientProxy);
 
 	int GetNewNetworkId();

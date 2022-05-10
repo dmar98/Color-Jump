@@ -24,6 +24,8 @@
     <ClInclude Include="CharacterClient.hpp" />
     <ClInclude Include="Client.hpp" />
     <ClInclude Include="CollisionHandler.hpp" />
+    <ClInclude Include="Command.hpp" />
+    <ClInclude Include="CommandQueue.hpp" />
     <ClInclude Include="Component.hpp" />
     <ClInclude Include="Container.hpp" />
     <ClInclude Include="DrawableComponent.hpp" />
@@ -46,6 +48,7 @@
     <ClInclude Include="NetworkManagerClient.hpp" />
     <ClInclude Include="PlatformClient.hpp" />
     <ClInclude Include="PlatformPartClient.hpp" />
+    <ClInclude Include="Player.hpp" />
     <ClInclude Include="PlayerAction.hpp" />
     <ClInclude Include="PlayerDataManager.hpp" />
     <ClInclude Include="PlayerSpriteComponent.hpp" />
@@ -77,6 +80,8 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientMain.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
+    <ClCompile Include="Command.cpp" />
+    <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="DrawableComponent.cpp" />
@@ -99,6 +104,7 @@
     <ClCompile Include="NetworkManagerClient.cpp" />
     <ClCompile Include="PlatformClient.cpp" />
     <ClCompile Include="PlatformPartClient.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerDataManager.cpp" />
     <ClCompile Include="PlayerSpriteComponent.cpp" />
     <ClCompile Include="RayGround.cpp" />

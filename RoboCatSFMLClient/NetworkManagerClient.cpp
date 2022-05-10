@@ -211,8 +211,8 @@ void NetworkManagerClient::ProcessPacket(InputMemoryBitStream& inInputStream,
 	case PacketType::PT_Ready:
 		HandleReadyChange(inInputStream);
 		break;
-	case PacketType::PT_Game_State: 
-		HandleGameStatePacket();
+	case PacketType::PT_Game_State:
+		HandleGameStatePacket(inInputStream);
 		break;
 	default:
 		break;
@@ -256,7 +256,6 @@ void NetworkManagerClient::SendOutgoingPackets()
 	case NetworkClientState::NCS_Size:
 	default:
 		break;
-
 	}
 }
 
@@ -313,19 +312,23 @@ void NetworkManagerClient::SendGoalPacket()
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Goal);
-	packet.Write(mPlayerId);
+	packet.Write(GetPlayerId());
 
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendTeamChangePacket()
+void NetworkManagerClient::SendTeamChangePacket(const int team_id, const EColorType color)
 {
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Team_Changed);
-	packet.Write(mPlayerId);
-	packet.Write(mTeamID);
-	packet.Write(mColor);
+	packet.Write(GetPlayerId());
+	packet.Write(team_id);
+	LOG("Client Team Change: Player %d sent color with value %d", GetPlayerId(), color)
+	packet.Write(color);
+
+	mTeamID = team_id;
+	mColor = color;
 
 	SendPacket(packet, mServerAddress);
 }
@@ -370,6 +373,28 @@ void NetworkManagerClient::SendTeamDeath(const int team_id)
 
 	packet.Write(PacketType::PT_Team_Death);
 	packet.Write(team_id);
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendGameDisconnect()
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Quit);
+	packet.Write(GetPlayerId());
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendPlayerPositionPacket(const float x, const float y)
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Game_State);
+	packet.Write(GetPlayerId());
+	packet.Write(x);
+	packet.Write(y);
 
 	SendPacket(packet, mServerAddress);
 }
@@ -463,7 +488,7 @@ void NetworkManagerClient::UpdateSendingWaitState()
 void NetworkManagerClient::UpdateSendingGameState()
 {
 	UpdateInfoUpdatePacket(NetworkClientState::NCS_Game_State,
-		[this] { SendGameStatePacket(); });
+	                       [this] { SendGameStatePacket(); });
 }
 
 void NetworkManagerClient::HandleWelcomePacket(InputMemoryBitStream& inInputStream)
@@ -486,8 +511,28 @@ void NetworkManagerClient::HandleStatePacket() const
 	LOG("'%s' is waiting in the lobby", mName.c_str())
 }
 
-void NetworkManagerClient::HandleGameStatePacket() const
+void NetworkManagerClient::HandleGameStatePacket(InputMemoryBitStream& inInputStream) const
 {
+	int player_count;
+	int player_id;
+	float x;
+	float y;
+
+	inInputStream.Read(player_count);
+
+	for (int i = 0; i < player_count; ++i)
+	{
+		inInputStream.Read(player_id);
+		inInputStream.Read(x);
+		inInputStream.Read(y);
+
+		if (player_id != GetPlayerId())
+		{
+			dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->UpdatePlayers(
+				player_id, x, y);
+		}
+	}
+
 	LOG("'%s' is in the game", mName.c_str())
 }
 
@@ -593,11 +638,6 @@ void NetworkManagerClient::HandleTeamChange(InputMemoryBitStream& inInputStream)
 		MovePlayerBack(playerId);
 	else
 		MovePlayer(playerId, teamId);
-
-	if (playerId == GetPlayerId())
-	{
-		mTeamID = teamId;
-	}
 
 	LOG("'%s' changed to team %d", mName.c_str(), teamId)
 }

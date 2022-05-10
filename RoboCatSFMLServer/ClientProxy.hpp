@@ -6,6 +6,7 @@ public:
 
 	const SocketAddress& GetSocketAddress() const { return mSocketAddress; }
 	int GetPlayerId() const { return mPlayerId; }
+	sf::Vector2f GetPosition() const { return m_position; }
 	const string& GetName() const { return mName; }
 	int GetTeamID() const { return mTeamId; }
 	bool GetReady() const { return mReady; }
@@ -29,6 +30,7 @@ public:
 	void SetColor(EColorType color);
 	void SetName(const string& name);
 	void SetIsReady(bool ready);
+	void SetPosition(float x, float y);
 
 
 private:
@@ -47,6 +49,7 @@ private:
 
 	float mLastPacketFromClientTime{};
 	float mTimeToRespawn;
+	sf::Vector2f m_position;
 };
 
 using ClientProxyPtr = shared_ptr<ClientProxy>;

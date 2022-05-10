@@ -227,7 +227,7 @@ void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
 		HandleReadyPacket(inClientProxy, inInputStream);
 		break;
 	case PacketType::PT_Game_State: 
-		SendGameStatePacket(inClientProxy);
+		SendGameStatePacket(inClientProxy, inInputStream);
 		break;
 	case PacketType::PT_Player_Connect:
 	case PacketType::PT_Initial_State:
@@ -372,12 +372,16 @@ void NetworkManagerServer::HandleTeamChange(const ClientProxyPtr& inClientProxy,
 	int player_id;
 	int team_id;
 	EColorType color;
+
 	in_input_stream.Read(player_id);
 	in_input_stream.Read(team_id);
 	in_input_stream.Read(color);
 
 	inClientProxy->SetTeamID(team_id);
 	inClientProxy->SetColor(color);
+
+	LOG("Server Team Change: Player %d has changed his team to %d. He has the color %d", player_id,
+		team_id, color)
 
 	auto p_function = [this, player_id, team_id](const ClientProxyPtr& client_proxy)
 	{
@@ -488,11 +492,32 @@ void NetworkManagerServer::SendStatePacketToClient(const ClientProxyPtr& inClien
 	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
 
-void NetworkManagerServer::SendGameStatePacket(const ClientProxyPtr& inClientProxy)
+void NetworkManagerServer::SendGameStatePacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream)
 {
+	
+	int player_id;
+	float x;
+	float y;
+
+	inInputStream.Read(player_id);
+	inInputStream.Read(x);
+	inInputStream.Read(y);
+
+	inClientProxy->SetPosition(x, y);
+
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Game_State);
+
+	const int in_data = mPlayerIdToClientMap.size();
+	packet.Write(in_data);
+
+	for (const auto& client : mPlayerIdToClientMap)
+	{
+		packet.Write(client.second->GetPlayerId());
+		packet.Write(client.second->GetPosition().x);
+		packet.Write(client.second->GetPosition().y);
+	}
 
 	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
@@ -598,6 +623,7 @@ void NetworkManagerServer::NotifySpawnCharacters()
 
 				packet.Write(player_info.first);
 				packet.Write(client_proxy->GetTeamID());
+				LOG("Server Color Sent Ghost: %d", client_proxy->GetColor())
 				packet.Write(client_proxy->GetColor());
 				packet.Write(client_proxy->GetName());
 			}
@@ -606,6 +632,7 @@ void NetworkManagerServer::NotifySpawnCharacters()
 
 			packet.Write(id);
 			packet.Write(proxy->GetTeamID());
+			LOG("Server Color Sent Client: %d", proxy->GetColor())
 			packet.Write(proxy->GetColor());
 			packet.Write(proxy->GetName());
 

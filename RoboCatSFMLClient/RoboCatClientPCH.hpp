@@ -20,6 +20,11 @@ class CharacterClient;
 #include "Utility.hpp"
 #include "KeyBinding.hpp"
 
+#include "Command.hpp"
+#include "CommandQueue.hpp"
+
+#include "Player.hpp"
+
 #include "State.hpp"
 #include "StateStack.hpp"
 

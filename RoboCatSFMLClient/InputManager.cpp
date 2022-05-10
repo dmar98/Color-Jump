@@ -86,6 +86,11 @@ void InputManager::HandleInput(EInputAction inInputAction, int inKeyCode)
 }
 
 
+void InputManager::SetPassFocus(const bool pass_focus)
+{
+	m_pass_focus = pass_focus;
+}
+
 InputManager::InputManager() :
 	mNextTimeToSampleInput(0.f),
 	mPendingMove(nullptr)

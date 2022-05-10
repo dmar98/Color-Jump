@@ -33,7 +33,7 @@ void GameObject::SetNetworkId(int inNetworkId)
 
 }
 
-unsigned GameObject::GetCategory() const
+unsigned int GameObject::GetCategory() const
 {
 	return Category::Type::kNone;
 }

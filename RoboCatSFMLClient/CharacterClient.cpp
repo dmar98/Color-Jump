@@ -69,6 +69,11 @@ void CharacterClient::SetOpaque() const
 	m_team_id_text->SetColor(white);
 }
 
+unsigned CharacterClient::GetCategory() const
+{
+	return Category::kPlayer;
+}
+
 void CharacterClient::SetTeamIdentifier(const int identifier)
 {
 	Character::SetTeamIdentifier(identifier);

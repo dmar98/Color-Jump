@@ -21,9 +21,7 @@ public:
 	virtual void Update();
 	virtual void LoadLevel() = 0;
 
-	virtual Character* AddCharacterWithColor(int identifier, EColorType color, sf::IntRect rect, Vector3 spawn_pos) = 0;
 	virtual Character* AddCharacter(int identifier, EColorType color) = 0;
-	virtual Character* AddGhostCharacterWithColor(const int identifier, EColorType color, const sf::IntRect& int_rect, const Vector3 spawn_pos) = 0;
 	virtual Character* AddGhostCharacter(const int identifier, const EColorType color) = 0;
 
 protected:

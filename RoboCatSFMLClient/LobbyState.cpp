@@ -22,7 +22,7 @@ LobbyState::LobbyState():
 
 	NetworkManagerClient::StaticInit(*serverAddress, PlayerDataManager::sInstance->GetName());
 
-	for (int i = 0; i < 8; ++i)
+	for (int i = 1; i < 9; ++i)
 	{
 		m_team_selections.try_emplace(i, std::vector<int>());
 	}
@@ -101,34 +101,27 @@ auto LobbyState::HandleBackButtonPressed() const
 	};
 }
 
-std::map<int, std::vector<int>>::mapped_type LobbyState::GetPlayerTeam(
-	const int player_id)
+std::map<int, std::vector<int>>::mapped_type LobbyState::GetTeam(
+	const int team_id)
 {
-	return m_team_selections[player_id];
+	return m_team_selections[team_id];
 }
 
 void LobbyState::HandleTeamChoice(const int team_id)
 {
 	if (TeamHasPlace(team_id) || team_id == 0)
 	{
-		NetworkManagerClient::sInstance->SetTeamID(team_id);
 		const int player_id = NetworkManagerClient::sInstance->GetPlayerId();
-		if (GetPlayerTeam(player_id).empty())
+		if (team_id == 0 || GetTeam(team_id).empty())
 		{
-			NetworkManagerClient::sInstance->SetPlayerColor(EColorType::kBlue);
+			NetworkManagerClient::sInstance->SendTeamChangePacket(team_id, EColorType::kBlue);
 		}
 		else
 		{
-			NetworkManagerClient::sInstance->SetPlayerColor(EColorType::kRed);
+			Debug("Red");
+			NetworkManagerClient::sInstance->SendTeamChangePacket(team_id, EColorType::kRed);
 		}
-
-		NetworkManagerClient::sInstance->SendTeamChangePacket();
 	}
-}
-
-std::map<int, vector<int>>::mapped_type LobbyState::GetTeam(const int id)
-{
-	return m_team_selections[id];
 }
 
 bool LobbyState::TeamHasPlace(const int id)
@@ -286,11 +279,11 @@ bool LobbyState::HandleEvent(const sf::Event& event)
 
 	if (event.type == sf::Event::GainedFocus)
 	{
-		// todo
+		InputManager::sInstance->SetPassFocus(true);
 	}
 	else if (event.type == sf::Event::LostFocus)
 	{
-		// todo
+		InputManager::sInstance->SetPassFocus(false);
 	}
 
 	return false;
@@ -305,10 +298,9 @@ void LobbyState::MovePlayer(int player_id, const int team_id)
 {
 	if (m_player_team_selection[player_id] != 0)
 	{
-		m_team_selections[m_player_team_selection[player_id]].erase(
-			std::remove(m_team_selections[m_player_team_selection[player_id]].begin(),
-			            m_team_selections[m_player_team_selection[player_id]].end(), player_id),
-			m_team_selections[m_player_team_selection[player_id]].end());
+		auto& team_selection = m_team_selections[m_player_team_selection[player_id]];
+		team_selection.erase(std::remove(team_selection.begin(), team_selection.end(), player_id),
+		                     team_selection.end());
 	}
 
 	m_team_selections[team_id].emplace_back(player_id);
@@ -427,4 +419,10 @@ sf::Vector2f LobbyState::GetUnpairedPos(const int i)
 
 
 	return {static_cast<float>(x), static_cast<float>(y)};
+}
+
+void LobbyState::Debug(const std::string& message) const
+{
+	const string in_format = "World Client: " + message;
+	LOG(in_format.c_str(), 0)
 }
