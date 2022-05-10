@@ -5,7 +5,7 @@ CharacterClient::CharacterClient(EColorType type, const sf::IntRect& texture_rec
 {
 	mSpriteComponent.reset(new SpriteComponent(this));
 	mSpriteComponent->SetTexture(TextureManager::sInstance->GetTexture("LevelTileSet"),
-	                             texture_rect);
+	                             texture_rect, true);
 
 	/*m_jump_smoke_animation.SetFrameSize(sf::Vector2i(256, 256));
 	m_jump_smoke_animation.SetNumFrames(16);
@@ -137,7 +137,7 @@ void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect)
 		this->SetLocation(
 			GetLocation()
 			- normal_velocity
-			+ Vector3(0, 9.81f * Timing::sInstance.GetDeltaTime(), 0));
+			+ Vector3(0, 9.81f * Timing::sInstance.GetDeltaTime() * 4.f, 0));
 		mSpriteComponent->UpdatePosition();
 	}
 }

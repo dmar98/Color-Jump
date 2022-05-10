@@ -91,9 +91,10 @@ void InputManager::SetPassFocus(const bool pass_focus)
 	m_pass_focus = pass_focus;
 }
 
-InputManager::InputManager() :
-	mNextTimeToSampleInput(0.f),
-	mPendingMove(nullptr)
+InputManager::InputManager()
+	: m_pass_focus(true),
+	  mNextTimeToSampleInput(0.f),
+	  mPendingMove(nullptr)
 {
 }
 

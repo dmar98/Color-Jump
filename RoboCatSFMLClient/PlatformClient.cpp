@@ -177,7 +177,7 @@ void PlatformClient::Update()
 			break;
 		}
 
-		m_current_pulse_cooldown = 2.f;
+		m_current_pulse_cooldown = 1.f;
 	}
 }
 

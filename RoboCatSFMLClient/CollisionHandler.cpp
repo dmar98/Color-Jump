@@ -119,7 +119,7 @@ bool CollisionHandler::CollideAndChangeColors(CharacterClient& player, const Pla
 
 bool CollisionHandler::IsPlayerAbovePlatform(const Character& player, const PlatformPart& platform_part)
 {
-	if (player.GetLocation().mY > platform_part.GetLocation().mY)
+	if (player.GetLocation().mY > platform_part.GetLocation().mY - 32.f / 2.f)
 	{
 		return true;
 	}

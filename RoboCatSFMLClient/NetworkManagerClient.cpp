@@ -441,11 +441,7 @@ void NetworkManagerClient::SendStatePacket()
 
 void NetworkManagerClient::SendGameStatePacket()
 {
-	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Game_State);
-
-	SendPacket(packet, mServerAddress);
 }
 
 void NetworkManagerClient::UpdateSendingQuit()

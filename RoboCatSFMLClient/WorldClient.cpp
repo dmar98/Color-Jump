@@ -86,8 +86,15 @@ void WorldClient::CheckClientCollisions() const
 		//Ray Ground Collisions
 		if (go_bounds.intersects(client_ray_bounds))
 		{
-			//Client Ray Collision!
-			collide = true;
+			const auto platform_part = dynamic_cast<PlatformPart*>(go.get());
+			if(platform_part != nullptr)
+			{
+				if(CollisionHandler::IsPlayerAtHisPlatform(*m_client_player, platform_part->GetPlatform()))
+				{
+					//Client Ray Collision!
+					collide = true;
+				}
+			}
 		}
 	}
 

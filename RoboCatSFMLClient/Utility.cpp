@@ -44,9 +44,18 @@ void Utility::CentreOrigin(sf::Sprite& sprite)
 	                 std::floor(bounds.top + bounds.height / 2.f));
 }
 
-void Utility::CentreOrigin(SpriteComponent& component)
+void Utility::CentreOrigin(SpriteComponent& component, bool is_player)
 {
-	const sf::FloatRect bounds = component.GetSprite().getLocalBounds();
+	sf::FloatRect bounds;
+	if (is_player)
+	{
+		bounds = component.GetSprite().getLocalBounds();
+	}
+	else
+	{
+		bounds = sf::FloatRect(0, 0, 64, 64);
+
+	}
 	component.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
 		std::floor(bounds.top + bounds.height / 2.f));
 }

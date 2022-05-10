@@ -9,7 +9,7 @@ class Utility
 public:
 	static int RandomInt(int exclusive_max);
 	static void CentreOrigin(sf::Sprite& sprite);
-	static void CentreOrigin(SpriteComponent& component);
+	static void CentreOrigin(SpriteComponent& component, bool is_player = false);
 	static void CentreOrigin(sf::Text& text);
 	static void CentreOrigin(TextComponent& component);
 	static std::string ToString(sf::Keyboard::Key key);

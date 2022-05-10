@@ -78,6 +78,7 @@ void Character::Jump()
 	m_grounded = false;
 	m_current_platform = nullptr;
 	SetVelocity(Vector3(0, -500.f, 0));
+	LOG("Jump", 0)
 }
 
 /*

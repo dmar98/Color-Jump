@@ -17,7 +17,7 @@ RayGround::RayGround(Character* character) : m_character(character)
  */
 sf::FloatRect RayGround::GetBoundingRect() const
 {
-	return {GetLocation().mX, GetLocation().mY, 2, 50};
+	return {GetLocation().mX, GetLocation().mY, 2, 25};
 }
 
 unsigned RayGround::GetCategory() const

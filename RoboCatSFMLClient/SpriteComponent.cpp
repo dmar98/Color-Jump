@@ -6,13 +6,13 @@ SpriteComponent::SpriteComponent(GameObject* inGameObject)
 {
 }
 
-void SpriteComponent::SetTexture(const TexturePtr& inTexture, const sf::IntRect subRect)
+void SpriteComponent::SetTexture(const TexturePtr& inTexture, const sf::IntRect subRect, bool is_player)
 {
 	if(subRect != sf::IntRect(0,0,0,0))
 		m_sprite.setTextureRect(subRect);
 
 	m_sprite.setTexture(*inTexture);
-	Utility::CentreOrigin(*this);
+	Utility::CentreOrigin(*this, is_player);
 	m_sprite.setScale(sf::Vector2f(m_game_object->GetScale(), m_game_object->GetScale()));
 }
 
