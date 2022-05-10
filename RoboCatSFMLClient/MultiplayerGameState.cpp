@@ -125,8 +125,10 @@ void MultiplayerGameState::UpdatePlayer(const int player_id, const float x, cons
 	}
 }
 
-void MultiplayerGameState::HandlePlayerDisconnect(InputMemoryBitStream& packet)
+void MultiplayerGameState::HandlePlayerDisconnect(int player_id)
 {
+	m_world_client->RemoveCharacter(player_id);
+	m_players.erase(player_id);
 }
 
 void MultiplayerGameState::HandlePlatformChange(const int player_id, const int platform_id,
@@ -178,10 +180,6 @@ void MultiplayerGameState::HandleTeamCheckpointSet(const int team_id, const int 
 	{
 		m_world_client->SetCheckpointToPlatformWithID(platform_id);
 	}
-}
-
-void MultiplayerGameState::HandlePacket(sf::Int8 packet_type, InputMemoryBitStream& packet)
-{
 }
 
 void MultiplayerGameState::Debug(const std::string& message)

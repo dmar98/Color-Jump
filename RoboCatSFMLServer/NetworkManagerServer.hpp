@@ -39,6 +39,7 @@ private:
 	void NotifyCountDown(const ClientProxyPtr& client);
 	void CheckIfAllReady();
 	void HandleReadyPacket(const ClientProxyPtr& client_proxy, InputMemoryBitStream& inInputStream);
+	void HandleGameStatePacket(const ClientProxyPtr& client_proxy, InputMemoryBitStream& inInputStream);
 	void ProcessPacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream);
 
 	void SendInitialState(const ClientProxyPtr& client_proxy);
@@ -53,6 +54,7 @@ private:
 	void SendStatePacketToClient(const ClientProxyPtr& inClientProxy);
 	void SendGameStatePacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream);
 	void HandleClientDisconnected(const ClientProxyPtr& inClientProxy);
+	void NotifyPlayerQuit(const ClientProxyPtr& client, int player_id);
 
 	int GetNewNetworkId();
 

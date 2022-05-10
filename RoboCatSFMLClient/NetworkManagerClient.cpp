@@ -357,12 +357,12 @@ void NetworkManagerClient::SendCheckpointReached(const int team_id, int platform
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendGoalReached(int team_id)
+void NetworkManagerClient::SendGoalReached()
 {
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Goal);
-	packet.Write(team_id);
+	packet.Write(mTeamID);
 
 	SendPacket(packet, mServerAddress);
 }
@@ -441,7 +441,6 @@ void NetworkManagerClient::SendStatePacket()
 
 void NetworkManagerClient::SendGameStatePacket()
 {
-
 }
 
 void NetworkManagerClient::UpdateSendingQuit()
@@ -587,10 +586,16 @@ void NetworkManagerClient::HandleInitialStatePacket(
 void NetworkManagerClient::RemovePlayer(const int player_id)
 {
 	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->RemovePlayer(player_id);
+
 }
 
 void NetworkManagerClient::HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream)
 {
+	if (mState == NetworkClientState::NCS_Quit)
+	{
+		mState = NetworkClientState::NCS_State;
+	}
+
 	int player_id;
 	input_memory_bit_stream.Read(player_id);
 

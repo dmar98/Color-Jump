@@ -54,7 +54,7 @@ public:
 
 	void SendPlatformInfo(int player_id, int platform_id, EPlatformType platform_type);
 	void SendCheckpointReached(int team_id, int platform_id);
-	void SendGoalReached(int team_id);
+	void SendGoalReached();
 	void SendTeamDeath(int team_id);
 	void SendGameDisconnect();
 	void SendPlayerPositionPacket(float x, float y);
@@ -96,7 +96,7 @@ private:
 	void HandleStatePacket() const;
 	void HandleGameStatePacket(InputMemoryBitStream& inInputStream) const;
 	void HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const;
-	static void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
+	void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
 	void HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream) const;
 	void HandleInitialStatePacket(InputMemoryBitStream& input_memory_bit_stream);
 	void HandleReadyChange(InputMemoryBitStream& input_memory_bit_stream);

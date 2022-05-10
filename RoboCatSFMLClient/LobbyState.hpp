@@ -8,7 +8,7 @@ class LobbyState final : public State
 	auto IsValidTeamPresent() const;
 	auto HandleLeaveTeamButtonPress();
 	auto IsInATeam() const;
-	auto HandleBackButtonPressed() const;
+	auto HandleBackButtonPressed();
 	auto GetLabel(int player_id);
 
 	std::map<int, vector<int>>::mapped_type GetTeam(int team_id);
@@ -64,4 +64,7 @@ private:
 	std::map<int, GUI::Label::Ptr> m_players;
 
 	bool m_ready{};
+
+
+	int m_local_id{};
 };

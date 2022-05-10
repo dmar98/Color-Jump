@@ -26,12 +26,13 @@ public:
 	void UpdatePlatform(int id, int platform_id, EPlatformType platform_type);
 	CommandQueue& GetCommandQueue();
 	void Debug(const std::string& message) const;
+	void RemoveCharacter(int player_id);
 
 private:
 	void CheckClientCollisions() const;
 	void DestroyPlayerOutsideView() const;
 	void OnReachedCheckpoint() const;
-	void OnReachedGoal() const;
+	static void OnReachedGoal();
 	void OnClientPlayerDeath() const;
 
 	sf::View m_camera;
