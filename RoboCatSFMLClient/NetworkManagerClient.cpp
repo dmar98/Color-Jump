@@ -586,10 +586,16 @@ void NetworkManagerClient::HandleInitialStatePacket(
 void NetworkManagerClient::RemovePlayer(const int player_id)
 {
 	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->RemovePlayer(player_id);
+
 }
 
 void NetworkManagerClient::HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream)
 {
+	if (mState == NetworkClientState::NCS_Quit)
+	{
+		mState = NetworkClientState::NCS_State;
+	}
+
 	int player_id;
 	input_memory_bit_stream.Read(player_id);
 

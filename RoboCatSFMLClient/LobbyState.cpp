@@ -91,15 +91,15 @@ auto LobbyState::IsInATeam() const
 	};
 }
 
-auto LobbyState::HandleBackButtonPressed() const
+auto LobbyState::HandleBackButtonPressed()
 {
 	return [this]
 	{
 		SendClientDisconnect();
-		RequestStackPop();
-		RequestStackPush(StateID::kMenu);
+		m_local_id = NetworkManagerClient::sInstance->GetPlayerId();
 	};
 }
+
 
 std::map<int, std::vector<int>>::mapped_type LobbyState::GetTeam(
 	const int team_id)
@@ -324,6 +324,12 @@ void LobbyState::MovePlayer(int player_id, const int team_id)
 
 void LobbyState::RemovePlayer(const int player_id)
 {
+	if (player_id == m_local_id)
+	{
+		RequestStackPop();
+		RequestStackPush(StateID::kMenu);
+	}
+
 	auto& team_selection = m_team_selections[m_player_team_selection[player_id]];
 	const auto remove = std::remove(team_selection.begin(), team_selection.end(), player_id);
 	team_selection.erase(remove, team_selection.end());

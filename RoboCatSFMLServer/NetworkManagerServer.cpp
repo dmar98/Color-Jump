@@ -258,7 +258,6 @@ void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
 		LOG("Unknown packet type received from %s",
 		    inClientProxy->GetSocketAddress().ToString().c_str())
 		break;
-	
 	}
 }
 
@@ -400,7 +399,7 @@ void NetworkManagerServer::HandleTeamChange(const ClientProxyPtr& inClientProxy,
 	inClientProxy->SetColor(color);
 
 	LOG("Server Team Change: Player %d has changed his team to %d. He has the color %d", player_id,
-		team_id, color)
+	    team_id, color)
 
 	auto p_function = [this, player_id, team_id](const ClientProxyPtr& client_proxy)
 	{
@@ -511,7 +510,8 @@ void NetworkManagerServer::SendStatePacketToClient(const ClientProxyPtr& inClien
 	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
 
-void NetworkManagerServer::SendGameStatePacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream)
+void NetworkManagerServer::SendGameStatePacket(const ClientProxyPtr& inClientProxy,
+                                               InputMemoryBitStream& inInputStream)
 {
 	OutputMemoryBitStream packet;
 
@@ -672,12 +672,32 @@ void NetworkManagerServer::CheckForDisconnects()
 
 void NetworkManagerServer::HandleClientDisconnected(const ClientProxyPtr& inClientProxy)
 {
-	mPlayerIdToClientMap.erase(inClientProxy->GetPlayerId());
+	int player_id = inClientProxy->GetPlayerId();
+
+	auto p_function = [this, player_id](const ClientProxyPtr& client)
+	{
+		NotifyPlayerQuit(client, player_id);
+	};
+
+	SendPacketToAll(p_function);
+
+	mPlayerIdToClientMap.erase(player_id);
 	mAddressToClientMap.erase(inClientProxy->GetSocketAddress());
 
-	LOG("Server Player Left, Player %d left the lobby", inClientProxy->GetPlayerId())
 
-	dynamic_cast<Server*>(Engine::s_instance.get())->HandleLostClient(inClientProxy);
+	LOG("Server Player Left, Player %d left the lobby", player_id)
+
+	
+}
+
+void NetworkManagerServer::NotifyPlayerQuit(const ClientProxyPtr& client, int player_id)
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Quit);
+	packet.Write(player_id);
+
+	SendPacket(packet, client->GetSocketAddress());
 }
 
 void NetworkManagerServer::RegisterGameObject(const GameObjectPtr& inGameObject)

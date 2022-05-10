@@ -96,7 +96,7 @@ private:
 	void HandleStatePacket() const;
 	void HandleGameStatePacket(InputMemoryBitStream& inInputStream) const;
 	void HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const;
-	static void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
+	void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
 	void HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream) const;
 	void HandleInitialStatePacket(InputMemoryBitStream& input_memory_bit_stream);
 	void HandleReadyChange(InputMemoryBitStream& input_memory_bit_stream);

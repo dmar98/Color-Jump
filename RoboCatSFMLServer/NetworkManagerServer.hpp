@@ -54,6 +54,7 @@ private:
 	void SendStatePacketToClient(const ClientProxyPtr& inClientProxy);
 	void SendGameStatePacket(const ClientProxyPtr& inClientProxy, InputMemoryBitStream& inInputStream);
 	void HandleClientDisconnected(const ClientProxyPtr& inClientProxy);
+	void NotifyPlayerQuit(const ClientProxyPtr& client, int player_id);
 
 	int GetNewNetworkId();
 
