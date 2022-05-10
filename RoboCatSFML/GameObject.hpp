@@ -80,7 +80,6 @@ private:
 	int mIndexInWorld;
 
 	bool mDoesWantToDie;
-
 	int mNetworkId;
 };
 

@@ -14,6 +14,9 @@ TitleState::TitleState()
 	std::shared_ptr<GUI::Label> label;
 	Utility::CreateLabel(label, position.x, position.y, "Press any key to continue", 50);
 	m_container.Pack(label);
+
+	// Play menu theme
+	AudioManager::sInstance->PlayMusic("MenuTheme");
 }
 
 bool TitleState::Update(const float dt)

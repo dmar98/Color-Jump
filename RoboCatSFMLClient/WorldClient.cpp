@@ -47,6 +47,7 @@ void WorldClient::Update()
 	}
 
 	CheckClientCollisions();
+	DestroyPlayerOutsideView();
 }
 
 void WorldClient::CheckClientCollisions() const
@@ -90,6 +91,18 @@ void WorldClient::CheckClientCollisions() const
 			GameObject::GOPair collision_pair(go.get(), client_ray);
 			CollisionHandler::PlayerGroundRayCast(collision_pair);
 		}
+	}
+}
+
+//Checks if the client player goes outside of the camera bounds
+void WorldClient::DestroyPlayerOutsideView() const
+{
+	if(m_client_player == nullptr)
+		return;
+
+	if (!m_client_player->IsDead() && m_client_player->GetLocation().mY > m_camera.getCenter().y + m_camera.getSize().y / 2)
+	{
+		OnClientPlayerDeath();
 	}
 }
 
@@ -206,6 +219,7 @@ void WorldClient::RespawnClientCharacter() const
 	position.mY -= static_cast<float>(m_client_player->GetSize().height - 15);
 	position.mX += static_cast<float>(part->GetSize().width) / 2.f;
 	m_client_player->SetLocation(position);
+	m_client_player->SetIsDead(false);
 
 	//Reset all platforms to their initial type
 	for (auto& platform : m_level_info.platforms)
@@ -292,6 +306,7 @@ void WorldClient::OnReachedGoal() const
 
 void WorldClient::OnClientPlayerDeath() const
 {
+	m_client_player->SetIsDead(true);
 	NetworkManagerClient::sInstance->SendTeamDeath(m_client_player->GetTeamIdentifier());
 }
 

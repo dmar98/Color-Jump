@@ -27,10 +27,9 @@ public:
 	CommandQueue& GetCommandQueue();
 	void Debug(const std::string& message) const;
 
-protected:
-	void CheckClientCollisions() const;
-
 private:
+	void CheckClientCollisions() const;
+	void DestroyPlayerOutsideView() const;
 	void OnReachedCheckpoint() const;
 	void OnReachedGoal() const;
 	void OnClientPlayerDeath() const;

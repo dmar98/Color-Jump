@@ -27,6 +27,9 @@ MenuState::MenuState(): State()
 		RequestStackPop();
 	});
 	m_container.Pack(button);
+
+	// Play menu theme
+	AudioManager::sInstance->PlayMusic("MenuTheme");
 }
 
 void MenuState::Draw()
