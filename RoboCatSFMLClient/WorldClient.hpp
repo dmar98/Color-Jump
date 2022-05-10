@@ -27,10 +27,9 @@ public:
 	void SetPlatformOnCharacter(Character* character, int platform_id) const;
 	void UpdatePlatform(int id, int platform_id, EPlatformType platform_type);
 
-protected:
-	void CheckClientCollisions() const;
-
 private:
+	void CheckClientCollisions() const;
+	void DestroyPlayerOutsideView() const;
 	void OnReachedCheckpoint() const;
 	void OnReachedGoal() const;
 	void OnClientPlayerDeath() const;

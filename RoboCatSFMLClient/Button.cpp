@@ -87,6 +87,8 @@ namespace GUI
 		{
 			Deactivate();
 		}
+
+		AudioManager::sInstance->Play("Button");
 	}
 
 	void Button::Deactivate()

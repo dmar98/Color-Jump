@@ -49,6 +49,8 @@ public:
 	bool IsOnPlatformOfType(EPlatformType platform_type) const;
 	bool IsOnPlatform(Platform* platform) const;
 	void StopMovement();
+	void SetIsDead(bool isDead);
+	bool IsDead() const;
 
 protected:
 	Character(EColorType type, const sf::IntRect& texture_rect);
@@ -61,9 +63,9 @@ protected:
 	RayGround* m_ray{};
 	bool m_can_jump;
 
-	/*SoundPlayer& m_sounds;*/
 	int m_identifier{};
 	int m_team_identifier{};
 
 	Vector3 m_velocity;
+	bool m_is_dead;
 };

@@ -9,6 +9,7 @@ bool Client::StaticInit()
 	WindowManager::StaticInit();
 	FontManager::StaticInit();
 	TextureManager::StaticInit();
+	AudioManager::StaticInit();
 	RenderManager::StaticInit();
 	StackManager::StaticInit();
 	PlayerDataManager::StaticInit();

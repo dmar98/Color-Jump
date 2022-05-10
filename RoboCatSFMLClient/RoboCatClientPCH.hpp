@@ -28,6 +28,7 @@ class CharacterClient;
 #include "PlayerSpriteComponent.hpp"
 #include "TextureManager.hpp"
 #include "FontManager.hpp"
+#include "AudioManager.hpp"
 #include "RenderManager.hpp"
 #include "WindowManager.hpp"
 #include "StackManager.hpp"

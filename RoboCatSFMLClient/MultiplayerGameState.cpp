@@ -8,6 +8,9 @@ MultiplayerGameState::MultiplayerGameState()
 	//Load the Level
 	m_world_client->LoadLevel();
 	m_world_client->SetCamera(WindowManager::sInstance->getDefaultView());
+
+	// Play level theme
+	AudioManager::sInstance->PlayMusic("LevelTheme");
 }
 
 void MultiplayerGameState::OnStackPopped()

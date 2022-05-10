@@ -103,8 +103,8 @@ void CharacterClient::Jump()
 	}
 
 	m_show_jump_animation = true;
-	/*m_jump_smoke_animation.Restart();
-	m_sounds.Play(SoundEffect::kJump);*/
+	//m_jump_smoke_animation.Restart();
+	AudioManager::sInstance->Play("Jump");
 }
 
 void CharacterClient::SetGrounded(Platform* platform)

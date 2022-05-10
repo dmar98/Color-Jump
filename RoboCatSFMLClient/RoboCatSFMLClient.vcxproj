@@ -55,6 +55,7 @@
     <ClInclude Include="RoboCatClient.hpp" />
     <ClInclude Include="RoboCatClientPCH.hpp" />
     <ClInclude Include="SettingsState.hpp" />
+    <ClInclude Include="AudioManager.hpp" />
     <ClInclude Include="SpriteComponent.hpp" />
     <ClInclude Include="StackManager.hpp" />
     <ClInclude Include="State.hpp" />
@@ -112,6 +113,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SettingsState.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="StackManager.cpp" />
     <ClCompile Include="State.cpp" />

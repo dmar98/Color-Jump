@@ -43,7 +43,8 @@ Character::Character(const EColorType type, const sf::IntRect& texture_rect)
 	  m_type(type),
 	  m_grounded(false),
 	  m_current_platform(nullptr),
-	  m_can_jump(true)
+	  m_can_jump(true),
+	  m_is_dead(false)
 	  /*m_sounds(context),
 	  m_jump_smoke_animation(textures.Get(Textures::kJumpSmoke))*/
 {
@@ -140,6 +141,16 @@ bool Character::IsOnPlatform(Platform* platform) const
 void Character::StopMovement()
 {
 	SetVelocity(Vector3(0, 9.81f, 0));
+}
+
+void Character::SetIsDead(bool isDead)
+{
+	m_is_dead = isDead;
+}
+
+bool Character::IsDead() const
+{
+	return m_is_dead;
 }
 
 void Character::SetIdentifier(const int identifier)
