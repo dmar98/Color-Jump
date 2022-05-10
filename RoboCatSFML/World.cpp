@@ -43,6 +43,11 @@ void World::RemoveGameObject(GameObjectPtr inGameObject)
 
 void World::Update()
 {
+	for (const auto& platform : m_level_info.platforms)
+	{
+		platform->Update();
+	}
+
 	//update all game objects- sometimes they want to die, so we need to tread carefully...
 	for (int i = 0, c = mGameObjects.size(); i < c; ++i)
 	{

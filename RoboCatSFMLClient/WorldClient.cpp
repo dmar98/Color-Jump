@@ -19,6 +19,9 @@ void WorldClient::Update()
 {
 	World::Update();
 
+	CheckClientCollisions();
+	DestroyPlayerOutsideView();
+
 	while (!m_command_queue.IsEmpty())
 	{
 		Command command = m_command_queue.Pop();
@@ -45,9 +48,6 @@ void WorldClient::Update()
 	{
 		m_game_object->Update();
 	}
-
-	CheckClientCollisions();
-	DestroyPlayerOutsideView();
 }
 
 void WorldClient::CheckClientCollisions() const

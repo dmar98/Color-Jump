@@ -22,7 +22,7 @@ public:
 	                       const std::string& name);
 	void SpawnGhostPlayer(int player_id, int team_id, EColorType color,
 		const std::string& name);
-	void UpdatePlayers(int player_id, float x, float y) const;
+	void UpdatePlayer(int player_id, float x, float y) const;
 
 private:
 	static void SendClientDisconnect();

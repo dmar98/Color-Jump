@@ -5,6 +5,7 @@
 PlatformClient::PlatformClient(const sf::Int8 id, const EPlatformType platform_type)
 	: Platform(id, platform_type)
 {
+	SetType(platform_type);
 }
 
 void PlatformClient::AddPlatformPart(PlatformPart* tile)
@@ -99,16 +100,64 @@ bool PlatformClient::HandlePlayerCollision(const EColorType color_type)
 void PlatformClient::SetType(const EPlatformType type)
 {
 	Platform::SetType(type);
+
+	switch (type)
+	{
+	case EPlatformType::kHorizontalBlue:
+	{
+		SetTextureOnParts(TextureManager::sInstance->GetTexture("HImpactBluePlatform"));
+	}
+	break;
+	case EPlatformType::kHorizontalRed:
+	{
+		SetTextureOnParts(TextureManager::sInstance->GetTexture("HImpactRedPlatform"));
+	}
+	break;
+	case EPlatformType::kVerticalBlue:
+	{
+		SetTextureOnParts(TextureManager::sInstance->GetTexture("VImpactBluePlatform"));
+	}
+	break;
+	case EPlatformType::kVerticalRed:
+	{
+		SetTextureOnParts(TextureManager::sInstance->GetTexture("VImpactRedPlatform"));
+	}
+	break;
+	case EPlatformType::kHorizontalPulse:
+	{
+		m_is_pulse = true;
+		SetType(EPlatformType::kHorizontalRed);
+	}
+	break;
+	case EPlatformType::kCheckpointActivated:
+	{
+		SetTextureOnParts(TextureManager::sInstance->GetTexture("ActivatedCheckpointPlatform"));
+	}
+	break;
+	case EPlatformType::kHorizontalImpact:
+	{
+		SetTextureOnParts(TextureManager::sInstance->GetTexture("HImpactBlankPlatform"));
+	}
+	break;
+	case EPlatformType::kVerticalImpact:
+	{
+		SetTextureOnParts(TextureManager::sInstance->GetTexture("VImpactBlankPlatform"));
+	}
+	break;
+	default:
+		break;
+	}
+
 }
 
 //Written by Paul Bichler (D00242563)
 //Update method is used by Pulse platforms to change the color every 2 seconds.
 void PlatformClient::Update()
 {
-	/*if (!m_is_pulse)
+	if (!m_is_pulse)
 		return;
 
-	m_current_pulse_cooldown -= dt.asSeconds();
+	m_current_pulse_cooldown -= Timing::sInstance.GetDeltaTime();
 
 	if (m_current_pulse_cooldown <= 0)
 	{
@@ -129,7 +178,7 @@ void PlatformClient::Update()
 		}
 
 		m_current_pulse_cooldown = 2.f;
-	}*/
+	}
 }
 
 //Written by Paul Bichler (D00242563)

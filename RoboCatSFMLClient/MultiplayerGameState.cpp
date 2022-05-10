@@ -113,7 +113,7 @@ void MultiplayerGameState::SpawnGhostPlayer(const int player_id, const int team_
 	m_players[player_id].reset(new Player(player_id));
 }
 
-void MultiplayerGameState::UpdatePlayers(const int player_id, const float x, const float y) const
+void MultiplayerGameState::UpdatePlayer(const int player_id, const float x, const float y) const
 {
 	const Vector3 position(x, y, 0);
 	Character* character = m_world_client->GetCharacter(player_id);
