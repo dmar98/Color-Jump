@@ -2,7 +2,8 @@
 
 DrawableComponent::DrawableComponent(GameObject* game_object)
 	: m_game_object(game_object),
-	  m_draw_predicate([] { return true; })
+	  m_draw_predicate([] { return true; }),
+	  m_offset(0, 0)
 {
 	//and add yourself to the rendermanager...
 	RenderManager::sInstance->AddComponent(this);

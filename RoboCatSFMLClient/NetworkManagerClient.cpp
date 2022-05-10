@@ -528,7 +528,7 @@ void NetworkManagerClient::HandleGameStatePacket(InputMemoryBitStream& inInputSt
 
 		if (player_id != GetPlayerId())
 		{
-			dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->UpdatePlayers(
+			dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->UpdatePlayer(
 				player_id, x, y);
 		}
 	}
