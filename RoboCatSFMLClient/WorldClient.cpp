@@ -59,6 +59,7 @@ void WorldClient::CheckClientCollisions() const
 	RayGround* client_ray = m_client_player->GetRay();
 	const sf::FloatRect client_ray_bounds = client_ray->GetBoundingRect();
 	std::set<GameObject::GOPair> ray_collision_pairs;
+	bool collide = false;
 
 	for (const auto& go : mGameObjects)
 	{
@@ -75,10 +76,8 @@ void WorldClient::CheckClientCollisions() const
 			const GameObject::GOPair collision_pair(go.get(), m_client_player);
 
 			if (CollisionHandler::PlatformCollision(collision_pair,
-			                                        [this] { OnReachedCheckpoint(); }, [this]
-			                                        {
-				                                        OnReachedGoal();
-			                                        }, this))
+			                                        [this] { OnReachedCheckpoint(); },
+			                                        [this] { OnReachedGoal(); }, this))
 				continue;
 
 			CollisionHandler::TrapCollision(collision_pair, [this] { OnClientPlayerDeath(); });
@@ -88,19 +87,24 @@ void WorldClient::CheckClientCollisions() const
 		if (go_bounds.intersects(client_ray_bounds))
 		{
 			//Client Ray Collision!
-			GameObject::GOPair collision_pair(go.get(), client_ray);
-			CollisionHandler::PlayerGroundRayCast(collision_pair);
+			collide = true;
 		}
+	}
+
+	if (!collide)
+	{
+		client_ray->SetFalling();
 	}
 }
 
 //Checks if the client player goes outside of the camera bounds
 void WorldClient::DestroyPlayerOutsideView() const
 {
-	if(m_client_player == nullptr)
+	if (m_client_player == nullptr)
 		return;
 
-	if (!m_client_player->IsDead() && m_client_player->GetLocation().mY > m_camera.getCenter().y + m_camera.getSize().y / 2)
+	if (!m_client_player->IsDead() && m_client_player->GetLocation().mY > m_camera.getCenter().y +
+		m_camera.getSize().y / 2)
 	{
 		OnClientPlayerDeath();
 	}
@@ -122,7 +126,7 @@ Character* WorldClient::AddCharacter(const int player_id, const EColorType color
 {
 	Debug("Player " + std::to_string(player_id) + " color is " + std::to_string(
 		static_cast<int>(color)));
-	
+
 	std::shared_ptr<CharacterClient> player;
 	if (color == EColorType::kRed)
 	{
@@ -149,7 +153,6 @@ Character* WorldClient::AddCharacter(const int player_id, const EColorType color
 
 Character* WorldClient::AddGhostCharacter(const int player_id, const EColorType color)
 {
-
 	std::shared_ptr<GhostCharacterClient> ghost_char;
 	if (color == EColorType::kRed)
 	{
@@ -162,7 +165,7 @@ Character* WorldClient::AddGhostCharacter(const int player_id, const EColorType 
 		ghost_char->SetLocation(m_level_info.m_blue_player_spawn_pos);
 	}
 
-	
+
 	ghost_char->SetIdentifier(player_id);
 
 	m_players.emplace_back(ghost_char.get());

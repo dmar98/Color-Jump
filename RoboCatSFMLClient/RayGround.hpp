@@ -1,6 +1,6 @@
 #pragma once
 
-class RayGround : public GameObject
+class RayGround final : public GameObject
 {
 public:
 	explicit RayGround(Character* character);

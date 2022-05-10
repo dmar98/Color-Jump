@@ -50,26 +50,14 @@ Character::Character(const EColorType type, const sf::IntRect& texture_rect)
 	  m_grounded(false),
 	  m_current_platform(nullptr),
 	  m_can_jump(true),
+	  m_velocity(0, 0, 0),
 	  m_is_dead(false)
-	  /*m_sounds(context),
-	  m_jump_smoke_animation(textures.Get(Textures::kJumpSmoke))*/
 {
-	/*
-	Utility::Debug("Character created.");
-	Utility::CentreOrigin(m_sprite);*/
 }
 
 float Character::GetMaxSpeed()
 {
 	return 200.f;
-}
-
-void Character::Debug()
-{
-	/*Utility::Debug("Id:       " + std::to_string(m_identifier));
-	Utility::Debug("Team Id:  " + std::to_string(m_team_identifier));
-	Utility::Debug("Color Id: " + std::to_string(static_cast<int>(m_type)));
-	Utility::Debug("Name:     " + m_name);*/
 }
 
 /*
@@ -80,7 +68,6 @@ void Character::Debug()
 void Character::Jump()
 {
 	/*Utility::Debug("Jump requested");*/
-	Debug();
 
 	if (m_can_jump == false)
 	{
@@ -220,13 +207,3 @@ void Character::Update()
 		Accelerate(0, 9.81f);
 	}
 }
-
-//void Character::DrawCurrent(sf::RenderTarget& target, const sf::RenderStates states) const
-//{
-//	target.draw(m_sprite, states);
-//	target.draw(m_name_text, states);
-//	target.draw(m_team_id_text, states);
-//
-//	if (m_show_jump_animation)
-//		target.draw(m_jump_smoke_animation, states);
-//}

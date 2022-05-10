@@ -48,6 +48,11 @@ int RenderManager::GetComponentIndex(DrawableComponent* inComponent) const
 	return -1;
 }
 
+void RenderManager::SetRay(RayGround* ray)
+{
+	mRay = ray;
+}
+
 //this part that renders the world is really a camera-
 //in a more detailed engine, we'd have a list of cameras, and then render manager would
 //render the cameras in order
@@ -61,6 +66,18 @@ void RenderManager::RenderComponents(const sf::View& camera) const
 		c->UpdatePosition();
 		WindowManager::sInstance->draw(*c);
 	}
+
+	if (mRay)
+	{
+		sf::RectangleShape shape;
+		shape.setPosition(sf::Vector2f(mRay->GetBoundingRect().left, mRay->GetBoundingRect().top));
+		shape.setSize(sf::Vector2f(mRay->GetBoundingRect().width, mRay->GetBoundingRect().height));
+		shape.setFillColor(sf::Color::Transparent);
+		shape.setOutlineColor(sf::Color::Green);
+		shape.setOutlineThickness(1.f);
+		WindowManager::sInstance->draw(shape);
+	}
+
 }
 
 void RenderManager::Render()

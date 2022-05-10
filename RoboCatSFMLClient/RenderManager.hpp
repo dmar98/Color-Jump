@@ -12,6 +12,7 @@ public:
 	void AddComponent(DrawableComponent* inComponent);
 	void RemoveComponent(DrawableComponent* inComponent);
 	int GetComponentIndex(DrawableComponent* inComponent) const;
+	void SetRay(RayGround* ray);
 
 private:
 	RenderManager();
@@ -20,4 +21,5 @@ private:
 	vector<DrawableComponent*> mComponents;
 
 	sf::View view;
+	RayGround* mRay;
 };

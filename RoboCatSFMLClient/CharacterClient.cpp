@@ -81,7 +81,7 @@ void CharacterClient::SetTeamIdentifier(const int identifier)
 	m_team_id_text->SetText(std::to_string(identifier));
 	const auto& sprite = mSpriteComponent->GetSprite();
 
-	m_team_id_text->SetOffset(sf::Vector2f(0, -sprite.getLocalBounds().height / 4 ));
+	m_team_id_text->SetOffset(sf::Vector2f(0, -sprite.getLocalBounds().height / 4));
 }
 
 void CharacterClient::SetName(const std::string& name)
@@ -118,29 +118,27 @@ void CharacterClient::SetGrounded(Platform* platform)
 	m_show_jump_animation = false;
 }
 
-void CharacterClient::SetGrounded()
-{
-	Character::SetGrounded();
-	m_show_jump_animation = false;
-}
-
 void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect)
 {
 	Vector3 velocity = GetVelocity();
 
-	if (velocity.Length() == 0.f)
+	if (velocity.Length2D() == 0.f)
 	{
 		velocity = Vector3(0, -9.81f, 0);
 	}
 
-	const Vector3 normal_velocity = Utility::UnitVector(velocity);
+	Vector3 normal_velocity = velocity;
+	normal_velocity.Normalize2D();
+	
 	SetVelocity(Vector3(0, 9.81f, 0));
 
 	while (rect.intersects(GetBoundingRect()))
 	{
-		SetLocation(
-			GetLocation() - normal_velocity + Vector3(0, 9.81f * Timing::sInstance.GetDeltaTime(),
-			                                          0));
+		this->SetLocation(
+			GetLocation()
+			- normal_velocity
+			+ Vector3(0, 9.81f * Timing::sInstance.GetDeltaTime(), 0));
+		mSpriteComponent->UpdatePosition();
 	}
 }
 
@@ -151,7 +149,7 @@ RayGround* CharacterClient::GetRay() const
 
 void CharacterClient::UpdateRay() const
 {
-	m_ray->SetLocation(GetLocation() + Vector3(0.f, 50.f, 0.f));
+	m_ray->SetLocation(GetLocation() + Vector3(0.f, 25.f, 0.f));
 }
 
 void CharacterClient::CreateRay()
@@ -159,6 +157,8 @@ void CharacterClient::CreateRay()
 	const std::shared_ptr<RayGround> ray(new RayGround(this));
 	m_ray = ray.get();
 	World::sInstance->AddGameObject(ray);
+
+	RenderManager::sInstance->SetRay(ray.get());
 }
 
 sf::FloatRect CharacterClient::GetBoundingRect() const

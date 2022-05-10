@@ -221,37 +221,6 @@ bool CollisionHandler::PlatformCollision(GameObject::GOPair pair,
 	return false;
 }
 
-void CollisionHandler::PlayerGroundRayCast(GameObject::GOPair& pair)
-{
-	if (MatchesCategories(pair, Category::Type::kRay, Category::Type::kPlatform))
-	{
-		const auto& ray_ground = dynamic_cast<RayGround&>(*pair.first);
-		const auto& platform_part = dynamic_cast<PlatformPart&>(*pair.second);
-		const auto platform = platform_part.GetPlatform();
-		const Character* player = ray_ground.m_character;
-
-		// Check if platform underneath is valid
-		if (CheckPlatformUnderneath(player->GetCharacterType(), platform->GetPlatformType()))
-		{
-			//collision found
-			return;
-		}
-	}
-
-	// check to see which object in pair is the ray 
-	if (pair.first != nullptr && (pair.first->GetCategory() & Category::Type::kRay) != 0)
-	{
-		//call set falling
-		const auto& ray_ground = dynamic_cast<RayGround&>(*pair.first);
-		ray_ground.SetFalling();
-	}
-	else if (pair.second != nullptr && (pair.second->GetCategory() & Category::Type::kRay) != 0)
-	{
-		const auto& ray_ground = dynamic_cast<RayGround&>(*pair.second);
-		ray_ground.SetFalling();
-	}
-}
-
 void CollisionHandler::TrapCollision(GameObject::GOPair pair, const std::function<void()>& callback)
 {
 	//Check Lose Condition

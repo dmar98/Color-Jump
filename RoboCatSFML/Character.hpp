@@ -40,7 +40,6 @@ public:
 
 
 	static float GetMaxSpeed();
-	void Debug();
 	virtual void Jump();
 	virtual void SetGrounded(Platform* platform);
 	virtual void SetGrounded();

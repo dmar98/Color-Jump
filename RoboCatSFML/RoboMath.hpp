@@ -1,20 +1,21 @@
 class Vector3
 {
 public:
-
-	float		mX, mY, mZ;
+	float mX, mY, mZ;
 
 	Vector3(float x, float y, float z) :
 		mX(x),
 		mY(y),
 		mZ(z)
-	{}
+	{
+	}
 
 	Vector3() :
 		mX(0.0f),
 		mY(0.0f),
 		mZ(0.0f)
-	{}
+	{
+	}
 
 	void Set(float x, float y, float z)
 	{
@@ -149,28 +150,26 @@ public:
 class Quaternion
 {
 public:
-
-	float		mX, mY, mZ, mW;
-
+	float mX, mY, mZ, mW;
 };
 
 
-template< int tValue, int tBits >
+template <int tValue, int tBits>
 struct GetRequiredBitsHelper
 {
-	enum { Value = GetRequiredBitsHelper< (tValue >> 1), tBits + 1 >::Value };
+	enum { Value = GetRequiredBitsHelper<(tValue >> 1), tBits + 1>::Value };
 };
 
-template< int tBits >
-struct GetRequiredBitsHelper< 0, tBits >
+template <int tBits>
+struct GetRequiredBitsHelper<0, tBits>
 {
 	enum { Value = tBits };
 };
 
-template< int tValue >
+template <int tValue>
 struct GetRequiredBits
 {
-	enum { Value = GetRequiredBitsHelper< tValue, 0 >::Value };
+	enum { Value = GetRequiredBitsHelper<tValue, 0>::Value };
 };
 
 namespace RoboMath
@@ -180,7 +179,7 @@ namespace RoboMath
 
 	Vector3 GetRandomVector(const Vector3& inMin, const Vector3& inMax);
 
-	inline bool	Is2DVectorEqual(const Vector3& inA, const Vector3& inB)
+	inline bool Is2DVectorEqual(const Vector3& inA, const Vector3& inB)
 	{
 		return (inA.mX == inB.mX && inA.mY == inB.mY);
 	}
@@ -208,4 +207,3 @@ namespace Colors
 	static const Vector3 LightPink(255.0f, 181.05f, 193.8f);
 	static const Vector3 LightGreen(142.8f, 237.15f, 142.8f);
 }
-

@@ -8,17 +8,8 @@
  */
 RayGround::RayGround(Character* character) : m_character(character)
 {
+	
 }
-
-//unsigned RayGround::GetCategory() const
-//{
-//	if (m_character->GetCategory() == Category::kPlayerOne)
-//	{
-//		return Category::kRayOne;
-//	}
-//
-//	return Category::kRayTwo;
-//}
 
 /*
  *	Dylan Goncalves Martins (D00242562)
@@ -26,17 +17,12 @@ RayGround::RayGround(Character* character) : m_character(character)
  */
 sf::FloatRect RayGround::GetBoundingRect() const
 {
-	return {m_character->GetLocation().mX, m_character->GetLocation().mY, 2, 50};
+	return {GetLocation().mX, GetLocation().mY, 2, 50};
 }
 
 unsigned RayGround::GetCategory() const
 {
-	if (m_character->GetCategory() == Category::Type::kPlayerRed)
-	{
-		return Category::Type::kRayRedPlayer;
-	}
-
-	return Category::Type::kRayBluePlayer;
+	return Category::Type::kRay;
 }
 
 void RayGround::SetFalling() const

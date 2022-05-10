@@ -49,15 +49,17 @@ bool MultiplayerGameState::Update(const float dt)
 		m_completion_time += dt;
 
 
-	if (!m_game_over)
-		m_completion_time += dt;
-
-
 	return false;
 }
 
 bool MultiplayerGameState::HandleEvent(const sf::Event& event)
 {
+	CommandQueue& commands = m_world_client->GetCommandQueue();
+	for (const auto& player : m_players)
+	{
+		player.second->HandleEvent(event, commands);
+	}
+
 	if (event.type == sf::Event::Closed)
 	{
 		SendClientDisconnect();
