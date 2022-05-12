@@ -22,8 +22,9 @@ public:
 	sf::FloatRect GetBoundingRect() const override;
 	void Jump() override;
 	void SetGrounded(Platform* platform) override;
-	void MoveOutOfCollision(const sf::FloatRect& rect, const PlatformPart* platform_part, bool is_vertical_platform);
+	void MoveOutOfCollision(const sf::FloatRect& rect);
 	RayGround* GetRay() const;
+	bool IsGrounded() const;
 
 private:
 	void UpdateRay() const;

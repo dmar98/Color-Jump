@@ -118,7 +118,7 @@ void CharacterClient::SetGrounded(Platform* platform)
 	m_show_jump_animation = false;
 }
 
-void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect, const PlatformPart* platform_part, bool is_vertical_platform)
+void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect)
 {
 	Vector3 velocity = GetVelocity();
 
@@ -129,12 +129,12 @@ void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect, const Platfo
 
 	Vector3 normal_velocity = velocity;
 	normal_velocity.Normalize2D();
-	normal_velocity.mY = 0;
-	const Vector3 down_force(0, /*m_current_platform == nullptr ? 0 : */9.81f * Timing::sInstance.GetDeltaTime() * 4.f, 0);
+	normal_velocity.mY = m_grounded ? normal_velocity.mY : 0;
+	const Vector3 down_force(0, 9.81f, 0);
 
 	while (rect.intersects(GetBoundingRect()))
 	{
-		this->SetLocation(GetLocation() - normal_velocity + down_force);
+		this->SetLocation(GetLocation() - normal_velocity + down_force * Timing::sInstance.GetDeltaTime());
 		mSpriteComponent->UpdatePosition();
 	}
 }
@@ -142,6 +142,11 @@ void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect, const Platfo
 RayGround* CharacterClient::GetRay() const
 {
 	return m_ray;
+}
+
+bool CharacterClient::IsGrounded() const
+{
+	return m_grounded && m_current_platform != nullptr;
 }
 
 void CharacterClient::UpdateRay() const

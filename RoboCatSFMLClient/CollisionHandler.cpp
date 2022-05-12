@@ -90,7 +90,8 @@ void CollisionHandler::ChangeVerticalPlatformColor(const Character& player, Plat
 	// Set color of vertical platform if there is a collision from the side/underneath 
 	if (platform->GetPlatformType() == EPlatformType::kVerticalImpact)
 	{
-		platform->HandlePlayerCollision(player.GetCharacterType());
+		platform->HandlePlayerCollisionAndChangeColor(player.GetCharacterType());
+		NetworkManagerClient::sInstance->SendPlatformInfo(player.GetPlayerID(), platform->GetID(), platform->GetPlatformType());
 	}
 }
 
@@ -101,7 +102,7 @@ void CollisionHandler::StopPlayerMovement(CharacterClient& player, const Platfor
 	if (IsPlayerAtHisPlatform(player, platform))
 	{
 		// move player out of collision and stop his movement
-		player.MoveOutOfCollision(platform_part.GetBoundingRect(), &platform_part, IsVerticalPlatform(platform->GetPlatformType()));
+		player.MoveOutOfCollision(platform_part.GetBoundingRect());
 		player.StopMovement();
 
 		ChangeVerticalPlatformColor(player, platform);
@@ -111,11 +112,13 @@ void CollisionHandler::StopPlayerMovement(CharacterClient& player, const Platfor
 bool CollisionHandler::CollideAndChangeColors(CharacterClient& player, const PlatformPart& platform_part,
 	Platform* platform)
 {
-	//Checks if player collided from underneath the center of the platform
-	if (IsPlayerBelowPlatform(player, platform_part))
+	const bool is_below_platform = IsPlayerBelowPlatform(player, platform_part);
+	const bool is_vertical_platform = IsVerticalPlatform(platform->GetPlatformType());
+
+	//Checks if player collided from underneath the center of a platform
+	if (is_below_platform || is_vertical_platform)
 	{
 		StopPlayerMovement(player, platform_part, platform);
-		// continue to next pair
 		return true;
 	}
 	return false;
