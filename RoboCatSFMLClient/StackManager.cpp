@@ -57,6 +57,8 @@ StackManager::StackManager()
 	m_stack.RegisterState<LobbyState>(StateID::kLobby);
 	m_stack.RegisterState<MultiplayerGameState>(StateID::kNetworkGame);
 	m_stack.RegisterState<TutorialState>(StateID::kTutorial);
+	m_stack.RegisterState<MultiPlayerGameOverState>(StateID::kMultiplayerWin, true);
+	m_stack.RegisterState<MultiPlayerGameOverState>(StateID::kMultiplayerLose, false);
 
 	m_stack.PushState(StateID::kTitle);
 }

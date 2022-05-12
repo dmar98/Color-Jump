@@ -91,7 +91,7 @@ void CollisionHandler::ChangeVerticalPlatformColor(const Character& player, Plat
 	if (platform->GetPlatformType() == EPlatformType::kVerticalImpact)
 	{
 		platform->HandlePlayerCollisionAndChangeColor(player.GetCharacterType());
-		NetworkManagerClient::sInstance->SendPlatformInfo(player.GetPlayerID(), platform->GetID(), platform->GetPlatformType());
+		NetworkManagerClient::sInstance->UpdatePlatform(platform->GetID(), platform->GetPlatformType());
 	}
 }
 

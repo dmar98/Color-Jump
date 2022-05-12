@@ -9,7 +9,8 @@ NetworkManagerServer::NetworkManagerServer() :
 	mClientDisconnectTimeout(3.f),
 	m_start_countdown(false),
 	m_start_countdown_timer(5),
-	m_game_started(false)
+	m_game_started(false),
+	m_game_time(0)
 {
 }
 
@@ -330,6 +331,7 @@ void NetworkManagerServer::NotifyGoalReached(const ClientProxyPtr& inClientProxy
 	packet.Write(PacketType::PT_Goal);
 	packet.Write(player_id);
 	packet.Write(team_id);
+	packet.Write(m_game_time);
 
 	LOG("Server Goal Reached, Team %d has reached the end", team_id)
 
@@ -596,7 +598,7 @@ ClientProxyPtr NetworkManagerServer::GetClientProxy(const int inPlayerId) const
 	return nullptr;
 }
 
-void NetworkManagerServer::Countdown(const float dt)
+void NetworkManagerServer::Update(const float dt)
 {
 	if (m_start_countdown && !m_game_started)
 	{
@@ -619,6 +621,9 @@ void NetworkManagerServer::Countdown(const float dt)
 			NotifySpawnCharacters();
 		}
 	}
+
+	if (m_game_started)
+		m_game_time += dt;
 }
 
 void NetworkManagerServer::NotifyGameStart(const ClientProxyPtr& client)

@@ -18,7 +18,7 @@ public:
 
 	ClientProxyPtr GetClientProxy(int inPlayerId) const;
 
-	void Countdown(float dt);
+	void Update(float dt);
 	void NotifyGameStart(const ClientProxyPtr& client);
 	void NotifySpawnCharacters();
 
@@ -84,6 +84,7 @@ private:
 	bool m_start_countdown;
 	float m_start_countdown_timer;
 	bool m_game_started;
+	float m_game_time;
 };
 
 

@@ -53,7 +53,7 @@ void Server::DoFrame()
 
 	Engine::DoFrame();
 
-	NetworkManagerServer::sInstance->Countdown(Timing::sInstance.GetDeltaTime());
+	NetworkManagerServer::sInstance->Update(Timing::sInstance.GetDeltaTime());
 }
 
 void Server::HandleNewClient(const ClientProxyPtr& inClientProxy)

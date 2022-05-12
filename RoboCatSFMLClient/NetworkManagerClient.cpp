@@ -49,10 +49,19 @@ void NetworkManagerClient::HandleGameWon(InputMemoryBitStream& inInputStream)
 {
 	int player_id;
 	int team_id;
+	float completion_time;
 	inInputStream.Read(player_id);
 	inInputStream.Read(team_id);
+	inInputStream.Read(completion_time);
 
-	GetMultiplayerGameState()->HandleGameEnd(team_id);
+	if (GetMultiplayerGameState() != nullptr)
+	{
+		GetMultiplayerGameState()->HandleGameEnd(team_id, completion_time);
+	}
+	else
+	{
+		dynamic_cast<MultiPlayerGameOverState*>(StackManager::sInstance->GetCurrentState())->HandleGameEnd(team_id, completion_time);
+	}
 
 	if (mState == NetworkClientState::NCS_Goal_Reached && player_id == GetPlayerId())
 	{
@@ -70,7 +79,12 @@ void NetworkManagerClient::HandlePlatformPacket(InputMemoryBitStream& inInputStr
 	inInputStream.Read(platform_id);
 	inInputStream.Read(platform_color);
 
-	GetMultiplayerGameState()->HandlePlatformChange(player_id, platform_id, platform_color);
+	Debug("Handle Platfrom change: Platform ID:" + std::to_string(platform_id) + " Color: " + std::to_string(((int)platform_color)));
+
+	if (GetMultiplayerGameState() != nullptr)
+	{
+		GetMultiplayerGameState()->HandlePlatformChange(player_id, platform_id, platform_color);
+	}
 
 	if (mState == NetworkClientState::NCS_Platform && player_id == GetPlayerId())
 	{
@@ -85,7 +99,8 @@ void NetworkManagerClient::HandleTeamDeathPacket(InputMemoryBitStream& inInputSt
 	inInputStream.Read(player_id);
 	inInputStream.Read(team_id);
 
-	GetMultiplayerGameState()->HandleTeamRespawn(team_id);
+	if (GetMultiplayerGameState() != nullptr)
+		GetMultiplayerGameState()->HandleTeamRespawn(team_id);
 
 	if (mState == NetworkClientState::NCS_Team_Death && player_id == GetPlayerId())
 	{
@@ -102,8 +117,8 @@ void NetworkManagerClient::HandleCheckpointPacket(InputMemoryBitStream& inInputS
 	inInputStream.Read(player_id);
 	inInputStream.Read(team_id);
 	inInputStream.Read(platform_id);
-
-	GetMultiplayerGameState()->HandleTeamCheckpointSet(team_id, platform_id);
+	if (GetMultiplayerGameState() != nullptr)
+		GetMultiplayerGameState()->HandleTeamCheckpointSet(team_id, platform_id);
 
 	if (mState == NetworkClientState::NCS_Checkpoint_Reached && player_id == GetPlayerId())
 	{
@@ -128,7 +143,8 @@ void NetworkManagerClient::ReadGhostData(InputMemoryBitStream& inInputStream)
 		inInputStream.Read(color);
 		inInputStream.Read(name);
 
-		GetMultiplayerGameState()->SpawnGhostPlayer(player_id, team_id, color, name);
+		if (GetMultiplayerGameState() != nullptr)
+			GetMultiplayerGameState()->SpawnGhostPlayer(player_id, team_id, color, name);
 	}
 }
 
@@ -143,7 +159,8 @@ void NetworkManagerClient::ReadPlayerData(InputMemoryBitStream& inInputStream)
 	inInputStream.Read(color);
 	inInputStream.Read(name);
 
-	GetMultiplayerGameState()->SpawnClientPlayer(player_id, team_id, color, name);
+	if (GetMultiplayerGameState() != nullptr)
+		GetMultiplayerGameState()->SpawnClientPlayer(player_id, team_id, color, name);
 }
 
 void NetworkManagerClient::HandleSpawnPacket(InputMemoryBitStream& inInputStream)
@@ -318,7 +335,7 @@ void NetworkManagerClient::UpdateReady()
 
 void NetworkManagerClient::UpdatePlatform()
 {
-	UpdateInfoPacket(NetworkClientState::NCS_Platform, [this] { SendPlatformPacket(); });
+	UpdateInfoUpdatePacket(NetworkClientState::NCS_Platform, [this] { SendPlatformPacket(); });
 }
 
 void NetworkManagerClient::UpdateInfoPacket(const NetworkClientState p_enum,
@@ -410,10 +427,13 @@ void NetworkManagerClient::UpdateTeam(const int team_id, const EColorType color)
 void NetworkManagerClient::UpdatePlatform(const int platform_id,
                                           const EPlatformType platform_type)
 {
-	mState = NetworkClientState::NCS_Platform;
+	if (mState != NetworkClientState::NCS_Platform)
+	{
+		mState = NetworkClientState::NCS_Platform;
 
-	mPlatformId = platform_id;
-	mPlatformType = platform_type;
+		mPlatformId = platform_id;
+		mPlatformType = platform_type;
+	}
 }
 
 void NetworkManagerClient::UpdateName(const string& name)
@@ -587,12 +607,12 @@ void NetworkManagerClient::HandleGameStatePacket(InputMemoryBitStream& inInputSt
 		inInputStream.Read(x);
 		inInputStream.Read(y);
 
-		if (player_id != GetPlayerId())
+		if (GetMultiplayerGameState() != nullptr && player_id != GetPlayerId())
 		{
 			GetMultiplayerGameState()->UpdatePlayer(player_id, x, y);
 		}
 	}
-	Debug(mName + " is in the game.");
+	/*Debug(mName + " is in the game.");*/
 }
 
 void NetworkManagerClient::HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const

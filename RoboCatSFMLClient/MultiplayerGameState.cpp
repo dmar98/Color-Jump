@@ -24,7 +24,7 @@ bool MultiplayerGameState::Update(const float dt)
 
 	m_world_client->Update();
 
-	if (InputManager::sInstance->GetPassFocus())
+	if (InputManager::sInstance->GetPassFocus() && !m_game_over)
 	{
 		CommandQueue& commands = m_world_client->GetCommandQueue();
 		for (const auto& pair : m_players)
@@ -157,7 +157,7 @@ void MultiplayerGameState::HandlePlatformChange(const int player_id, const int p
 	}
 }
 
-void MultiplayerGameState::HandleGameEnd(const int team_id)
+void MultiplayerGameState::HandleGameEnd(const int team_id, float completion_time)
 {
 	if (!m_game_over && team_id == NetworkManagerClient::sInstance->GetTeamID())
 	{
@@ -169,7 +169,7 @@ void MultiplayerGameState::HandleGameEnd(const int team_id)
 
 		m_game_over = true;
 	}
-	LeaderBoardManager::sInstance->AddToLeaderboard(team_id, m_completion_time);
+	LeaderBoardManager::sInstance->AddToLeaderboard(team_id, completion_time);
 }
 
 void MultiplayerGameState::HandleTeamRespawn(const int team_id) const

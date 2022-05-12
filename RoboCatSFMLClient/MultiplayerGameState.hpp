@@ -12,7 +12,7 @@ public:
 	bool HandleEvent(const sf::Event& event) override;
 	void Draw() override;
 
-	void HandleGameEnd(int team_id);
+	void HandleGameEnd(const int team_id, float completion_time);
 	void HandlePlatformChange(int player_id, int platform_id, EPlatformType platform_color) const;
 	void HandleTeamRespawn(int team_id) const;
 	void HandleTeamCheckpointSet(int team_id, int platform_id) const;
