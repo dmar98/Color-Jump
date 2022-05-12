@@ -4,6 +4,9 @@ bool CollisionHandler::CheckPlatform(const Platform* platform, EColorType charac
 {
 	const auto platform_type = platform->GetPlatformType();
 
+	if (platform_type == EPlatformType::kVerticalNormal)
+		return true;
+
 	if (character == EColorType::kBlue)
 	{
 		if (platform_type == EPlatformType::kHorizontalBlue ||
@@ -26,7 +29,8 @@ bool CollisionHandler::CheckPlatform(const Platform* platform, EColorType charac
 
 bool CollisionHandler::IsVerticalPlatform(EPlatformType platform_type)
 {
-	return platform_type == EPlatformType::kVerticalBlue ||
+	return platform_type == EPlatformType::kVerticalNormal ||
+		platform_type == EPlatformType::kVerticalBlue ||
 		platform_type == EPlatformType::kVerticalImpact ||
 		platform_type == EPlatformType::kVerticalRed;
 }

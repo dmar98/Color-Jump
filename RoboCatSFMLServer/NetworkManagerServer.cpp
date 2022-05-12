@@ -243,10 +243,10 @@ void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
 		HandleReadyPacket(inClientProxy, inInputStream);
 		break;
 	case PacketType::PT_Game_State:
-		if (inClientProxy->GetDeliveryNotificationManager().ReadAndProcessState(inInputStream))
-		{
+		//if (inClientProxy->GetDeliveryNotificationManager().ReadAndProcessState(inInputStream))
+		//{
 			HandleGameStatePacket(inClientProxy, inInputStream);
-		}
+		//}
 		break;
 	case PacketType::PT_Player_Connect:
 	case PacketType::PT_Initial_State:

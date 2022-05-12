@@ -35,6 +35,11 @@ bool Engine::PollEvent(sf::Event& p_event)
 	return false;
 }
 
+void Engine::Quit()
+{
+	m_should_keep_running = false;
+}
+
 int Engine::DoRunLoop()
 {
 	//Main message loop

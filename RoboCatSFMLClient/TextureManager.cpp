@@ -23,6 +23,7 @@ TextureManager::TextureManager()
 	CacheTexture("HImpactBluePlatform", "../Assets/Media/Textures/BlueImpactPlatform.png");
 
 	CacheTexture("VImpactBlankPlatform", "../Assets/Media/Textures/VBlankPlatform.png");
+	CacheTexture("VNormalPlatform", "../Assets/Media/Textures/VNormalPlatform.png");
 	CacheTexture("VImpactRedPlatform", "../Assets/Media/Textures/VRedImpactPlatform.png");
 	CacheTexture("VImpactBluePlatform", "../Assets/Media/Textures/VBlueImpactPlatform.png");
 

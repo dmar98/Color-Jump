@@ -191,14 +191,6 @@ uint32_t Character::Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirt
 	return GameObject::Write(inOutputStream, inDirtyState);
 }
 
-void Character::SetGrounded()
-{
-	m_can_jump = true;
-	m_grounded = true;
-	SetVelocity(Vector3(m_velocity.mX, 0, 0));
-	SetLocation(Vector3(GetLocation().mX, GetLocation().mY - 2, 0));
-}
-
 void Character::Update()
 {
 	SetLocation(GetLocation() + m_velocity * Timing::sInstance.GetDeltaTime());

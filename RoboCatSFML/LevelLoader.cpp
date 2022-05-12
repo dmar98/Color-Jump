@@ -59,10 +59,10 @@ void LevelLoader::LoadLevelLayer(const std::string& csv_path, LevelInfo& level_i
 			}
 			break;
 			case kHorizontalPlatformPart:
+			case kVerticalPlatformPart:
 			case kHorizontalImpactPlatformPart:
 			case kVerticalImpactPlatformPart:
 			case kHorizontalPulsePlatformPart:
-			case kVerticalPulsePlatformPart:
 			case kHorizontalBluePlatformPart:
 			case kHorizontalRedPlatformPart:
 			case kVerticalBluePlatformPart:
