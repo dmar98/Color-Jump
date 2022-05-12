@@ -32,6 +32,7 @@ void Client::DoFrame()
 	if (StackManager::sInstance->IsEmpty())
 	{
 		PlayerDataManager::sInstance->Save();
+		Quit();
 		WindowManager::sInstance->close();
 	}
 

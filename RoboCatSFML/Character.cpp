@@ -19,8 +19,7 @@ void Character::Accelerate(const float vx, const float vy)
 
 void Character::Accelerate(const sf::Vector2f vector2)
 {
-	m_velocity.mX += vector2.x;
-	m_velocity.mY += vector2.y;
+	Accelerate(vector2.x, vector2.y);
 }
 
 void Character::ProcessInput(float inDeltaTime, const InputState& inInputState)
@@ -189,14 +188,6 @@ unsigned Character::GetCategory() const
 uint32_t Character::Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const
 {
 	return GameObject::Write(inOutputStream, inDirtyState);
-}
-
-void Character::SetGrounded()
-{
-	m_can_jump = true;
-	m_grounded = true;
-	SetVelocity(Vector3(m_velocity.mX, 0, 0));
-	SetLocation(Vector3(GetLocation().mX, GetLocation().mY - 2, 0));
 }
 
 void Character::Update()

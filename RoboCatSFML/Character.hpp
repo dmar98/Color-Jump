@@ -42,7 +42,6 @@ public:
 	static float GetMaxSpeed();
 	virtual void Jump();
 	virtual void SetGrounded(Platform* platform);
-	virtual void SetGrounded();
 	void SetFalling();
 	EColorType GetCharacterType() const;
 	Platform* GetCurrentPlatform() const;

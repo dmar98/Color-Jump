@@ -12,12 +12,12 @@ enum ETileType
 	kHorizontalPlatformPart = 9,
 	kHorizontalRedPlatformPart = 17,
 	kHorizontalBluePlatformPart = 15,
+	kVerticalPlatformPart = 10,
 	kVerticalRedPlatformPart = 11,
 	kVerticalBluePlatformPart = 8,
 	kHorizontalImpactPlatformPart = 13,
 	kVerticalImpactPlatformPart = 7,
 	kHorizontalPulsePlatformPart = 16,
-	kVerticalPulsePlatformPart = -4,
 	kFinishPlatformPart = 18,
 	kCheckpointPlatformPart = 14,
 	kSpikes = 12

@@ -14,11 +14,14 @@ void PlatformClient::AddPlatformPart(PlatformPart* tile)
 
 	const auto client_platform_part = dynamic_cast<PlatformPartClient*>(tile);
 
-	//In the tileset, the pulse platform uses a gray platform sprite, which has to be replaced here
-	if (m_is_pulse)
+	//In the tileset, the pulse and normal vertical platforms uses a gray platform sprite,
+	//which has to be replaced here.
+	if (m_is_pulse || tile->GetPlatform()->GetPlatformType() == EPlatformType::kVerticalNormal)
+	{
 		client_platform_part->SetTexture(m_current_texture,
-		                       sf::IntRect(0, 0, m_current_texture->getSize().x,
-		                                   m_current_texture->getSize().y));
+							  sf::IntRect(0, 0, m_current_texture->getSize().x,
+										  m_current_texture->getSize().y));
+	}
 }
 
 //Written by Paul Bichler (D00242563)
@@ -56,7 +59,7 @@ bool PlatformClient::HandlePlayerCollisionAndChangeColor(const EColorType color_
 		break;
 	case EPlatformType::kNormal:
 	case EPlatformType::kHorizontalPulse:
-	case EPlatformType::kVerticalPulse:
+	case EPlatformType::kVerticalNormal:
 	case EPlatformType::kGoal:
 	default:
 		break;
@@ -85,7 +88,7 @@ bool PlatformClient::HandlePlayerCollision(const EColorType color_type)
 	case EPlatformType::kVerticalImpact:
 	case EPlatformType::kNormal:
 	case EPlatformType::kHorizontalPulse:
-	case EPlatformType::kVerticalPulse:
+	case EPlatformType::kVerticalNormal:
 	case EPlatformType::kGoal:
 	default:
 		break;
@@ -144,10 +147,14 @@ void PlatformClient::SetType(const EPlatformType type)
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("VImpactBlankPlatform"));
 	}
 	break;
+	case EPlatformType::kVerticalNormal:
+	{
+		SetTextureOnParts(TextureManager::sInstance->GetTexture("VNormalPlatform"));
+	}
+	break;
 	default:
 		break;
 	}
-
 }
 
 //Written by Paul Bichler (D00242563)
@@ -177,7 +184,7 @@ void PlatformClient::Update()
 			break;
 		}
 
-		m_current_pulse_cooldown = 1.f;
+		m_current_pulse_cooldown = 1.5f;
 	}
 }
 

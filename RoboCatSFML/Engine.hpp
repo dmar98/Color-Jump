@@ -14,6 +14,7 @@ public:
 
 	virtual void HandleEvent(sf::Event& p_event);
 	virtual bool PollEvent(sf::Event& p_event);
+	void Quit();
 
 protected:
 	Engine();

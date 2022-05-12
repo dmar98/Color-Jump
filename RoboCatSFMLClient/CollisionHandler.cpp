@@ -4,6 +4,9 @@ bool CollisionHandler::CheckPlatform(const Platform* platform, EColorType charac
 {
 	const auto platform_type = platform->GetPlatformType();
 
+	if (platform_type == EPlatformType::kVerticalNormal)
+		return true;
+
 	if (character == EColorType::kBlue)
 	{
 		if (platform_type == EPlatformType::kHorizontalBlue ||
@@ -26,7 +29,8 @@ bool CollisionHandler::CheckPlatform(const Platform* platform, EColorType charac
 
 bool CollisionHandler::IsVerticalPlatform(EPlatformType platform_type)
 {
-	return platform_type == EPlatformType::kVerticalBlue ||
+	return platform_type == EPlatformType::kVerticalNormal ||
+		platform_type == EPlatformType::kVerticalBlue ||
 		platform_type == EPlatformType::kVerticalImpact ||
 		platform_type == EPlatformType::kVerticalRed;
 }
@@ -97,7 +101,7 @@ void CollisionHandler::StopPlayerMovement(CharacterClient& player, const Platfor
 	if (IsPlayerAtHisPlatform(player, platform))
 	{
 		// move player out of collision and stop his movement
-		player.MoveOutOfCollision(platform_part.GetBoundingRect());
+		player.MoveOutOfCollision(platform_part.GetBoundingRect(), &platform_part, IsVerticalPlatform(platform->GetPlatformType()));
 		player.StopMovement();
 
 		ChangeVerticalPlatformColor(player, platform);
@@ -108,7 +112,7 @@ bool CollisionHandler::CollideAndChangeColors(CharacterClient& player, const Pla
 	Platform* platform)
 {
 	//Checks if player collided from underneath the center of the platform
-	if (IsPlayerAbovePlatform(player, platform_part))
+	if (IsPlayerBelowPlatform(player, platform_part))
 	{
 		StopPlayerMovement(player, platform_part, platform);
 		// continue to next pair
@@ -117,7 +121,7 @@ bool CollisionHandler::CollideAndChangeColors(CharacterClient& player, const Pla
 	return false;
 }
 
-bool CollisionHandler::IsPlayerAbovePlatform(const Character& player, const PlatformPart& platform_part)
+bool CollisionHandler::IsPlayerBelowPlatform(const Character& player, const PlatformPart& platform_part)
 {
 	if (player.GetLocation().mY > platform_part.GetLocation().mY - 32.f / 2.f)
 	{
@@ -130,6 +134,7 @@ bool CollisionHandler::IsPlayerAbovePlatform(const Character& player, const Plat
 bool CollisionHandler::IsPlatformStatic(EPlatformType platform_type)
 {
 	if (platform_type == EPlatformType::kNormal ||
+		platform_type == EPlatformType::kVerticalNormal ||
 		platform_type == EPlatformType::kGoal ||
 		platform_type == EPlatformType::kCheckpoint ||
 		platform_type == EPlatformType::kCheckpointActivated)

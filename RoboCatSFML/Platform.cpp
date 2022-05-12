@@ -55,7 +55,7 @@ bool Platform::HandlePlayerCollisionAndChangeColor(const EColorType color_type)
 		break;
 	case EPlatformType::kNormal:
 	case EPlatformType::kHorizontalPulse:
-	case EPlatformType::kVerticalPulse:
+	case EPlatformType::kVerticalNormal:
 	case EPlatformType::kGoal:
 	default:
 		break;
@@ -84,7 +84,7 @@ bool Platform::HandlePlayerCollision(const EColorType color_type)
 	case EPlatformType::kVerticalImpact:
 	case EPlatformType::kNormal:
 	case EPlatformType::kHorizontalPulse:
-	case EPlatformType::kVerticalPulse:
+	case EPlatformType::kVerticalNormal:
 	case EPlatformType::kGoal:
 	default:
 		break;
