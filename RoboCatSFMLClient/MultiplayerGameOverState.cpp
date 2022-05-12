@@ -79,6 +79,12 @@ void MultiPlayerGameOverState::HandleGameEnd(const int team_id, float completion
 	LeaderBoardManager::sInstance->AddToLeaderboard(team_id, completion_time);
 }
 
+void MultiPlayerGameOverState::Quit()
+{
+	RequestStackClear();
+	RequestStackPush(StateID::kMenu);
+}
+
 void MultiPlayerGameOverState::UpdateLeaderboard() const
 {
 	const auto leaderboard = LeaderBoardManager::sInstance->GetLeaderboard();

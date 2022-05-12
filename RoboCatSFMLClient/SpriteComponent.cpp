@@ -25,7 +25,7 @@ void SpriteComponent::DrawCurrent(sf::RenderTarget& target, const sf::RenderStat
 {
 	target.draw(m_sprite, states);
 	const sf::FloatRect bounding_rect = m_game_object->GetBoundingRect();
-	DrawBoundingRect(target, states, bounding_rect);
+	// DrawBoundingRect(target, states, bounding_rect);
 }
 
 void SpriteComponent::DrawBoundingRect(sf::RenderTarget& target, sf::RenderStates states,

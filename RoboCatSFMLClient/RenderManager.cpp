@@ -68,7 +68,7 @@ void RenderManager::RenderComponents(const sf::View& camera) const
 	}
 
 	//HUD::sInstance->Render();
-	if (mRay)
+	/*if (mRay)
 	{
 		sf::RectangleShape shape;
 		shape.setPosition(sf::Vector2f(mRay->GetBoundingRect().left, mRay->GetBoundingRect().top));
@@ -77,7 +77,7 @@ void RenderManager::RenderComponents(const sf::View& camera) const
 		shape.setOutlineColor(sf::Color::Green);
 		shape.setOutlineThickness(1.f);
 		WindowManager::sInstance->draw(shape);
-	}
+	}*/
 
 }
 

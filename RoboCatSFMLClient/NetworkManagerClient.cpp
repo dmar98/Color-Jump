@@ -248,6 +248,10 @@ void NetworkManagerClient::HandleConnectionReset(const SocketAddress& inFromAddr
 	{
 		GetMultiplayerGameState()->Quit();
 	}
+	else
+	{
+		dynamic_cast<MultiPlayerGameOverState*>(StackManager::sInstance->GetCurrentState())->Quit();
+	}
 }
 
 

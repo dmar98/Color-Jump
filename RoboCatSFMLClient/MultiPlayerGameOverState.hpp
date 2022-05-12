@@ -8,6 +8,7 @@ public:
 	bool HandleEvent(const sf::Event& event) override;
 	void Draw() override;
 	void HandleGameEnd(const int team_id, float completion_time);
+	void Quit();
 
 private:
 	void UpdateLeaderboard() const;
