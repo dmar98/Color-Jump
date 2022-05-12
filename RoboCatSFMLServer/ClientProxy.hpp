@@ -11,8 +11,6 @@ public:
 	int GetTeamID() const { return mTeamId; }
 	bool GetReady() const { return mReady; }
 	EColorType GetColor() const { return mColor; }
-	void SetInputState(const InputState& inInputState) { mInputState = inInputState; }
-	const InputState& GetInputState() const { return mInputState; }
 
 	void UpdateLastPacketTime();
 	float GetLastPacketFromClientTime() const { return mLastPacketFromClientTime; }
@@ -23,9 +21,7 @@ public:
 	}
 
 	ReplicationManagerServer& GetReplicationManagerServer() { return mReplicationManagerServer; }
-
-	void HandleCatDied();
-	void RespawnCatIfNecessary();
+	
 	void SetTeamID(int team_id);
 	void SetColor(EColorType color);
 	void SetName(const string& name);
@@ -48,7 +44,6 @@ private:
 	InputState mInputState;
 
 	float mLastPacketFromClientTime{};
-	float mTimeToRespawn;
 	sf::Vector2f m_position;
 };
 

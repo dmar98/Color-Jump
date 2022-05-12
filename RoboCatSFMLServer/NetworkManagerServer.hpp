@@ -29,6 +29,8 @@ private:
 	                               const SocketAddress& inFromAddress);
 	void HandleTeamChange(const ClientProxyPtr& inClientProxy,
 	                      InputMemoryBitStream& in_input_stream);
+	void HandleColorChange(const ClientProxyPtr& inClientProxy,
+	                       InputMemoryBitStream& in_input_stream);
 
 	void HandlePlayerNameChange(const ClientProxyPtr& client_proxy,
 	                            InputMemoryBitStream& input_memory_bit_stream);
@@ -62,11 +64,11 @@ private:
 	void NotifyOfTeamChange(const ClientProxyPtr& inClientProxy, int player_id, int team_id);
 	void NotifyPlayerNameChange(const ClientProxyPtr& inClientProxy, int player_id, const string&
 	                            name);
-	void NotifyGoalReached(const ClientProxyPtr& inClientProxy, int team_id);
-	void NotifyTeamRespawn(const ClientProxyPtr& inClientProxy, int team_id);
-	void NotifyCheckpointReached(const ClientProxyPtr& inClientProxy, int team_id, int platform_id);
-	void NotifyPlatformUpdate(const ClientProxyPtr& inClientProxy, const int player_id, const int platform_id,
-	                          const EPlatformType platform_color);
+	void NotifyGoalReached(const ClientProxyPtr& inClientProxy, int player_id, int team_id);
+	void NotifyTeamRespawn(const ClientProxyPtr& inClientProxy, int player_id, int team_id);
+	void NotifyCheckpointReached(const ClientProxyPtr& inClientProxy, int player_id, int team_id, int platform_id);
+	void NotifyPlatformUpdate(const ClientProxyPtr& inClientProxy, int player_id, int platform_id,
+	                          EPlatformType platform_color);
 	void NotifyReadyChange(const ClientProxyPtr& inClientProxy, int player_id, bool ready);
 
 	using IntToClientMap = unordered_map<int, ClientProxyPtr>;

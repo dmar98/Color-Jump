@@ -13,6 +13,7 @@ bool Client::StaticInit()
 	RenderManager::StaticInit();
 	StackManager::StaticInit();
 	PlayerDataManager::StaticInit();
+	HUD::StaticInit();
 	World::StaticInit(new WorldClient());
 
 	s_instance.reset(client);

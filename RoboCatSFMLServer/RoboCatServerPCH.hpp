@@ -7,10 +7,6 @@
 #include "NetworkManagerServer.hpp"
 #include "Server.hpp"
 
-#include "RoboCatServer.hpp"
-#include "MouseServer.hpp"
-#include "YarnServer.hpp"
-
 #include "WorldServer.hpp"
 #include "LevelManager.hpp"
 #include "PlatformServer.hpp"

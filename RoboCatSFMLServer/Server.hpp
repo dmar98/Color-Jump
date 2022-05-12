@@ -1,25 +1,19 @@
-class Server : public Engine
+#pragma once
+class Server final : public Engine
 {
 public:
-
 	static bool StaticInit();
 
 	void DoFrame() override;
 
 	int Run() override;
 
-	void HandleNewClient(ClientProxyPtr inClientProxy);
-	void HandleLostClient(ClientProxyPtr inClientProxy);
-
-	RoboCatPtr	GetCatForPlayer(int inPlayerId);
-	void	SpawnCatForPlayer(int inPlayerId);
-
+	static void HandleNewClient(const ClientProxyPtr& inClientProxy);
+	static void HandleLostClient(const ClientProxyPtr& inClientProxy);
 
 private:
 	Server();
 
-	bool	InitNetworkManager();
-	void	SetupWorld();
-
+	bool InitNetworkManager() const;
+	void SetupWorld();
 };
-

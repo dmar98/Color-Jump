@@ -41,7 +41,7 @@ bool MultiplayerGameState::Update(const float dt)
 
 	if (character)
 	{
-		NetworkManagerClient::sInstance->SendPlayerPositionPacket(
+		NetworkManagerClient::sInstance->UpdatePlayerPosition(
 			character->GetLocation().mX, character->GetLocation().mY);
 	}
 
@@ -85,7 +85,7 @@ void MultiplayerGameState::Draw()
 
 void MultiplayerGameState::SendClientDisconnect()
 {
-	NetworkManagerClient::sInstance->SendGameDisconnect();
+	NetworkManagerClient::sInstance->SetState(NetworkManagerClient::NetworkClientState::NCS_Quit);
 }
 
 void MultiplayerGameState::SpawnClientPlayer(const int player_id, const int team_id,
@@ -125,7 +125,13 @@ void MultiplayerGameState::UpdatePlayer(const int player_id, const float x, cons
 	}
 }
 
-void MultiplayerGameState::HandlePlayerDisconnect(int player_id)
+void MultiplayerGameState::Quit()
+{
+	RequestStackClear();
+	RequestStackPush(StateID::kMenu);
+}
+
+void MultiplayerGameState::RemovePlayer(int player_id)
 {
 	m_world_client->RemoveCharacter(player_id);
 	m_players.erase(player_id);

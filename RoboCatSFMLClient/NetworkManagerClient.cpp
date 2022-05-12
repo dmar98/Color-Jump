@@ -8,41 +8,18 @@ namespace
 	constexpr float kTimeBetweenUpdatePackets = 0.033f;
 }
 
-void NetworkManagerClient::SetTeamID(const int team_id)
-{
-	mTeamID = team_id;
-}
-
-void NetworkManagerClient::SetName(const string& name)
-{
-	mName = name;
-}
-
-void NetworkManagerClient::SetPlayerColor(const EColorType color)
-{
-	mColor = color;
-}
-
-void NetworkManagerClient::SendReadyPacket()
-{
-	OutputMemoryBitStream packet;
-
-	packet.Write(PacketType::PT_Ready);
-	packet.Write(GetPlayerId());
-	packet.Write(mReady);
-
-	SendPacket(packet, mServerAddress);
-}
-
-void NetworkManagerClient::SendReady(const bool ready)
-{
-	mReady = ready;
-	SendReadyPacket();
-}
 
 NetworkManagerClient::NetworkManagerClient() :
 	mDeliveryNotificationManager(true, false),
-	mColor(EColorType::kBlue)
+	mState(NetworkClientState::NCS_Uninitialized),
+	mPlayerId(-1),
+	mTeamID(-1),
+	mPlatformId(-1),
+	mColor(EColorType::kBlue),
+	mReady(false),
+	m_x(0),
+	m_y(0),
+	mPlatformType(EPlatformType::kNormal)
 {
 }
 
@@ -70,11 +47,17 @@ void NetworkManagerClient::Init(const SocketAddress& inServerAddress, const stri
 
 void NetworkManagerClient::HandleGameWon(InputMemoryBitStream& inInputStream)
 {
+	int player_id;
 	int team_id;
+	inInputStream.Read(player_id);
 	inInputStream.Read(team_id);
 
-	dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->
-		HandleGameEnd(team_id);
+	GetMultiplayerGameState()->HandleGameEnd(team_id);
+
+	if (mState == NetworkClientState::NCS_Goal_Reached && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_Game_State;
+	}
 }
 
 void NetworkManagerClient::HandlePlatformPacket(InputMemoryBitStream& inInputStream)
@@ -87,29 +70,45 @@ void NetworkManagerClient::HandlePlatformPacket(InputMemoryBitStream& inInputStr
 	inInputStream.Read(platform_id);
 	inInputStream.Read(platform_color);
 
-	dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->
-		HandlePlatformChange(player_id, platform_id, platform_color);
+	GetMultiplayerGameState()->HandlePlatformChange(player_id, platform_id, platform_color);
+
+	if (mState == NetworkClientState::NCS_Platform && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_Game_State;
+	}
 }
 
 void NetworkManagerClient::HandleTeamDeathPacket(InputMemoryBitStream& inInputStream)
 {
+	int player_id;
 	int team_id;
+	inInputStream.Read(player_id);
 	inInputStream.Read(team_id);
 
-	dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->
-		HandleTeamRespawn(team_id);
+	GetMultiplayerGameState()->HandleTeamRespawn(team_id);
+
+	if (mState == NetworkClientState::NCS_Team_Death && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_Game_State;
+	}
 }
 
 void NetworkManagerClient::HandleCheckpointPacket(InputMemoryBitStream& inInputStream)
 {
+	int player_id;
 	int team_id;
 	int platform_id;
 
+	inInputStream.Read(player_id);
 	inInputStream.Read(team_id);
 	inInputStream.Read(platform_id);
 
-	dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->
-		HandleTeamCheckpointSet(team_id, platform_id);
+	GetMultiplayerGameState()->HandleTeamCheckpointSet(team_id, platform_id);
+
+	if (mState == NetworkClientState::NCS_Checkpoint_Reached && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_Game_State;
+	}
 }
 
 void NetworkManagerClient::ReadGhostData(InputMemoryBitStream& inInputStream)
@@ -129,8 +128,7 @@ void NetworkManagerClient::ReadGhostData(InputMemoryBitStream& inInputStream)
 		inInputStream.Read(color);
 		inInputStream.Read(name);
 
-		dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->
-			SpawnGhostPlayer(player_id, team_id, color, name);
+		GetMultiplayerGameState()->SpawnGhostPlayer(player_id, team_id, color, name);
 	}
 }
 
@@ -145,8 +143,7 @@ void NetworkManagerClient::ReadPlayerData(InputMemoryBitStream& inInputStream)
 	inInputStream.Read(color);
 	inInputStream.Read(name);
 
-	dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->
-		SpawnClientPlayer(player_id, team_id, color, name);
+	GetMultiplayerGameState()->SpawnClientPlayer(player_id, team_id, color, name);
 }
 
 void NetworkManagerClient::HandleSpawnPacket(InputMemoryBitStream& inInputStream)
@@ -158,6 +155,7 @@ void NetworkManagerClient::HandleSpawnPacket(InputMemoryBitStream& inInputStream
 		ReadPlayerData(inInputStream);
 	}
 }
+
 
 void NetworkManagerClient::ProcessPacket(InputMemoryBitStream& inInputStream,
                                          const SocketAddress& inFromAddress)
@@ -181,7 +179,7 @@ void NetworkManagerClient::ProcessPacket(InputMemoryBitStream& inInputStream,
 	case PacketType::PT_Player_Connect:
 		HandlePlayerPacket(inInputStream);
 		break;
-	case PacketType::PT_Player:
+	case PacketType::PT_Name:
 		HandlePlayerNamePacket(inInputStream);
 		break;
 	case PacketType::PT_Team_Changed:
@@ -214,8 +212,24 @@ void NetworkManagerClient::ProcessPacket(InputMemoryBitStream& inInputStream,
 	case PacketType::PT_Game_State:
 		HandleGameStatePacket(inInputStream);
 		break;
+	case PacketType::PT_Color: 
+		HandleColorChange(inInputStream);
+		break;
 	default:
 		break;
+	}
+}
+
+void NetworkManagerClient::HandleConnectionReset(const SocketAddress& inFromAddress)
+{
+	if (GetLobbyState())
+	{
+		GetLobbyState()->Quit();
+	}
+
+	if (GetMultiplayerGameState())
+	{
+		GetMultiplayerGameState()->Quit();
 	}
 }
 
@@ -230,7 +244,7 @@ void NetworkManagerClient::SendOutgoingPackets()
 	case NetworkClientState::NCS_Quit:
 		UpdateSendingQuit();
 		break;
-	case NetworkClientState::NCS_Player_Update:
+	case NetworkClientState::NCS_Name:
 		UpdateSendingPlayer();
 		break;
 	case NetworkClientState::NCS_Goal_Reached:
@@ -249,7 +263,19 @@ void NetworkManagerClient::SendOutgoingPackets()
 		UpdateSendingWaitState();
 		break;
 	case NetworkClientState::NCS_Game_State:
-		UpdateSendingGameState();
+		UpdatePositions();
+		break;
+	case NetworkClientState::NCS_Team_Changed:
+		UpdateTeamChanged();
+		break;
+	case NetworkClientState::NCS_Color:
+		UpdateColor();
+		break;
+	case NetworkClientState::NCS_Ready:
+		UpdateReady();
+		break;
+	case NetworkClientState::NCS_Platform:
+		UpdatePlatform();
 		break;
 	case NetworkClientState::NCS_Uninitialized:
 	case NetworkClientState::NCS_Spawn:
@@ -259,9 +285,40 @@ void NetworkManagerClient::SendOutgoingPackets()
 	}
 }
 
+void NetworkManagerClient::UpdatePositions()
+{
+	UpdateInfoUpdatePacket(NetworkClientState::NCS_Game_State, [this] { SendPositionPacket(); });
+}
+
+void NetworkManagerClient::UpdateTeamChanged()
+{
+	UpdateInfoPacket(NetworkClientState::NCS_Team_Changed, [this] { SendTeamPacket(); });
+}
+
+void NetworkManagerClient::UpdateColor()
+{
+	UpdateInfoPacket(NetworkClientState::NCS_Color, [this] { SendColorPacket(); });
+}
+
+void NetworkManagerClient::UpdateReady(const bool ready)
+{
+	mState = NetworkClientState::NCS_Ready;
+	mReady = ready;
+}
+
 void NetworkManagerClient::UpdateSayingHello()
 {
 	UpdateInfoPacket(NetworkClientState::NCS_Saying_Hello, [this] { SendHelloPacket(); });
+}
+
+void NetworkManagerClient::UpdateReady()
+{
+	UpdateInfoPacket(NetworkClientState::NCS_Ready, [this] { SendReadyPacket(); });
+}
+
+void NetworkManagerClient::UpdatePlatform()
+{
+	UpdateInfoPacket(NetworkClientState::NCS_Platform, [this] { SendPlatformPacket(); });
 }
 
 void NetworkManagerClient::UpdateInfoPacket(const NetworkClientState p_enum,
@@ -282,7 +339,7 @@ void NetworkManagerClient::SendHelloPacket()
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Hello);
-	packet.Write(mName);
+	packet.Write(GetName());
 
 	SendPacket(packet, mServerAddress);
 }
@@ -292,6 +349,7 @@ void NetworkManagerClient::SendQuitPacket()
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Quit);
+	packet.Write(GetPlayerId());
 
 	SendPacket(packet, mServerAddress);
 }
@@ -300,9 +358,32 @@ void NetworkManagerClient::SendPlayerPacket()
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Player);
-	packet.Write(mPlayerId);
-	packet.Write(mName);
+	packet.Write(PacketType::PT_Name);
+	packet.Write(GetPlayerId());
+	packet.Write(GetName());
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendReadyPacket()
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Ready);
+	packet.Write(GetPlayerId());
+	packet.Write(GetReady());
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendPlatformPacket()
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Platform);
+	packet.Write(GetPlayerId());
+	packet.Write(GetPlatformId());
+	packet.Write(GetPlatformType());
 
 	SendPacket(packet, mServerAddress);
 }
@@ -313,90 +394,46 @@ void NetworkManagerClient::SendGoalPacket()
 
 	packet.Write(PacketType::PT_Goal);
 	packet.Write(GetPlayerId());
+	packet.Write(GetTeamID());
 
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendTeamChangePacket(const int team_id, const EColorType color)
+void NetworkManagerClient::UpdateTeam(const int team_id, const EColorType color)
 {
-	OutputMemoryBitStream packet;
-
-	packet.Write(PacketType::PT_Team_Changed);
-	packet.Write(GetPlayerId());
-	packet.Write(team_id);
-	LOG("Client Team Change: Player %d sent color with value %d", GetPlayerId(), color)
-	packet.Write(color);
+	mState = NetworkClientState::NCS_Team_Changed;
 
 	mTeamID = team_id;
 	mColor = color;
-
-	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendPlatformInfo(const int player_id, const int platform_id,
-                                            const EPlatformType platform_type)
+void NetworkManagerClient::UpdatePlatform(const int platform_id,
+                                          const EPlatformType platform_type)
 {
-	OutputMemoryBitStream packet;
+	mState = NetworkClientState::NCS_Platform;
 
-	packet.Write(PacketType::PT_Platform);
-	packet.Write(player_id);
-	packet.Write(platform_id);
-	packet.Write(platform_type);
-
-	SendPacket(packet, mServerAddress);
+	mPlatformId = platform_id;
+	mPlatformType = platform_type;
 }
 
-void NetworkManagerClient::SendCheckpointReached(const int team_id, int platform_id)
+void NetworkManagerClient::UpdateName(const string& name)
 {
-	OutputMemoryBitStream packet;
+	mState = NetworkClientState::NCS_Name;
 
-	packet.Write(PacketType::PT_Checkpoint);
-	packet.Write(team_id);
-	packet.Write(platform_id);
-
-	SendPacket(packet, mServerAddress);
+	mName = name;
 }
 
-void NetworkManagerClient::SendGoalReached()
+void NetworkManagerClient::UpdateColor(const EColorType color)
 {
-	OutputMemoryBitStream packet;
+	mState = NetworkClientState::NCS_Color;
 
-	packet.Write(PacketType::PT_Goal);
-	packet.Write(mTeamID);
-
-	SendPacket(packet, mServerAddress);
+	mColor = color;
 }
 
-void NetworkManagerClient::SendTeamDeath(const int team_id)
+void NetworkManagerClient::UpdatePlayerPosition(const float x, const float y)
 {
-	OutputMemoryBitStream packet;
-
-	packet.Write(PacketType::PT_Team_Death);
-	packet.Write(team_id);
-
-	SendPacket(packet, mServerAddress);
-}
-
-void NetworkManagerClient::SendGameDisconnect()
-{
-	OutputMemoryBitStream packet;
-
-	packet.Write(PacketType::PT_Quit);
-	packet.Write(GetPlayerId());
-
-	SendPacket(packet, mServerAddress);
-}
-
-void NetworkManagerClient::SendPlayerPositionPacket(const float x, const float y)
-{
-	OutputMemoryBitStream packet;
-
-	packet.Write(PacketType::PT_Game_State);
-	packet.Write(GetPlayerId());
-	packet.Write(x);
-	packet.Write(y);
-
-	SendPacket(packet, mServerAddress);
+	m_x = x;
+	m_y = y;
 }
 
 void NetworkManagerClient::SendStartGamePacket()
@@ -404,7 +441,7 @@ void NetworkManagerClient::SendStartGamePacket()
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Start_Game);
-	packet.Write(mPlayerId);
+	packet.Write(GetPlayerId());
 
 	SendPacket(packet, mServerAddress);
 }
@@ -414,7 +451,8 @@ void NetworkManagerClient::SendTeamDeathPacket()
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Team_Death);
-	packet.Write(mTeamID);
+	packet.Write(GetPlayerId());
+	packet.Write(GetTeamID());
 
 	SendPacket(packet, mServerAddress);
 }
@@ -424,8 +462,9 @@ void NetworkManagerClient::SendCheckpointPacket()
 	OutputMemoryBitStream packet;
 
 	packet.Write(PacketType::PT_Checkpoint);
-	packet.Write(mTeamID);
-	//packet.Write(mPlatformId);
+	packet.Write(GetPlayerId());
+	packet.Write(GetTeamID());
+	packet.Write(GetPlatformId());
 
 	SendPacket(packet, mServerAddress);
 }
@@ -439,8 +478,38 @@ void NetworkManagerClient::SendStatePacket()
 	SendPacket(packet, mServerAddress);
 }
 
-void NetworkManagerClient::SendGameStatePacket()
+void NetworkManagerClient::SendPositionPacket()
 {
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Game_State);
+	packet.Write(GetPlayerId());
+	packet.Write(m_x);
+	packet.Write(m_y);
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendTeamPacket()
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Team_Changed);
+	packet.Write(GetPlayerId());
+	packet.Write(GetTeamID());
+
+	SendPacket(packet, mServerAddress);
+}
+
+void NetworkManagerClient::SendColorPacket()
+{
+	OutputMemoryBitStream packet;
+
+	packet.Write(PacketType::PT_Color);
+	packet.Write(GetPlayerId());
+	packet.Write(GetColor());
+
+	SendPacket(packet, mServerAddress);
 }
 
 void NetworkManagerClient::UpdateSendingQuit()
@@ -450,7 +519,7 @@ void NetworkManagerClient::UpdateSendingQuit()
 
 void NetworkManagerClient::UpdateSendingPlayer()
 {
-	UpdateInfoPacket(NetworkClientState::NCS_Player_Update, [this] { SendPlayerPacket(); });
+	UpdateInfoPacket(NetworkClientState::NCS_Name, [this] { SendPlayerPacket(); });
 }
 
 void NetworkManagerClient::UpdateSendingGoalReached()
@@ -480,30 +549,27 @@ void NetworkManagerClient::UpdateSendingWaitState()
 	                 [this] { SendStatePacket(); });
 }
 
-void NetworkManagerClient::UpdateSendingGameState()
-{
-	UpdateInfoUpdatePacket(NetworkClientState::NCS_Game_State,
-	                       [this] { SendGameStatePacket(); });
-}
-
 void NetworkManagerClient::HandleWelcomePacket(InputMemoryBitStream& inInputStream)
 {
 	if (mState == NetworkClientState::NCS_Saying_Hello)
 	{
-		//if we got a player id, we've been welcomed!
 		int playerId;
 		inInputStream.Read(playerId);
+
 		mPlayerId = playerId;
 		mState = NetworkClientState::NCS_State;
-		AddPlayer(playerId, mName);
-		LOG("'%s' was welcomed on client as player %d", mName.c_str(), mPlayerId)
+
+		GetLobbyState()->AddPlayer(playerId, mName, false);
+		GetLobbyState()->HandleConnected();
+
+		Debug(mName + " was welcomed on client as player " + std::to_string(GetPlayerId()));
 	}
 }
 
 
 void NetworkManagerClient::HandleStatePacket() const
 {
-	LOG("'%s' is waiting in the lobby", mName.c_str())
+	Debug(mName + " is waiting in the lobby.");
 }
 
 void NetworkManagerClient::HandleGameStatePacket(InputMemoryBitStream& inInputStream) const
@@ -523,12 +589,10 @@ void NetworkManagerClient::HandleGameStatePacket(InputMemoryBitStream& inInputSt
 
 		if (player_id != GetPlayerId())
 		{
-			dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState())->UpdatePlayer(
-				player_id, x, y);
+			GetMultiplayerGameState()->UpdatePlayer(player_id, x, y);
 		}
 	}
-
-	LOG("'%s' is in the game", mName.c_str())
+	Debug(mName + " is in the game.");
 }
 
 void NetworkManagerClient::HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const
@@ -537,27 +601,27 @@ void NetworkManagerClient::HandlePlayerPacket(InputMemoryBitStream& input_memory
 	string name;
 	input_memory_bit_stream.Read(player_id);
 	input_memory_bit_stream.Read(name);
-	AddPlayer(player_id, name);
-	LOG("'%s' was welcomed on client as player %d", name.c_str(), player_id)
+
+	if (GetPlayerId() != player_id)
+	{
+		GetLobbyState()->AddPlayer(player_id, name, false);
+		Debug(name + " was welcomed on client as player " + std::to_string(player_id));
+	}
 }
 
-void NetworkManagerClient::AddPlayer(const int player_id, const std::string& name, const bool ready)
+LobbyState* NetworkManagerClient::GetLobbyState()
 {
-	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->AddPlayer(
-		player_id, name, ready);
+	return dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState());
 }
 
-void NetworkManagerClient::MovePlayer(const int player_id, const int team_id)
+MultiplayerGameState* NetworkManagerClient::GetMultiplayerGameState()
 {
-	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->MovePlayer(
-		player_id, team_id);
+	return dynamic_cast<MultiplayerGameState*>(StackManager::sInstance->GetCurrentState());
 }
 
 void NetworkManagerClient::HandleInitialStatePacket(
-	InputMemoryBitStream& input_memory_bit_stream)
+	InputMemoryBitStream& input_memory_bit_stream) const
 {
-	mState = NetworkClientState::NCS_State;
-
 	int player_count;
 	input_memory_bit_stream.Read(player_count);
 	for (int i = 0; i < player_count; ++i)
@@ -571,104 +635,113 @@ void NetworkManagerClient::HandleInitialStatePacket(
 		input_memory_bit_stream.Read(name);
 		input_memory_bit_stream.Read(ready);
 
-		AddPlayer(player_id, name, ready);
+		GetLobbyState()->AddPlayer(player_id, name, ready);
 
 		if (team_id != 0)
 		{
 			if (player_id != GetPlayerId())
 			{
-				MovePlayer(player_id, team_id);
+				GetLobbyState()->MovePlayer(player_id, team_id);
 			}
 		}
 	}
 }
 
-void NetworkManagerClient::RemovePlayer(const int player_id)
-{
-	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->RemovePlayer(player_id);
-
-}
-
 void NetworkManagerClient::HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream)
 {
-	if (mState == NetworkClientState::NCS_Quit)
-	{
-		mState = NetworkClientState::NCS_State;
-	}
-
 	int player_id;
 	input_memory_bit_stream.Read(player_id);
 
-	RemovePlayer(player_id);
+	if (GetLobbyState())
+	{
+		GetLobbyState()->RemovePlayer(player_id);
+	}
+	else if (GetMultiplayerGameState())
+	{
+		GetMultiplayerGameState()->RemovePlayer(player_id);
+	}
+	
+
+	if (mState == NetworkClientState::NCS_Quit && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_State;
+	}
 }
 
-void NetworkManagerClient::SetName(const int player_id, const std::string& name)
-{
-	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->SetName(player_id, name);
-}
-
-void NetworkManagerClient::HandlePlayerNamePacket(
-	InputMemoryBitStream& input_memory_bit_stream) const
+void NetworkManagerClient::HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream)
 {
 	int player_id;
 	std::string name;
 
 	input_memory_bit_stream.Read(player_id);
 	input_memory_bit_stream.Read(name);
+	GetLobbyState()->SetName(player_id, name);
 
-	SetName(player_id, name);
-}
-
-
-void NetworkManagerClient::MovePlayerBack(const int playerId)
-{
-	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->MovePlayerBack(
-		playerId);
+	if (mState == NetworkClientState::NCS_Name && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_State;
+	}
 }
 
 void NetworkManagerClient::HandleTeamChange(InputMemoryBitStream& inInputStream)
 {
-	mState = NetworkClientState::NCS_State;
+	int player_id;
+	int team_id;
+	inInputStream.Read(player_id);
+	inInputStream.Read(team_id);
 
-	int playerId;
-	int teamId;
-	inInputStream.Read(playerId);
-	inInputStream.Read(teamId);
-
-	if (teamId == 0)
-		MovePlayerBack(playerId);
+	if (team_id == 0)
+		GetLobbyState()->MovePlayerBack(player_id);
 	else
-		MovePlayer(playerId, teamId);
+		GetLobbyState()->MovePlayer(player_id, team_id);
 
-	LOG("'%s' changed to team %d", mName.c_str(), teamId)
+	Debug(mName + " changed to team " + std::to_string(team_id));
+
+	if (mState == NetworkClientState::NCS_Team_Changed && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_State;
+	}
+}
+
+void NetworkManagerClient::HandleColorChange(InputMemoryBitStream& inInputStream)
+{
+	int player_id;
+	inInputStream.Read(player_id);
+
+	if (mState == NetworkClientState::NCS_Color && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_State;
+	}
 }
 
 void NetworkManagerClient::HandleStartPacket()
 {
 	if (mState == NetworkClientState::NCS_State)
 	{
-		dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->Start();
+		GetLobbyState()->Start();
 		mState = NetworkClientState::NCS_Spawn;
 	}
 }
 
 void NetworkManagerClient::HandleStartCountdownPacket()
 {
-	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->StartCountDown();
+	GetLobbyState()->StartCountDown();
 }
 
 void NetworkManagerClient::HandleReadyChange(InputMemoryBitStream& input_memory_bit_stream)
 {
-	mState = NetworkClientState::NCS_State;
-
 	int player_id;
 	bool ready;
 
 	input_memory_bit_stream.Read(player_id);
 	input_memory_bit_stream.Read(ready);
 
-	dynamic_cast<LobbyState*>(StackManager::sInstance->GetCurrentState())->SetReady(
-		player_id, ready);
+	GetLobbyState()->SetReady(player_id, ready);
+
+	if (mState == NetworkClientState::NCS_Ready && player_id == GetPlayerId())
+	{
+		mState = NetworkClientState::NCS_State;
+	}
 }
 
 

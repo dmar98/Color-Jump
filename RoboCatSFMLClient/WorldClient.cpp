@@ -87,9 +87,10 @@ void WorldClient::CheckClientCollisions() const
 		if (go_bounds.intersects(client_ray_bounds))
 		{
 			const auto platform_part = dynamic_cast<PlatformPart*>(go.get());
-			if(platform_part != nullptr)
+			if (platform_part != nullptr)
 			{
-				if(CollisionHandler::IsPlayerAtHisPlatform(*m_client_player, platform_part->GetPlatform()))
+				if (CollisionHandler::IsPlayerAtHisPlatform(
+					*m_client_player, platform_part->GetPlatform()))
 				{
 					//Client Ray Collision!
 					collide = true;
@@ -305,19 +306,21 @@ void WorldClient::OnReachedCheckpoint() const
 
 	if (m_team_mate != nullptr && current_platform == m_team_mate->GetCurrentPlatform() &&
 		current_platform != m_checkpoint)
-		NetworkManagerClient::sInstance->SendCheckpointReached(
-			m_client_player->GetTeamIdentifier(), current_platform->GetID());
+		NetworkManagerClient::sInstance->SetState(
+			NetworkManagerClient::NetworkClientState::NCS_Checkpoint_Reached);
 }
 
 void WorldClient::OnReachedGoal()
 {
-	NetworkManagerClient::sInstance->SendGoalReached();
+	NetworkManagerClient::sInstance->SetState(
+		NetworkManagerClient::NetworkClientState::NCS_Goal_Reached);
 }
 
 void WorldClient::OnClientPlayerDeath() const
 {
 	m_client_player->SetIsDead(true);
-	NetworkManagerClient::sInstance->SendTeamDeath(m_client_player->GetTeamIdentifier());
+	NetworkManagerClient::sInstance->SetState(
+		NetworkManagerClient::NetworkClientState::NCS_Team_Death);
 }
 
 
@@ -338,7 +341,16 @@ void WorldClient::RemoveCharacter(const int player_id)
 
 	if (character)
 	{
-		character->SetIsDead(true);
+		shared_ptr<GameObject> toDelete;
+		for (auto& go : mGameObjects)
+		{
+			if (go.get() == character)
+			{
+				toDelete = go;
+			}
+		}
+
+		mGameObjects.erase(std::find(mGameObjects.begin(), mGameObjects.end(), toDelete));
 		m_players.erase(std::find(m_players.begin(), m_players.end(), character));
 	}
 }

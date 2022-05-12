@@ -7,14 +7,18 @@ public:
 		NCS_Uninitialized,
 		NCS_Saying_Hello,
 		NCS_Quit,
-		NCS_Player_Update,
+		NCS_Name,
 		NCS_Goal_Reached,
 		NCS_Start_Network_Game,
 		NCS_Team_Death,
+		NCS_Team_Changed,
 		NCS_Checkpoint_Reached,
 		NCS_State,
 		NCS_Game_State,
 		NCS_Spawn,
+		NCS_Ready,
+		NCS_Platform,
+		NCS_Color,
 		NCS_Size,
 	};
 
@@ -24,9 +28,10 @@ public:
 
 
 	void SendOutgoingPackets();
-
 	void ProcessPacket(InputMemoryBitStream& inInputStream,
 	                   const SocketAddress& inFromAddress) override;
+
+	void HandleConnectionReset(const SocketAddress& inFromAddress) override;
 
 	const WeightedTimedMovingAverage& GetAvgRoundTripTime() const
 	{
@@ -38,40 +43,46 @@ public:
 		return mAvgRoundTripTime.GetValue();
 	}
 
-	int GetPlayerId() const
-	{
-		return mPlayerId;
-	}
-
-	void SetTeamID(int team_id);
-	void SetName(const string& name);
-	void SetPlayerColor(EColorType color);
-	void SendReadyPacket();
+	int GetPlayerId() const { return mPlayerId; }
 	int GetTeamID() const { return mTeamID; }
-
-	void SendReady(bool ready);
-	void SendTeamChangePacket(int team_id, EColorType color);
-
-	void SendPlatformInfo(int player_id, int platform_id, EPlatformType platform_type);
-	void SendCheckpointReached(int team_id, int platform_id);
-	void SendGoalReached();
-	void SendTeamDeath(int team_id);
-	void SendGameDisconnect();
-	void SendPlayerPositionPacket(float x, float y);
+	EColorType GetColor() const { return mColor; }
+	bool GetReady() const { return mReady; }
+	int GetPlatformId() const { return mPlatformId; }
+	EPlatformType GetPlatformType() const { return mPlatformType; }
+	string GetName() const { return mName; }
+	
+	void SetState(NetworkClientState m_state);
+	
+	void UpdatePlayerPosition(float x, float y);
+	void UpdateTeam(int team_id, EColorType color);
+	void UpdateReady(bool ready);
+	void UpdatePlatform(int platform_id, EPlatformType platform_type);
+	void UpdateName(const string& name);
+	void UpdateColor(EColorType color);
 
 private:
 	NetworkManagerClient();
+
 	void Init(const SocketAddress& inServerAddress, const string& inName);
-	static void HandleGameWon(InputMemoryBitStream& inInputStream);
-	static void HandlePlatformPacket(InputMemoryBitStream& inInputStream);
-	static void HandleTeamDeathPacket(InputMemoryBitStream& inInputStream);
-	static void HandleCheckpointPacket(InputMemoryBitStream& inInputStream);
-	static void ReadGhostData(InputMemoryBitStream& inInputStream);
-	static void ReadPlayerData(InputMemoryBitStream& inInputStream);
+
+	static LobbyState* GetLobbyState();
+	static MultiplayerGameState* GetMultiplayerGameState();
+
+
+	void HandleGameWon(InputMemoryBitStream& inInputStream);
+	void HandlePlatformPacket(InputMemoryBitStream& inInputStream);
+	void HandleTeamDeathPacket(InputMemoryBitStream& inInputStream);
+	void HandleCheckpointPacket(InputMemoryBitStream& inInputStream);
 	void HandleSpawnPacket(InputMemoryBitStream& inInputStream);
+	void HandleWelcomePacket(InputMemoryBitStream& inInputStream);
 
 
+	void UpdatePositions();
+	void UpdateTeamChanged();
+	void UpdateColor();
 	void UpdateSayingHello();
+	void UpdateReady();
+	void UpdatePlatform();
 	void UpdateSendingQuit();
 	void UpdateSendingPlayer();
 	void UpdateSendingGoalReached();
@@ -79,35 +90,32 @@ private:
 	void UpdateSendingTeamDeath();
 	void UpdateSendingCheckpoint();
 	void UpdateSendingWaitState();
-	void UpdateSendingGameState();
 
 	void SendHelloPacket();
 	void SendQuitPacket();
 	void SendPlayerPacket();
 	void SendGoalPacket();
-	
 	void SendStartGamePacket();
 	void SendTeamDeathPacket();
 	void SendCheckpointPacket();
 	void SendStatePacket();
-	void SendGameStatePacket();
+	void SendPositionPacket();
+	void SendReadyPacket();
+	void SendPlatformPacket();
+	void SendTeamPacket();
+	void SendColorPacket();
 
-	void HandleWelcomePacket(InputMemoryBitStream& inInputStream);
 	void HandleStatePacket() const;
 	void HandleGameStatePacket(InputMemoryBitStream& inInputStream) const;
 	void HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const;
+
 	void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
-	void HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream) const;
-	void HandleInitialStatePacket(InputMemoryBitStream& input_memory_bit_stream);
+	void HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream);
+	void HandleInitialStatePacket(InputMemoryBitStream& input_memory_bit_stream) const;
 	void HandleReadyChange(InputMemoryBitStream& input_memory_bit_stream);
 
-	static void RemovePlayer(int player_id);
-	static void AddPlayer(int player_id, const std::string& name, bool ready = false);
-	static void MovePlayer(int player_id, int team_id);
-	static void MovePlayerBack(int playerId);
-	static void SetName(int player_id, const std::string& name);
-
 	void HandleTeamChange(InputMemoryBitStream& inInputStream);
+	void HandleColorChange(InputMemoryBitStream& inInputStream);
 	void HandleStartPacket();
 	static void HandleStartCountdownPacket();
 
@@ -116,24 +124,30 @@ private:
 
 	void SendInputPacket();
 
+	static void ReadGhostData(InputMemoryBitStream& inInputStream);
+	static void ReadPlayerData(InputMemoryBitStream& inInputStream);
+
+
 	DeliveryNotificationManager mDeliveryNotificationManager;
-
 	SocketAddress mServerAddress;
-
-	NetworkClientState mState = NetworkClientState::NCS_Uninitialized;
-	
-
-
-public:
-	void SetState(NetworkClientState m_state);
-private:
+	NetworkClientState mState;
 	std::map<NetworkClientState, float> mTimeOfLastPacket;
 
 	string mName;
-	int mPlayerId{};
-	int mTeamID{};
+	int mPlayerId;
+	int mTeamID;
+	int mPlatformId;
 	EColorType mColor;
-	bool mReady{};
+	bool mReady;
+	float m_x;
+	float m_y;
+	EPlatformType mPlatformType;
 
 	WeightedTimedMovingAverage mAvgRoundTripTime;
+
+	void Debug(const std::string& message) const
+	{
+		const string in_format = "Network Client: " + message;
+		LOG(in_format.c_str(), 0)
+	}
 };

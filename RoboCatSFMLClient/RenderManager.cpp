@@ -67,6 +67,7 @@ void RenderManager::RenderComponents(const sf::View& camera) const
 		WindowManager::sInstance->draw(*c);
 	}
 
+	//HUD::sInstance->Render();
 	if (mRay)
 	{
 		sf::RectangleShape shape;
@@ -84,6 +85,8 @@ void RenderManager::Render()
 {
 	WindowManager::sInstance->clear(sf::Color(0, 37, 97, 255));
 	StackManager::sInstance->Render();
+
+	
 	WindowManager::sInstance->display();
 
 }
