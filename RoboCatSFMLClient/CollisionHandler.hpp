@@ -11,8 +11,7 @@ class CollisionHandler
 		Platform* platform);
 	static bool CollideAndChangeColors(CharacterClient& player, const PlatformPart& platform_part,
 		Platform* platform);
-	static bool IsVerticalPlatform(EPlatformType platform_type);
-	static bool IsPlayerAbovePlatform(const Character& player, const PlatformPart& platform_part);
+	static bool IsPlayerBelowPlatform(const Character& player, const PlatformPart& platform_part);
 	static bool IsPlatformStatic(EPlatformType platform_type);
 	static bool IsPlatformStillChangeable(EPlatformType platform_type);
 	static bool CheckPlatformUnderneath(EColorType color, EPlatformType platform);
@@ -23,5 +22,6 @@ public:
 		const std::function<void()>& win_callback, const WorldClient* world = nullptr);
 	static void TrapCollision(GameObject::GOPair pair, const std::function<void()>& callback);
 	static bool IsPlayerAtHisPlatform(const Character& player, const Platform* platform);
+	static bool IsVerticalPlatform(EPlatformType platform_type);
 };
 

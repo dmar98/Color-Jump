@@ -19,8 +19,7 @@ void Character::Accelerate(const float vx, const float vy)
 
 void Character::Accelerate(const sf::Vector2f vector2)
 {
-	m_velocity.mX += vector2.x;
-	m_velocity.mY += vector2.y;
+	Accelerate(vector2.x, vector2.y);
 }
 
 void Character::ProcessInput(float inDeltaTime, const InputState& inInputState)
