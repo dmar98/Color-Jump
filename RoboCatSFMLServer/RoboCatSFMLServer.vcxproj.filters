@@ -33,22 +33,13 @@
     <ClInclude Include="RoboCatServerPCH.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MouseServer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkManagerServer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ReplicationManagerServer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoboCatServer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Server.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="YarnServer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ReplicationManagerTransmissionData.hpp">
@@ -89,22 +80,13 @@
     <ClCompile Include="RoboCatServerPCH.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MouseServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NetworkManagerServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ReplicationManagerServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RoboCatServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="YarnServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ServerMain.cpp">

@@ -9,7 +9,7 @@ public:
 		PT_Hello,
 		PT_Quit,
 		PT_Platform,
-		PT_Player,
+		PT_Name,
 		PT_Goal,
 		PT_Team_Changed,
 		PT_Start_Game,
@@ -21,7 +21,8 @@ public:
 		PT_Initial_State,
 		PT_Ready,
 		PT_Spawn,
-		PT_Game_State
+		PT_Game_State,
+		PT_Color
 	};
 
 	static constexpr int kMaxPacketsPerFrameCount = 10;

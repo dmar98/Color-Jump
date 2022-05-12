@@ -38,10 +38,6 @@ class CharacterClient;
 #include "WindowManager.hpp"
 #include "StackManager.hpp"
 
-#include "RoboCatClient.hpp"
-#include "MouseClient.hpp"
-#include "YarnClient.hpp"
-
 #include "JoinServerState.hpp"
 #include "LevelLoseState.hpp"
 #include "LevelPauseState.hpp"

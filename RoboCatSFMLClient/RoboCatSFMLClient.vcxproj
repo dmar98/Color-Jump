@@ -42,7 +42,6 @@
     <ClInclude Include="LobbyState.hpp" />
     <ClInclude Include="MenuState.hpp" />
     <ClInclude Include="LevelLoaderClient.hpp" />
-    <ClInclude Include="MouseClient.hpp" />
     <ClInclude Include="MultiPlayerGameOverState.hpp" />
     <ClInclude Include="MultiplayerGameState.hpp" />
     <ClInclude Include="NetworkManagerClient.hpp" />
@@ -55,7 +54,6 @@
     <ClInclude Include="RayGround.hpp" />
     <ClInclude Include="RenderManager.hpp" />
     <ClInclude Include="ReplicationManagerClient.hpp" />
-    <ClInclude Include="RoboCatClient.hpp" />
     <ClInclude Include="RoboCatClientPCH.hpp" />
     <ClInclude Include="SettingsState.hpp" />
     <ClInclude Include="AudioManager.hpp" />
@@ -73,7 +71,6 @@
     <ClInclude Include="Utility.hpp" />
     <ClInclude Include="WindowManager.hpp" />
     <ClInclude Include="WorldClient.hpp" />
-    <ClInclude Include="YarnClient.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
@@ -99,7 +96,6 @@
     <ClCompile Include="LevelWinState.cpp" />
     <ClCompile Include="LobbyState.cpp" />
     <ClCompile Include="MenuState.cpp" />
-    <ClCompile Include="MouseClient.cpp" />
     <ClCompile Include="MultiplayerGameOverState.cpp" />
     <ClCompile Include="MultiplayerGameState.cpp" />
     <ClCompile Include="NetworkManagerClient.cpp" />
@@ -111,7 +107,6 @@
     <ClCompile Include="RayGround.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="ReplicationManagerClient.cpp" />
-    <ClCompile Include="RoboCatClient.cpp" />
     <ClCompile Include="RoboCatClientPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -133,7 +128,6 @@
     <ClCompile Include="TileFactoryClient.cpp" />
     <ClCompile Include="WindowManager.cpp" />
     <ClCompile Include="WorldClient.cpp" />
-    <ClCompile Include="YarnClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RoboCatSFML\RoboCatSFML.vcxproj">

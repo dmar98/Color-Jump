@@ -16,13 +16,14 @@ public:
 	void HandlePlatformChange(int player_id, int platform_id, EPlatformType platform_color) const;
 	void HandleTeamRespawn(int team_id) const;
 	void HandleTeamCheckpointSet(int team_id, int platform_id) const;
-	void HandlePlayerDisconnect(int player_id);
+	void RemovePlayer(int player_id);
 
 	void SpawnClientPlayer(int player_id, int team_id, EColorType color,
 	                       const std::string& name);
 	void SpawnGhostPlayer(int player_id, int team_id, EColorType color,
 		const std::string& name);
 	void UpdatePlayer(int player_id, float x, float y) const;
+	static void Quit();
 
 private:
 	static void SendClientDisconnect();
