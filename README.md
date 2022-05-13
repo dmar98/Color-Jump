@@ -10,4 +10,24 @@ Happy Jumping!
 
 ## Assets
 
-Same as in CA2 (see link)
+### Music
+- ByeByeBrain : by Alexander Nakarada | https://www.serpentsoundstudios.com 
+  Music promoted on https://www.chosic.com/free-music/all/ 
+  Creative Commons Attribution 4.0 International (CC BY 4.0) 
+  https://creativecommons.org/licenses/by/4.0/
+- FallenLeaves : Music: https://www.chosic.com/free-music/all/
+
+### Sounds
+- Jump Sound by mixkit.co | https://mixkit.co/free-sound-effects/jump/
+- Win Sound by mixkit.co | https://mixkit.co/free-sound-effects/win/
+- Lose Sound by mixkit.co | https://mixkit.co/free-sound-effects/lose/
+- Checkpoint Sound by mixkit.co | https://mixkit.co/free-sound-effects/win/
+- Death Sound from Game Master Audio - Pro Sound Collection v1.3 | https://www.gamedevmarket.net/
+- Platform Color Change Sound from Game Master Audio - Pro Sound Collection v1.3 | https://www.gamedevmarket.net/
+
+### Sprites
+- Sprite sheet: Scribble Platformer by Kenney.nl | https://www.kenney.nl/assets/scribble-platformer
+
+## Tools
+
+- Levels were designed in Tiled (free and open source level editor) | https://www.mapeditor.org/
