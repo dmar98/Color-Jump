@@ -94,6 +94,7 @@ public:
 	void MovePlayerBack(int player_id);
 	void SetName(int player_id, const string& name);
 	void Start();
+	void UpdateNameColor(int player_id);
 	void SetReady(int player_id, bool ready);
 	void StartCountDown();
 	void HandleConnected();

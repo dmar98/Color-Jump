@@ -247,6 +247,7 @@ void WorldClient::SetCheckpointToPlatformWithID(const int platform_id)
 	{
 		m_checkpoint = new_checkpoint;
 		m_checkpoint->SetType(EPlatformType::kCheckpointActivated);
+		AudioManager::sInstance->Play("Checkpoint");
 	}
 }
 
@@ -306,8 +307,10 @@ void WorldClient::OnReachedCheckpoint() const
 
 	if (m_team_mate != nullptr && current_platform == m_team_mate->GetCurrentPlatform() &&
 		current_platform != m_checkpoint)
+	{
 		NetworkManagerClient::sInstance->SetState(
-			NetworkManagerClient::NetworkClientState::NCS_Checkpoint_Reached);
+		   NetworkManagerClient::NetworkClientState::NCS_Checkpoint_Reached);
+	}
 }
 
 void WorldClient::OnReachedGoal()
@@ -318,9 +321,13 @@ void WorldClient::OnReachedGoal()
 
 void WorldClient::OnClientPlayerDeath() const
 {
-	m_client_player->SetIsDead(true);
-	NetworkManagerClient::sInstance->SetState(
-		NetworkManagerClient::NetworkClientState::NCS_Team_Death);
+	if (!m_client_player->IsDead())
+	{
+		m_client_player->SetIsDead(true);
+		NetworkManagerClient::sInstance->SetState(
+			NetworkManagerClient::NetworkClientState::NCS_Team_Death);
+		AudioManager::sInstance->Play("Death");
+	}
 }
 
 

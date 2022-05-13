@@ -19,10 +19,15 @@ void AudioManager::StaticInit()
 }
 
 AudioManager::AudioManager()
-	: m_music_volume(10.f)
+	: m_music_volume(30.f)
 {
 	CacheSound("Jump", "../Assets/Media/Sound/Jump.wav");
 	CacheSound("Button", "../Assets/Media/Sound/Button.wav");
+	CacheSound("Death", "../Assets/Media/Sound/Death.wav");
+	CacheSound("Lose", "../Assets/Media/Sound/Lose.wav");
+	CacheSound("Win", "../Assets/Media/Sound/Win.wav");
+	CacheSound("Checkpoint", "../Assets/Media/Sound/Checkpoint.wav");
+	CacheSound("PlatformColorChange", "../Assets/Media/Sound/PlatformColorChange.wav");
 
 	CacheMusic("MenuTheme", "../Assets/Media/Music/FallenLeaves.ogg");
 	CacheMusic("LevelTheme", "../Assets/Media/Music/ByeByeBrain.ogg");

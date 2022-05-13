@@ -10,11 +10,13 @@ MultiPlayerGameOverState::MultiPlayerGameOverState(bool has_won)
 	{
 		m_title_text.setString("You Win!");
 		m_title_text.setFillColor(sf::Color::Green);
+		AudioManager::sInstance->Play("Win");
 	}
 	else
 	{
 		m_title_text.setString("You Lose!");
 		m_title_text.setFillColor(sf::Color::Red);
+		AudioManager::sInstance->Play("Lose");
 	}
 
 	m_title_text.setFont(font);

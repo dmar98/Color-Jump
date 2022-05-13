@@ -37,6 +37,8 @@ bool PlatformClient::HandlePlayerCollisionAndChangeColor(const EColorType color_
 			SetType(EPlatformType::kHorizontalBlue);
 		else
 			SetType(EPlatformType::kHorizontalRed);
+
+		AudioManager::sInstance->Play("PlatformColorChange");
 		break;
 	//Impact Platforms change color to the color of the colliding player
 	case EPlatformType::kVerticalImpact:
@@ -44,6 +46,8 @@ bool PlatformClient::HandlePlayerCollisionAndChangeColor(const EColorType color_
 			SetType(EPlatformType::kVerticalBlue);
 		else
 			SetType(EPlatformType::kVerticalRed);
+
+		AudioManager::sInstance->Play("PlatformColorChange");
 		break;
 	//Only the Blue Player can collide with the blue platforms
 	case EPlatformType::kHorizontalBlue:

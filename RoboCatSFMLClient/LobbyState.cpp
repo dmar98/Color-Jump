@@ -165,7 +165,7 @@ void LobbyState::CreateUI()
 
 void LobbyState::Draw()
 {
-	WindowManager::sInstance->clear(sf::Color(0, 37, 97, 255));
+	WindowManager::sInstance->clear(sf::Color(50, 78, 161, 255));
 
 	if (m_connected)
 	{
@@ -280,9 +280,9 @@ void LobbyState::MovePlayer(int player_id, const int team_id)
 
 	m_team_selections[team_id].emplace_back(player_id);
 
-	UpdateTeamMembers(team_id);
-
 	m_player_team_selection[player_id] = team_id;
+
+	UpdateTeamMembers(team_id);
 }
 
 void LobbyState::RemovePlayer(const int player_id)
@@ -312,7 +312,6 @@ void LobbyState::AddPlayer(const int id, const std::string& label_text, const bo
 	{
 		m_gui_container.Pack(label);
 		m_player_team_selection.try_emplace(id, 0);
-		label->SetTextColor(ready);
 	}
 }
 
@@ -349,12 +348,16 @@ void LobbyState::UpdateTeamMembers(const int team_id)
 			if (i == 0)
 			{
 				NetworkManagerClient::sInstance->UpdateColor(EColorType::kBlue);
+				//m_players[player_id]->SetTextColor(sf::Color::Blue);
 			}
 			else
 			{
 				NetworkManagerClient::sInstance->UpdateColor(EColorType::kRed);
+				/*m_players[player_id]->SetTextColor(sf::Color::Red);*/
 			}
 		}
+
+		UpdateNameColor(player_id);
 
 		i++;
 	}
@@ -383,6 +386,7 @@ void LobbyState::MovePlayerBack(const int player_id)
 	RemovePlayerFromTeam(player_id);
 	m_players[player_id]->setPosition(GetUnpairedPos(player_id));
 	m_player_team_selection[player_id] = 0;
+	UpdateNameColor(player_id);
 }
 
 void LobbyState::SetName(const int player_id, const string& name)
@@ -405,9 +409,35 @@ void LobbyState::Start()
 	RequestStackPush(StateID::kMenu);
 }
 
+void LobbyState::UpdateNameColor(const int player_id)
+{
+	const int player_team_id = m_player_team_selection[player_id];
+
+	if (player_team_id == 0)
+	{
+		m_players[player_id]->SetTextColor(sf::Color::White);
+		return;
+	}
+
+	for (int i = 0; i < m_team_selections[player_team_id].size(); i++)
+	{
+		if (m_team_selections[player_team_id][i] == player_id)
+			m_players[player_id]->SetTextColor(i == 0 ? sf::Color::Blue : sf::Color::Red);
+	}
+}
+
 void LobbyState::SetReady(const int player_id, const bool ready)
 {
-	m_players[player_id]->SetTextColor(ready);
+	if(ready)
+	{
+		//Player is ready -> change name color to green
+		m_players[player_id]->SetTextColor(sf::Color::Green);
+	}
+	else
+	{
+		//Player is unready -> change name color to character color (which is based on the name slot)
+		UpdateNameColor(player_id);
+	}
 }
 
 void LobbyState::StartCountDown()

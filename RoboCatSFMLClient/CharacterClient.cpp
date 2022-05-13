@@ -100,22 +100,18 @@ sf::IntRect CharacterClient::GetSize() const
 
 void CharacterClient::Jump()
 {
-	Character::Jump();
-
 	if (m_can_jump == false)
 	{
 		return;
 	}
 
-	m_show_jump_animation = true;
-	//m_jump_smoke_animation.Restart();
+	Character::Jump();
 	AudioManager::sInstance->Play("Jump");
 }
 
 void CharacterClient::SetGrounded(Platform* platform)
 {
 	Character::SetGrounded(platform);
-	m_show_jump_animation = false;
 }
 
 void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect)
