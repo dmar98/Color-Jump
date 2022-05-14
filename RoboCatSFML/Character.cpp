@@ -14,7 +14,10 @@ const Vector3& Character::GetVelocity() const
 void Character::Accelerate(const float vx, const float vy)
 {
 	m_velocity.mX += vx;
-	m_velocity.mY += vy;
+	if (abs( m_velocity.mY ) <= 600)
+	{
+		m_velocity.mY += vy;
+	}
 }
 
 void Character::Accelerate(const sf::Vector2f vector2)
