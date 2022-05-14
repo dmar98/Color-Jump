@@ -11,7 +11,7 @@ public:
 	static std::unique_ptr<World> sInstance;
 
 	void AddGameObject(GameObjectPtr inGameObject);
-	void RemoveGameObject(GameObjectPtr inGameObject);
+	void RemoveGameObject(const GameObjectPtr& inGameObject);
 	void RemoveAllGameObjects();
 
 	void SetWorldBounds(sf::FloatRect world_bounds);

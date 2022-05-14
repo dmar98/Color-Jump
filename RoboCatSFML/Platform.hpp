@@ -1,10 +1,4 @@
 #pragma once
-#include <vector>
-
-#include "EColorType.hpp"
-#include "EPlatformType.hpp"
-
-class PlatformPart;
 
 class Platform
 {

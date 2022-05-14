@@ -21,12 +21,19 @@ public:
 	}
 
 	ReplicationManagerServer& GetReplicationManagerServer() { return mReplicationManagerServer; }
-	
+
 	void SetTeamID(int team_id);
 	void SetColor(EColorType color);
 	void SetName(const string& name);
 	void SetIsReady(bool ready);
 	void SetPosition(float x, float y);
+
+	void SetIsLastMoveTimestampDirty(const bool inIsDirty)
+	{
+		mIsLastMoveTimestampDirty = inIsDirty;
+	}
+
+	bool IsLastMoveTimestampDirty() const { return mIsLastMoveTimestampDirty; }
 
 
 private:
@@ -38,13 +45,12 @@ private:
 	int mPlayerId;
 	int mTeamId;
 	EColorType mColor;
-	bool mReady{};
-
-
-	InputState mInputState;
+	bool mReady;
 
 	float mLastPacketFromClientTime{};
 	sf::Vector2f m_position;
+
+	bool mIsLastMoveTimestampDirty;
 };
 
 using ClientProxyPtr = shared_ptr<ClientProxy>;

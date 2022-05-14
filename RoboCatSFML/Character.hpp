@@ -26,7 +26,6 @@ public:
 	const Vector3& GetVelocity() const;
 	void Accelerate(float vx, float vy);
 	void Accelerate(sf::Vector2f vector2);
-	void ProcessInput(float inDeltaTime, const InputState& inInputState);
 
 	void SetIdentifier(int identifier);
 	virtual void SetTeamIdentifier(int identifier);

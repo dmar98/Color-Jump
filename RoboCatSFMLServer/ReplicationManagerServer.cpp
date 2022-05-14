@@ -1,4 +1,4 @@
-#include "RoboCatServerPCH.hpp"
+#include "ColorJumpServerPCH.hpp"
 
 void ReplicationManagerServer::ReplicateCreate(int inNetworkId, uint32_t inInitialDirtyState)
 {
@@ -49,15 +49,15 @@ void ReplicationManagerServer::Write(OutputMemoryBitStream& inOutputStream, Repl
 			//now do what?
 			switch (action)
 			{
-			case RA_Create:
+			case ReplicationAction::RA_Create:
 				writtenState = WriteCreateAction(inOutputStream, networkId, dirtyState);
 				//once the create action is transmitted, future replication
 				//of this object should be updates instead of creates
 				break;
-			case RA_Update:
+			case ReplicationAction::RA_Update:
 				writtenState = WriteUpdateAction(inOutputStream, networkId, dirtyState);
 				break;
-			case RA_Destroy:
+			case ReplicationAction::RA_Destroy:
 				//don't need anything other than state!
 				writtenState = WriteDestroyAction(inOutputStream, networkId, dirtyState);
 				//add this to the list of replication commands to remove

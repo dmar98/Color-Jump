@@ -1,6 +1,5 @@
 //Written by Paul Bichler (D00242563)
-#include "RoboCatClientPCH.hpp"
-#include "Platform.hpp"
+#include "ColorJumpClientPCH.hpp"
 
 //Written by Paul Bichler (D00242563)
 PlatformPartClient::PlatformPartClient(const sf::IntRect sub_rect, PlatformClient* platform, const ETileType type)

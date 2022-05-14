@@ -8,9 +8,6 @@ public:
 
 	int Run() override;
 
-	static void HandleNewClient(const ClientProxyPtr& inClientProxy);
-	static void HandleLostClient(const ClientProxyPtr& inClientProxy);
-
 private:
 	Server();
 

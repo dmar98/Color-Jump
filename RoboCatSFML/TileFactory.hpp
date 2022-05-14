@@ -1,11 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/System/Vector2.hpp>
-
-#include "Platform.hpp"
-#include "Tile.hpp"
-
 class TileFactory
 {
 protected:

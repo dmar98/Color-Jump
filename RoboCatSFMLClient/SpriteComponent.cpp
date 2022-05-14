@@ -1,4 +1,4 @@
-#include "RoboCatClientPCH.hpp"
+#include "ColorJumpClientPCH.hpp"
 
 
 SpriteComponent::SpriteComponent(GameObject* inGameObject)
@@ -24,7 +24,7 @@ sf::Sprite& SpriteComponent::GetSprite()
 void SpriteComponent::DrawCurrent(sf::RenderTarget& target, const sf::RenderStates states) const
 {
 	target.draw(m_sprite, states);
-	const sf::FloatRect bounding_rect = m_game_object->GetBoundingRect();
+	// const sf::FloatRect bounding_rect = m_game_object->GetBoundingRect();
 	// DrawBoundingRect(target, states, bounding_rect);
 }
 

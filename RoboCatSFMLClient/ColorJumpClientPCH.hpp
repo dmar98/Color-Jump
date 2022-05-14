@@ -1,6 +1,6 @@
 #pragma once
 #define _USE_MATH_DEFINES
-#include "RoboCatShared.hpp"
+#include "ColorJumpShared.hpp"
 
 class CharacterClient;
 
@@ -49,8 +49,6 @@ class CharacterClient;
 #include "SettingsState.hpp"
 #include "TitleState.hpp"
 #include "TutorialState.hpp"
-
-#include "HUD.hpp"
 
 #include "ReplicationManagerClient.hpp"
 #include "NetworkManagerClient.hpp"

@@ -24,6 +24,7 @@
     <ProjectGuid>{9bc2d72d-cbc8-4fd1-9c64-65e227c32979}</ProjectGuid>
     <RootNamespace>RoboCatSFML</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ColorJump</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -90,7 +91,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\OneDrive\OneDrive - Dundalk Institute of Technology\Y4_Semester1\MPDP\SFML-2.5.1\include;C:\Users\Dmar\Documents\GD4\Multiplayer\SFML-2.5.1\include;C:\Users\loanej\dev\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>RoboCatPCH.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>ColorJumpPCH.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,25 +164,18 @@
     <ClInclude Include="GameObject.hpp" />
     <ClInclude Include="GameObjectRegistry.hpp" />
     <ClInclude Include="InFlightPacket.hpp" />
-    <ClInclude Include="InputAction.hpp" />
-    <ClInclude Include="InputState.hpp" />
     <ClInclude Include="LeaderBoardManager.hpp" />
     <ClInclude Include="LevelLoader.hpp" />
     <ClInclude Include="LevelManager.hpp" />
     <ClInclude Include="LinkingContext.hpp" />
     <ClInclude Include="MemoryBitStream.hpp" />
-    <ClInclude Include="Mouse.hpp" />
-    <ClInclude Include="Move.hpp" />
-    <ClInclude Include="MoveList.hpp" />
     <ClInclude Include="NetworkManager.hpp" />
     <ClInclude Include="Platform.hpp" />
     <ClInclude Include="PlatformPart.hpp" />
     <ClInclude Include="ReplicationCommand.hpp" />
-    <ClInclude Include="RoboCat.hpp" />
-    <ClInclude Include="RoboCatPCH.hpp" />
-    <ClInclude Include="RoboCatShared.hpp" />
+    <ClInclude Include="ColorJumpPCH.hpp" />
+    <ClInclude Include="ColorJumpShared.hpp" />
     <ClInclude Include="RoboMath.hpp" />
-    <ClInclude Include="ScoreBoardManager.hpp" />
     <ClInclude Include="SocketAddress.hpp" />
     <ClInclude Include="SocketAddressFactory.hpp" />
     <ClInclude Include="SocketUtil.hpp" />
@@ -194,7 +188,6 @@
     <ClInclude Include="UDPSocket.hpp" />
     <ClInclude Include="WeightedTimedMovingAverage.hpp" />
     <ClInclude Include="World.hpp" />
-    <ClInclude Include="Yarn.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AckRange.cpp" />
@@ -204,26 +197,20 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectRegistry.cpp" />
     <ClCompile Include="InFlightPacket.cpp" />
-    <ClCompile Include="InputState.cpp" />
     <ClCompile Include="LeaderBoardManager.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="MemoryBitStream.cpp" />
-    <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="Move.cpp" />
-    <ClCompile Include="MoveList.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlatformPart.cpp" />
-    <ClCompile Include="RoboCat.cpp" />
-    <ClCompile Include="RoboCatPCH.cpp">
+    <ClCompile Include="ColorJumpPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RoboMath.cpp" />
-    <ClCompile Include="ScoreBoardManager.cpp" />
     <ClCompile Include="SocketAddress.cpp" />
     <ClCompile Include="SocketAddressFactory.cpp" />
     <ClCompile Include="SocketUtil.cpp" />
@@ -234,7 +221,6 @@
     <ClCompile Include="Timing.cpp" />
     <ClCompile Include="UDPSocket.cpp" />
     <ClCompile Include="World.cpp" />
-    <ClCompile Include="Yarn.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

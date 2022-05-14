@@ -39,10 +39,10 @@
     <ClInclude Include="Engine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoboCatPCH.hpp">
+    <ClInclude Include="ColorJumpPCH.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoboCatShared.hpp">
+    <ClInclude Include="ColorJumpShared.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.hpp">
@@ -54,31 +54,10 @@
     <ClInclude Include="GameObjectRegistry.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InputAction.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputState.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryBitStream.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mouse.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Move.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveList.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ReplicationCommand.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RoboCat.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreBoardManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NetworkManager.hpp">
@@ -106,9 +85,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Yarn.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WeightedTimedMovingAverage.hpp">
@@ -182,25 +158,7 @@
     <ClCompile Include="GameObjectRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MemoryBitStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Move.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RoboCat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreBoardManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NetworkManager.cpp">
@@ -230,10 +188,7 @@
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Yarn.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RoboCatPCH.cpp">
+    <ClCompile Include="ColorJumpPCH.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AckRange.cpp">

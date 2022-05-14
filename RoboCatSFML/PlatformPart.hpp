@@ -1,8 +1,4 @@
 #pragma once
-#include <SFML/Graphics/Rect.hpp>
-
-#include "Platform.hpp"
-#include "Tile.hpp"
 
 class PlatformPart : public Tile
 {

@@ -1,4 +1,4 @@
-#include "RoboCatServerPCH.hpp"
+#include "ColorJumpServerPCH.hpp"
 
 void ReplicationManagerTransmissionData::AddTransmission(int inNetworkId, ReplicationAction inAction, uint32_t inState)
 {
@@ -22,13 +22,13 @@ void ReplicationManagerTransmissionData::HandleDeliveryFailure(DeliveryNotificat
 
 		switch (rt.GetAction())
 		{
-		case RA_Create:
+		case ReplicationAction::RA_Create:
 			HandleCreateDeliveryFailure(networkId);
 			break;
-		case RA_Update:
+		case ReplicationAction::RA_Update:
 			HandleUpdateStateDeliveryFailure(networkId, rt.GetState(), inDeliveryNotificationManager);
 			break;
-		case RA_Destroy:
+		case ReplicationAction::RA_Destroy:
 			HandleDestroyDeliveryFailure(networkId);
 			break;
 		}
@@ -43,10 +43,10 @@ void ReplicationManagerTransmissionData::HandleDeliverySuccess(DeliveryNotificat
 	{
 		switch (rt.GetAction())
 		{
-		case RA_Create:
+		case ReplicationAction::RA_Create:
 			HandleCreateDeliverySuccess(rt.GetNetworkId());
 			break;
-		case RA_Destroy:
+		case ReplicationAction::RA_Destroy:
 			HandleDestroyDeliverySuccess(rt.GetNetworkId());
 			break;
 		}

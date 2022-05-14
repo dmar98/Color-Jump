@@ -1,5 +1,5 @@
 //Written by Dylan Goncalves Martins (D00242562), modified by Paul Bichler (D00242563)
-#include "RoboCatPCH.hpp"
+#include "ColorJumpPCH.hpp"
 
 void Character::SetVelocity(const Vector3& inVelocity)
 {
@@ -20,22 +20,6 @@ void Character::Accelerate(const float vx, const float vy)
 void Character::Accelerate(const sf::Vector2f vector2)
 {
 	Accelerate(vector2.x, vector2.y);
-}
-
-void Character::ProcessInput(float inDeltaTime, const InputState& inInputState)
-{
-	////process our input....
-
-	////turning...
-	//float newRotation = GetRotation() + inInputState.GetDesiredHorizontalDelta() * mMaxRotationSpeed * inDeltaTime;
-	//SetRotation(newRotation);
-
-	////moving...
-	//float inputForwardDelta = inInputState.GetDesiredVerticalDelta();
-	//mThrustDir = inputForwardDelta;
-
-
-	//mIsShooting = inInputState.IsShooting();
 }
 
 /*
@@ -192,10 +176,10 @@ uint32_t Character::Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirt
 
 void Character::Update()
 {
-	SetLocation(GetLocation() + m_velocity * Timing::sInstance.GetDeltaTime());
-	Accelerate(-m_velocity.mX * 0.5f, 0);
+	SetLocation(GetLocation() + m_velocity * Timing::sInstance.GetDeltaTime() * 2);
+	Accelerate(-m_velocity.mX * 0.75f, 0);
 	if (!m_grounded)
 	{
-		Accelerate(0, 9.81f);
+		Accelerate(0, 9.81f * 2);
 	}
 }

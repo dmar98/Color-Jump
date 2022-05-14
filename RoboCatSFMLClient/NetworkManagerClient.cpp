@@ -1,4 +1,4 @@
-#include "RoboCatClientPCH.hpp"
+#include "ColorJumpClientPCH.hpp"
 
 NetworkManagerClient* NetworkManagerClient::sInstance;
 
@@ -13,7 +13,7 @@ NetworkManagerClient::NetworkManagerClient() :
 	mDeliveryNotificationManager(true, false),
 	mState(NetworkClientState::NCS_Uninitialized),
 	mPlayerId(-1),
-	mTeamID(-1),
+	mTeamID(0),
 	mPlatformId(-1),
 	mColor(EColorType::kBlue),
 	mReady(false),

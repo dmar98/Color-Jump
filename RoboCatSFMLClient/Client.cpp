@@ -1,4 +1,4 @@
-#include "RoboCatClientPCH.hpp"
+#include "ColorJumpClientPCH.hpp"
 
 bool Client::StaticInit()
 {
@@ -13,7 +13,6 @@ bool Client::StaticInit()
 	RenderManager::StaticInit();
 	StackManager::StaticInit();
 	PlayerDataManager::StaticInit();
-	HUD::StaticInit();
 	World::StaticInit(new WorldClient());
 
 	s_instance.reset(client);
@@ -25,8 +24,6 @@ Client::Client() = default;
 
 void Client::DoFrame()
 {
-	InputManager::sInstance->Update();
-
 	StackManager::sInstance->Update(Timing::sInstance.GetDeltaTime());
 
 	if (StackManager::sInstance->IsEmpty())
@@ -41,18 +38,6 @@ void Client::DoFrame()
 
 void Client::HandleEvent(sf::Event& p_event)
 {
-	switch (p_event.type)
-	{
-	case sf::Event::KeyPressed:
-		InputManager::sInstance->HandleInput(EIA_Pressed, p_event.key.code);
-		break;
-	case sf::Event::KeyReleased:
-		InputManager::sInstance->HandleInput(EIA_Released, p_event.key.code);
-		break;
-	default:
-		break;
-	}
-
 	StackManager::sInstance->HandleEvent(p_event);
 	if (p_event.type == sf::Event::Closed)
 	{

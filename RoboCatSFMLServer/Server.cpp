@@ -1,4 +1,4 @@
-#include "RoboCatServerPCH.hpp"
+#include "ColorJumpServerPCH.hpp"
 
 //uncomment this when you begin working on the server
 
@@ -54,18 +54,4 @@ void Server::DoFrame()
 	Engine::DoFrame();
 
 	NetworkManagerServer::sInstance->Update(Timing::sInstance.GetDeltaTime());
-}
-
-void Server::HandleNewClient(const ClientProxyPtr& inClientProxy)
-{
-	const int playerId = inClientProxy->GetPlayerId();
-	ScoreBoardManager::sInstance->AddEntry(playerId, inClientProxy->GetName());
-}
-
-void Server::HandleLostClient(const ClientProxyPtr& inClientProxy)
-{
-	const int playerId = inClientProxy->GetPlayerId();
-	ScoreBoardManager::sInstance->RemoveEntry(playerId);
-
-
 }

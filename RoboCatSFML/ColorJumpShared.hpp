@@ -57,7 +57,10 @@ using std::unordered_set;
 
 
 class GameObject;
-class RoboCat;
+class Platform;
+class PlatformPart;
+
+
 
 #include "SFML/System.hpp"
 #include "SFML/Window.hpp"
@@ -65,6 +68,10 @@ class RoboCat;
 #include "SFML/Audio.hpp"
 
 #include "RoboMath.hpp"
+
+#include "EColorType.hpp"
+#include "ETileType.hpp"
+#include "EPlatformType.hpp"
 
 #include "StringUtils.hpp"
 #include "SocketAddress.hpp"
@@ -82,19 +89,10 @@ class RoboCat;
 #include "AckRange.hpp"
 #include "DeliveryNotificationManager.hpp"
 
-#include "InputAction.hpp"
-#include "InputState.hpp"
-#include "Move.hpp"
-#include "MoveList.hpp"
-
 #include "GameObject.hpp"
 #include "GameObjectRegistry.hpp"
-#include "RoboCat.hpp"
 #include "Timing.hpp"
-#include "Mouse.hpp"
-#include "Yarn.hpp"
 #include "StringUtils.hpp"
-#include "ScoreBoardManager.hpp"
 
 #include "WeightedTimedMovingAverage.hpp"
 #include "ReplicationCommand.hpp"
@@ -102,11 +100,11 @@ class RoboCat;
 #include "Engine.hpp"
 
 #include "Tile.hpp"
-#include "EPlatformType.hpp"
-#include "Platform.hpp"
 #include "PlatformPart.hpp"
-#include "EColorType.hpp"
-#include "ETileType.hpp"
+#include "Platform.hpp"
+
+
+
 #include "LevelManager.hpp"
 #include "TileFactory.hpp"
 #include "LevelLoader.hpp"

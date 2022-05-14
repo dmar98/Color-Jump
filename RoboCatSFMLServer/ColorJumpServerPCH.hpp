@@ -1,4 +1,5 @@
-#include "RoboCatShared.hpp"
+#pragma once
+#include "ColorJumpShared.hpp"
 
 #include "ReplicationManagerTransmissionData.hpp"
 #include "ReplicationManagerServer.hpp"
@@ -15,4 +16,3 @@
 #include "LevelLoaderServer.hpp"
 #include "TileFactoryServer.hpp"
 #include "CharacterServer.hpp"
-

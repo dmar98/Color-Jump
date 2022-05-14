@@ -1,4 +1,4 @@
-#include "RoboCatClientPCH.hpp"
+#include "ColorJumpClientPCH.hpp"
 
 CharacterClient::CharacterClient(EColorType type, const sf::IntRect& texture_rect)
 	: Character(type, texture_rect)
@@ -7,14 +7,6 @@ CharacterClient::CharacterClient(EColorType type, const sf::IntRect& texture_rec
 	mSpriteComponent->SetTexture(TextureManager::sInstance->GetTexture("LevelTileSet"),
 	                             texture_rect, true);
 
-	/*m_jump_smoke_animation.SetFrameSize(sf::Vector2i(256, 256));
-	m_jump_smoke_animation.SetNumFrames(16);
-	m_jump_smoke_animation.SetDuration(sf::seconds(.5f));
-	m_jump_smoke_animation.setScale(.5f, .5f);
-
-	const sf::FloatRect bounds = m_jump_smoke_animation.GetLocalBounds();
-	m_jump_smoke_animation.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
-	                                 std::floor(bounds.top + 50.f));*/
 	m_name_text.reset(new TextComponent(this));
 	m_name_text->SetFont(*FontManager::sInstance->GetFont("carlito"));
 	m_name_text->SetFontSize(15.f);
@@ -33,12 +25,6 @@ void CharacterClient::Update()
 {
 	Character::Update();
 	UpdateRay();
-
-	/*if (m_show_jump_animation)
-	{
-		m_jump_smoke_animation.Update(dt);
-		m_show_jump_animation = !m_jump_smoke_animation.IsFinished();
-	}*/
 }
 
 void CharacterClient::HandleDying()

@@ -1,4 +1,4 @@
-#include "RoboCatPCH.hpp"
+#include "ColorJumpPCH.hpp"
 
 std::unique_ptr<World> World::sInstance;
 
@@ -24,7 +24,7 @@ void World::AddGameObject(GameObjectPtr inGameObject)
 }
 
 
-void World::RemoveGameObject(GameObjectPtr inGameObject)
+void World::RemoveGameObject(const GameObjectPtr& inGameObject)
 {
 	int index = inGameObject->GetIndexInWorld();
 

@@ -30,7 +30,7 @@
     <ClInclude Include="ClientProxy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoboCatServerPCH.hpp">
+    <ClInclude Include="ColorJumpServerPCH.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NetworkManagerServer.hpp">
@@ -77,16 +77,13 @@
     <ClCompile Include="ClientProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RoboCatServerPCH.cpp">
+    <ClCompile Include="ColorJumpServerPCH.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NetworkManagerServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ReplicationManagerServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ServerMain.cpp">
@@ -114,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CharacterServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

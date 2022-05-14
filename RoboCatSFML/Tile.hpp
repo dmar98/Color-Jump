@@ -1,7 +1,4 @@
 #pragma once
-#include "EColorType.hpp"
-#include "ETileType.hpp"
-
 class Tile : public GameObject
 {
 public:

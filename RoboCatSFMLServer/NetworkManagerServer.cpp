@@ -1,4 +1,4 @@
-#include "RoboCatServerPCH.hpp"
+#include "ColorJumpServerPCH.hpp"
 
 NetworkManagerServer* NetworkManagerServer::sInstance;
 
@@ -454,11 +454,6 @@ void NetworkManagerServer::HandlePacketFromNewClient(InputMemoryBitStream& inInp
 			inFromAddress, name, mNewPlayerId++);
 		mAddressToClientMap[inFromAddress] = newClientProxy;
 		mPlayerIdToClientMap[newClientProxy->GetPlayerId()] = newClientProxy;
-
-		//tell the server about this client, spawn a cat, etc...
-		//if we had a generic message system, this would be a good use for it...
-		//instead we'll just tell the server directly
-		dynamic_cast<Server*>(Engine::s_instance.get())->HandleNewClient(newClientProxy);
 
 		//and welcome the client...
 		SendWelcomePacket(newClientProxy);

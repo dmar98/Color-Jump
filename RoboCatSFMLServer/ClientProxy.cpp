@@ -1,4 +1,4 @@
-#include "RoboCatServerPCH.hpp"
+#include "ColorJumpServerPCH.hpp"
 
 ClientProxy::ClientProxy(const SocketAddress& inSocketAddress, string inName,
                          const int inPlayerId) :
@@ -7,7 +7,8 @@ ClientProxy::ClientProxy(const SocketAddress& inSocketAddress, string inName,
 	mName(std::move(inName)),
 	mPlayerId(inPlayerId),
 	mTeamId(0),
-	mColor(EColorType::kBlue)
+	mColor(EColorType::kBlue),
+	mReady(false)
 {
 	UpdateLastPacketTime();
 }

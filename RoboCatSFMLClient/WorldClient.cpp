@@ -1,4 +1,4 @@
-#include "RoboCatClientPCH.hpp"
+#include "ColorJumpClientPCH.hpp"
 
 WorldClient::WorldClient()
 	: World(),
@@ -42,11 +42,6 @@ void WorldClient::Update()
 		sf::Vector2f camera_pos = m_camera.getCenter();
 		camera_pos.x = m_client_player->GetLocation().mX;
 		m_camera.setCenter(camera_pos);
-	}
-
-	for (const auto& m_game_object : mGameObjects)
-	{
-		m_game_object->Update();
 	}
 }
 

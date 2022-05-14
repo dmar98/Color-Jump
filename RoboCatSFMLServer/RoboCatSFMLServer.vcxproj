@@ -24,6 +24,7 @@
     <ProjectGuid>{186055f9-98e9-474e-9ff3-173f37dd362c}</ProjectGuid>
     <RootNamespace>RoboCatSFMLServer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ColorJumpServer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -90,7 +91,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\OneDrive\OneDrive - Dundalk Institute of Technology\Y4_Semester1\MPDP\SFML-2.5.1\include;C:\Users\Dmar\Documents\GD4\Multiplayer\SFML-2.5.1\include;../RoboCatSFML;C:\Users\loanej\dev\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>RoboCatServerPCH.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>ColorJumpServerPCH.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -164,7 +165,7 @@
     <ClInclude Include="PlatformPartServer.hpp" />
     <ClInclude Include="ReplicationManagerServer.hpp" />
     <ClInclude Include="ReplicationManagerTransmissionData.hpp" />
-    <ClInclude Include="RoboCatServerPCH.hpp" />
+    <ClInclude Include="ColorJumpServerPCH.hpp" />
     <ClInclude Include="Server.hpp" />
     <ClInclude Include="TileFactoryServer.hpp" />
     <ClInclude Include="TileServer.hpp" />
@@ -180,7 +181,7 @@
     <ClCompile Include="PlatformPartServer.cpp" />
     <ClCompile Include="ReplicationManagerServer.cpp" />
     <ClCompile Include="ReplicationManagerTransmissionData.cpp" />
-    <ClCompile Include="RoboCatServerPCH.cpp">
+    <ClCompile Include="ColorJumpServerPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

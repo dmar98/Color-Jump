@@ -31,7 +31,6 @@
     <ClInclude Include="DrawableComponent.hpp" />
     <ClInclude Include="FontManager.hpp" />
     <ClInclude Include="GhostCharacterClient.hpp" />
-    <ClInclude Include="HUD.hpp" />
     <ClInclude Include="InputManager.hpp" />
     <ClInclude Include="JoinServerState.hpp" />
     <ClInclude Include="KeyBinding.hpp" />
@@ -54,7 +53,7 @@
     <ClInclude Include="RayGround.hpp" />
     <ClInclude Include="RenderManager.hpp" />
     <ClInclude Include="ReplicationManagerClient.hpp" />
-    <ClInclude Include="RoboCatClientPCH.hpp" />
+    <ClInclude Include="ColorJumpClientPCH.hpp" />
     <ClInclude Include="SettingsState.hpp" />
     <ClInclude Include="AudioManager.hpp" />
     <ClInclude Include="SpriteComponent.hpp" />
@@ -85,7 +84,6 @@
     <ClCompile Include="DrawableComponent.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GhostCharacterClient.cpp" />
-    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LevelLoaderClient.cpp" />
     <ClCompile Include="JoinServerState.cpp" />
@@ -140,6 +138,7 @@
     <ProjectGuid>{8b45a7f9-97ce-4bcc-8c02-7f0c21150782}</ProjectGuid>
     <RootNamespace>RoboCatSFMLClient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ColorJumpClient</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -206,7 +205,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\OneDrive\OneDrive - Dundalk Institute of Technology\Y4_Semester1\MPDP\SFML-2.5.1\include;C:\Users\Dmar\Documents\GD4\Multiplayer\SFML-2.5.1\include;..\RoboCatSFML;C:\Users\loanej\dev\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>RoboCatClientPCH.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>ColorJumpClientPCH.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
