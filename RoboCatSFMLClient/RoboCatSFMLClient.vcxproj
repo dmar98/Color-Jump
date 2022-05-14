@@ -52,7 +52,6 @@
     <ClInclude Include="PlayerSpriteComponent.hpp" />
     <ClInclude Include="RayGround.hpp" />
     <ClInclude Include="RenderManager.hpp" />
-    <ClInclude Include="ReplicationManagerClient.hpp" />
     <ClInclude Include="ColorJumpClientPCH.hpp" />
     <ClInclude Include="SettingsState.hpp" />
     <ClInclude Include="AudioManager.hpp" />
@@ -104,7 +103,6 @@
     <ClCompile Include="PlayerSpriteComponent.cpp" />
     <ClCompile Include="RayGround.cpp" />
     <ClCompile Include="RenderManager.cpp" />
-    <ClCompile Include="ReplicationManagerClient.cpp" />
     <ClCompile Include="RoboCatClientPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

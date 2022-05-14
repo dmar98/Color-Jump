@@ -32,11 +32,6 @@ void CharacterClient::HandleDying()
 	Character::HandleDying();
 }
 
-void CharacterClient::Read(InputMemoryBitStream& inInputStream)
-{
-	Character::Read(inInputStream);
-}
-
 void CharacterClient::SetTransparent() const
 {
 	const auto& color = mSpriteComponent->GetSprite().getColor();
@@ -112,11 +107,12 @@ void CharacterClient::MoveOutOfCollision(const sf::FloatRect& rect)
 	Vector3 normal_velocity = velocity;
 	normal_velocity.Normalize2D();
 	normal_velocity.mY = m_grounded ? normal_velocity.mY : 0;
-	const Vector3 down_force(0, 9.81f, 0);
+	const Vector3 down_force(0, 9.81f / 2, 0);
 
 	while (rect.intersects(GetBoundingRect()))
 	{
-		this->SetLocation(GetLocation() - normal_velocity + down_force * Timing::sInstance.GetDeltaTime());
+		this->SetLocation(
+			GetLocation() - normal_velocity + down_force * Timing::sInstance.GetDeltaTime());
 		mSpriteComponent->UpdatePosition();
 	}
 }

@@ -44,16 +44,6 @@ public:
 
 	virtual unsigned int GetCategory() const;
 	virtual sf::FloatRect GetBoundingRect() const;
-
-	virtual uint32_t Write(OutputMemoryBitStream& inOutputStream, const uint32_t inDirtyState) const
-	{
-		(void)inOutputStream;
-		(void)inDirtyState;
-		return 0;
-	}
-
-	virtual void Read(InputMemoryBitStream& inInputStream) { (void)inInputStream; }
-
 private:
 	Vector3 mLocation;
 

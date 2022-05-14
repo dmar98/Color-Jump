@@ -131,7 +131,7 @@ Character* WorldClient::AddCharacter(const int player_id, const EColorType color
 		static_cast<int>(color)));
 
 	std::shared_ptr<CharacterClient> player;
-	if (color == EColorType::kRed)
+	if (color == kRed)
 	{
 		player.reset(new CharacterClient(color, m_level_info.m_red_player_rect));
 		player->SetLocation(m_level_info.m_red_player_spawn_pos);
@@ -157,7 +157,7 @@ Character* WorldClient::AddCharacter(const int player_id, const EColorType color
 Character* WorldClient::AddGhostCharacter(const int player_id, const EColorType color)
 {
 	std::shared_ptr<GhostCharacterClient> ghost_char;
-	if (color == EColorType::kRed)
+	if (color == kRed)
 	{
 		ghost_char.reset(new GhostCharacterClient(color, m_level_info.m_red_player_rect));
 		ghost_char->SetLocation(m_level_info.m_red_player_spawn_pos);
@@ -241,7 +241,7 @@ void WorldClient::SetCheckpointToPlatformWithID(const int platform_id)
 	if (new_checkpoint != nullptr)
 	{
 		m_checkpoint = new_checkpoint;
-		m_checkpoint->SetType(EPlatformType::kCheckpointActivated);
+		m_checkpoint->SetType(kCheckpointActivated);
 		AudioManager::sInstance->Play("Checkpoint");
 	}
 }
@@ -277,7 +277,7 @@ void WorldClient::UpdatePlatform(const int id, const int platform_id,
 	{
 		if (platform->GetID() == platform_id)
 		{
-			if (platform_type == EPlatformType::kCheckpointActivated)
+			if (platform_type == kCheckpointActivated)
 			{
 				if (GetClientCharacter()->GetPlayerID() == id)
 				{

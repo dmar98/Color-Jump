@@ -9,8 +9,6 @@ public:
 	void Update() override;
 	void HandleDying() override;
 
-	void Read(InputMemoryBitStream& inInputStream) override;
-
 	void SetTransparent() const;
 	void SetOpaque() const;
 	unsigned int GetCategory() const override;

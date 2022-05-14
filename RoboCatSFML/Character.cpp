@@ -14,7 +14,10 @@ const Vector3& Character::GetVelocity() const
 void Character::Accelerate(const float vx, const float vy)
 {
 	m_velocity.mX += vx;
-	m_velocity.mY += vy;
+	if (abs( m_velocity.mY ) <= 600)
+	{
+		m_velocity.mY += vy;
+	}
 }
 
 void Character::Accelerate(const sf::Vector2f vector2)
@@ -162,16 +165,11 @@ std::string Character::GetName() const
 
 unsigned Character::GetCategory() const
 {
-	if (m_type == EColorType::kRed)
+	if (m_type == kRed)
 	{
 		return static_cast<int>(Category::kPlayerRed);
 	}
 	return static_cast<int>(Category::kPlayerBlue);
-}
-
-uint32_t Character::Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const
-{
-	return GameObject::Write(inOutputStream, inDirtyState);
 }
 
 void Character::Update()

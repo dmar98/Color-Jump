@@ -47,12 +47,12 @@ bool Tile::HandleCollision(const EColorType color)
 	{
 	case kHorizontalBluePlatformPart:
 	case kVerticalBluePlatformPart:
-		if (color != EColorType::kBlue)
+		if (color != kBlue)
 			return false;
 		break;
 	case kHorizontalRedPlatformPart:
 	case kVerticalRedPlatformPart:
-		if (color != EColorType::kRed)
+		if (color != kRed)
 			return false;
 		break;
 	default:
