@@ -5,7 +5,7 @@
 
 //Each Platform in the game has a type to determine what happens when the player collides with it.
 //The values of the Platform types depend on the platform part tile type it's associated with.
-enum class EPlatformType
+enum EPlatformType
 {
 	kNormal = kHorizontalPlatformPart,
 	kHorizontalImpact = kHorizontalImpactPlatformPart,

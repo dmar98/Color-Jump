@@ -29,14 +29,14 @@ bool Platform::HandlePlayerCollisionAndChangeColor(const EColorType color_type)
 	{
 	//Impact Platforms change color to the color of the colliding player
 	case EPlatformType::kHorizontalImpact:
-		if (color_type == EColorType::kBlue)
+		if (color_type == kBlue)
 			SetType(EPlatformType::kHorizontalBlue);
 		else
 			SetType(EPlatformType::kHorizontalRed);
 		break;
 	//Impact Platforms change color to the color of the colliding player
 	case EPlatformType::kVerticalImpact:
-		if (color_type == EColorType::kBlue)
+		if (color_type == kBlue)
 			SetType(EPlatformType::kVerticalBlue);
 		else
 			SetType(EPlatformType::kVerticalRed);
@@ -44,13 +44,13 @@ bool Platform::HandlePlayerCollisionAndChangeColor(const EColorType color_type)
 	//Only the Blue Player can collide with the blue platforms
 	case EPlatformType::kHorizontalBlue:
 	case EPlatformType::kVerticalBlue:
-		if (color_type != EColorType::kBlue)
+		if (color_type != kBlue)
 			return false;
 		break;
 	//Only the Red Player can collide with the red platforms
 	case EPlatformType::kHorizontalRed:
 	case EPlatformType::kVerticalRed:
-		if (color_type != EColorType::kRed)
+		if (color_type != kRed)
 			return false;
 		break;
 	case EPlatformType::kNormal:
@@ -71,13 +71,13 @@ bool Platform::HandlePlayerCollision(const EColorType color_type)
 	//Only the Blue Player can collide with the blue platforms
 	case EPlatformType::kHorizontalBlue:
 	case EPlatformType::kVerticalBlue:
-		if (color_type != EColorType::kBlue)
+		if (color_type != kBlue)
 			return false;
 		break;
 	//Only the Red Player can collide with the red platforms
 	case EPlatformType::kHorizontalRed:
 	case EPlatformType::kVerticalRed:
-		if (color_type != EColorType::kRed)
+		if (color_type != kRed)
 			return false;
 		break;
 	case EPlatformType::kHorizontalImpact:

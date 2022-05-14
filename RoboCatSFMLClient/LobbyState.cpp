@@ -72,11 +72,11 @@ void LobbyState::HandleTeamChoice(const int team_id)
 	{
 		if (team_id == 0 || m_team_selections[team_id].empty())
 		{
-			NetworkManagerClient::sInstance->UpdateTeam(team_id, EColorType::kBlue);
+			NetworkManagerClient::sInstance->UpdateTeam(team_id, kBlue);
 		}
 		else
 		{
-			NetworkManagerClient::sInstance->UpdateTeam(team_id, EColorType::kRed);
+			NetworkManagerClient::sInstance->UpdateTeam(team_id, kRed);
 		}
 	}
 }
@@ -283,6 +283,8 @@ void LobbyState::MovePlayer(int player_id, const int team_id)
 	m_player_team_selection[player_id] = team_id;
 
 	UpdateTeamMembers(team_id);
+
+
 }
 
 void LobbyState::RemovePlayer(const int player_id)
@@ -310,6 +312,7 @@ void LobbyState::AddPlayer(const int id, const std::string& label_text, const bo
 
 	if (m_players.try_emplace(id, label).second)
 	{
+		m_player_ready.try_emplace(id, ready);
 		m_gui_container.Pack(label);
 		m_player_team_selection.try_emplace(id, 0);
 	}
@@ -347,17 +350,17 @@ void LobbyState::UpdateTeamMembers(const int team_id)
 		{
 			if (i == 0)
 			{
-				NetworkManagerClient::sInstance->UpdateColor(EColorType::kBlue);
+				NetworkManagerClient::sInstance->UpdateColor(kBlue);
 				//m_players[player_id]->SetTextColor(sf::Color::Blue);
 			}
 			else
 			{
-				NetworkManagerClient::sInstance->UpdateColor(EColorType::kRed);
+				NetworkManagerClient::sInstance->UpdateColor(kRed);
 				/*m_players[player_id]->SetTextColor(sf::Color::Red);*/
 			}
 		}
 
-		UpdateNameColor(player_id);
+		SetReady(player_id, m_player_ready[player_id]);
 
 		i++;
 	}
@@ -428,8 +431,11 @@ void LobbyState::UpdateNameColor(const int player_id)
 
 void LobbyState::SetReady(const int player_id, const bool ready)
 {
+	m_player_ready[player_id] = ready;
+
 	if(ready)
 	{
+		
 		//Player is ready -> change name color to green
 		m_players[player_id]->SetTextColor(sf::Color::Green);
 	}

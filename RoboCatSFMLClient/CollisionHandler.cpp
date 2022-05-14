@@ -4,21 +4,21 @@ bool CollisionHandler::CheckPlatform(const Platform* platform, EColorType charac
 {
 	const auto platform_type = platform->GetPlatformType();
 
-	if (platform_type == EPlatformType::kVerticalNormal)
+	if (platform_type == kVerticalNormal)
 		return true;
 
-	if (character == EColorType::kBlue)
+	if (character == kBlue)
 	{
-		if (platform_type == EPlatformType::kHorizontalBlue ||
-			platform_type == EPlatformType::kVerticalBlue)
+		if (platform_type == kHorizontalBlue ||
+			platform_type == kVerticalBlue)
 		{
 			return true;
 		}
 	}
-	else if (character == EColorType::kRed)
+	else if (character == kRed)
 	{
-		if (platform_type == EPlatformType::kHorizontalRed ||
-			platform_type == EPlatformType::kVerticalRed)
+		if (platform_type == kHorizontalRed ||
+			platform_type == kVerticalRed)
 		{
 			return true;
 		}
@@ -29,10 +29,10 @@ bool CollisionHandler::CheckPlatform(const Platform* platform, EColorType charac
 
 bool CollisionHandler::IsVerticalPlatform(EPlatformType platform_type)
 {
-	return platform_type == EPlatformType::kVerticalNormal ||
-		platform_type == EPlatformType::kVerticalBlue ||
-		platform_type == EPlatformType::kVerticalImpact ||
-		platform_type == EPlatformType::kVerticalRed;
+	return platform_type == kVerticalNormal ||
+		platform_type == kVerticalBlue ||
+		platform_type == kVerticalImpact ||
+		platform_type == kVerticalRed;
 }
 
 bool CollisionHandler::MatchesCategories(GameObject::GOPair& collision, Category::Type type1, Category::Type type2)
@@ -61,7 +61,7 @@ void CollisionHandler::IsAtTheFinishLine(const Character* player_1, const Charac
 	const EPlatformType platform_type = platform->GetPlatformType();
 
 	//Check Win Condition
-	if (platform_type == EPlatformType::kCheckpoint)
+	if (platform_type == kCheckpoint)
 	{
 		if (player_1->IsOnPlatformOfType(platform_type))
 		{
@@ -69,7 +69,7 @@ void CollisionHandler::IsAtTheFinishLine(const Character* player_1, const Charac
 		}
 	}
 
-	if (platform_type == EPlatformType::kGoal)
+	if (platform_type == kGoal)
 	{
 		if (player_1 == nullptr ||
 			player_2 == nullptr)
@@ -88,7 +88,7 @@ void CollisionHandler::IsAtTheFinishLine(const Character* player_1, const Charac
 void CollisionHandler::ChangeVerticalPlatformColor(const Character& player, Platform* platform)
 {
 	// Set color of vertical platform if there is a collision from the side/underneath 
-	if (platform->GetPlatformType() == EPlatformType::kVerticalImpact)
+	if (platform->GetPlatformType() == kVerticalImpact)
 	{
 		platform->HandlePlayerCollisionAndChangeColor(player.GetCharacterType());
 		NetworkManagerClient::sInstance->UpdatePlatform(platform->GetID(), platform->GetPlatformType());
@@ -136,11 +136,11 @@ bool CollisionHandler::IsPlayerBelowPlatform(const Character& player, const Plat
 
 bool CollisionHandler::IsPlatformStatic(EPlatformType platform_type)
 {
-	if (platform_type == EPlatformType::kNormal ||
-		platform_type == EPlatformType::kVerticalNormal ||
-		platform_type == EPlatformType::kGoal ||
-		platform_type == EPlatformType::kCheckpoint ||
-		platform_type == EPlatformType::kCheckpointActivated)
+	if (platform_type == kNormal ||
+		platform_type == kVerticalNormal ||
+		platform_type == kGoal ||
+		platform_type == kCheckpoint ||
+		platform_type == kCheckpointActivated)
 	{
 		return true;
 	}
@@ -149,8 +149,8 @@ bool CollisionHandler::IsPlatformStatic(EPlatformType platform_type)
 
 bool CollisionHandler::IsPlatformStillChangeable(EPlatformType platform_type)
 {
-	return platform_type == EPlatformType::kHorizontalImpact ||
-		platform_type == EPlatformType::kVerticalImpact;
+	return platform_type == kHorizontalImpact ||
+		platform_type == kVerticalImpact;
 }
 
 bool CollisionHandler::IsPlayerAtHisPlatform(const Character& player, const Platform* platform)
@@ -171,19 +171,19 @@ bool CollisionHandler::CheckPlatformUnderneath(EColorType color, EPlatformType p
 	if (IsPlatformStatic(platform))
 		return true;
 
-	if (color == EColorType::kRed)
+	if (color == kRed)
 	{
-		if (platform == EPlatformType::kVerticalRed ||
-			platform == EPlatformType::kHorizontalRed)
+		if (platform == kVerticalRed ||
+			platform == kHorizontalRed)
 		{
 			return true;
 		}
 	}
 
-	if (color == EColorType::kBlue)
+	if (color == kBlue)
 	{
-		if (platform == EPlatformType::kVerticalBlue ||
-			platform == EPlatformType::kHorizontalBlue)
+		if (platform == kVerticalBlue ||
+			platform == kHorizontalBlue)
 		{
 			return true;
 		}

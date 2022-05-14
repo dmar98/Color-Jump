@@ -50,7 +50,6 @@ class CharacterClient;
 #include "TitleState.hpp"
 #include "TutorialState.hpp"
 
-#include "ReplicationManagerClient.hpp"
 #include "NetworkManagerClient.hpp"
 #include "Client.hpp"
 #include "PlayerDataManager.hpp"

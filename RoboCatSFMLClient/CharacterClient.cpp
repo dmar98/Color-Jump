@@ -32,11 +32,6 @@ void CharacterClient::HandleDying()
 	Character::HandleDying();
 }
 
-void CharacterClient::Read(InputMemoryBitStream& inInputStream)
-{
-	Character::Read(inInputStream);
-}
-
 void CharacterClient::SetTransparent() const
 {
 	const auto& color = mSpriteComponent->GetSprite().getColor();

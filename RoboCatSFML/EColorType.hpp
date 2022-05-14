@@ -1,5 +1,5 @@
 #pragma once
-enum class EColorType
+enum EColorType
 {
 	kBlue,
 	kRed

@@ -90,9 +90,6 @@
     <ClInclude Include="WeightedTimedMovingAverage.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AckRange.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ByteSwap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -189,9 +186,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColorJumpPCH.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AckRange.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DeliveryNotificationManager.cpp">

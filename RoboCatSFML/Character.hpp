@@ -35,9 +35,6 @@ public:
 	std::string GetName() const;
 	unsigned GetCategory() const override;
 
-	uint32_t Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const override;
-
-
 	static float GetMaxSpeed();
 	virtual void Jump();
 	virtual void SetGrounded(Platform* platform);

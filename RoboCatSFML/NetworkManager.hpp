@@ -4,7 +4,7 @@ using IntToGameObjectMap = unordered_map<int, GameObjectPtr>;
 class NetworkManager
 {
 public:
-	enum class PacketType
+	enum PacketType
 	{
 		PT_Hello,
 		PT_Quit,

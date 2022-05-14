@@ -28,12 +28,12 @@ private:
 	void HandlePacketFromNewClient(InputMemoryBitStream& inInputStream,
 	                               const SocketAddress& inFromAddress);
 	void HandleTeamChange(const ClientProxyPtr& inClientProxy,
-	                      InputMemoryBitStream& in_input_stream);
+	                      InputMemoryBitStream& inInputStream);
 	void HandleColorChange(const ClientProxyPtr& inClientProxy,
-	                       InputMemoryBitStream& in_input_stream);
+	                       InputMemoryBitStream& inInputStream);
 
 	void HandlePlayerNameChange(const ClientProxyPtr& client_proxy,
-	                            InputMemoryBitStream& input_memory_bit_stream);
+	                            InputMemoryBitStream& inInputStream);
 	void HandleGoalReached(InputMemoryBitStream& inInputStream);
 	void HandleTeamDeath(InputMemoryBitStream& inInputStream);
 	void HandleCheckpoint(InputMemoryBitStream& inInputStream);

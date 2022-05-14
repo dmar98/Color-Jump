@@ -162,16 +162,11 @@ std::string Character::GetName() const
 
 unsigned Character::GetCategory() const
 {
-	if (m_type == EColorType::kRed)
+	if (m_type == kRed)
 	{
 		return static_cast<int>(Category::kPlayerRed);
 	}
 	return static_cast<int>(Category::kPlayerBlue);
-}
-
-uint32_t Character::Write(OutputMemoryBitStream& inOutputStream, uint32_t inDirtyState) const
-{
-	return GameObject::Write(inOutputStream, inDirtyState);
 }
 
 void Character::Update()
@@ -180,6 +175,6 @@ void Character::Update()
 	Accelerate(-m_velocity.mX * 0.75f, 0);
 	if (!m_grounded)
 	{
-		Accelerate(0, 9.81f * 2);
+		Accelerate(0, 9.81f);
 	}
 }

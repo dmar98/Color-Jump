@@ -16,7 +16,7 @@ void PlatformClient::AddPlatformPart(PlatformPart* tile)
 
 	//In the tileset, the pulse and normal vertical platforms uses a gray platform sprite,
 	//which has to be replaced here.
-	if (m_is_pulse || tile->GetPlatform()->GetPlatformType() == EPlatformType::kVerticalNormal)
+	if (m_is_pulse || tile->GetPlatform()->GetPlatformType() == kVerticalNormal)
 	{
 		client_platform_part->SetTexture(m_current_texture,
 							  sf::IntRect(0, 0, m_current_texture->getSize().x,
@@ -32,39 +32,39 @@ bool PlatformClient::HandlePlayerCollisionAndChangeColor(const EColorType color_
 	switch (m_type)
 	{
 	//Impact Platforms change color to the color of the colliding player
-	case EPlatformType::kHorizontalImpact:
-		if (color_type == EColorType::kBlue)
-			SetType(EPlatformType::kHorizontalBlue);
+	case kHorizontalImpact:
+		if (color_type == kBlue)
+			SetType(kHorizontalBlue);
 		else
-			SetType(EPlatformType::kHorizontalRed);
+			SetType(kHorizontalRed);
 
 		AudioManager::sInstance->Play("PlatformColorChange");
 		break;
 	//Impact Platforms change color to the color of the colliding player
-	case EPlatformType::kVerticalImpact:
-		if (color_type == EColorType::kBlue)
-			SetType(EPlatformType::kVerticalBlue);
+	case kVerticalImpact:
+		if (color_type == kBlue)
+			SetType(kVerticalBlue);
 		else
-			SetType(EPlatformType::kVerticalRed);
+			SetType(kVerticalRed);
 
 		AudioManager::sInstance->Play("PlatformColorChange");
 		break;
 	//Only the Blue Player can collide with the blue platforms
-	case EPlatformType::kHorizontalBlue:
-	case EPlatformType::kVerticalBlue:
-		if (color_type != EColorType::kBlue)
+	case kHorizontalBlue:
+	case kVerticalBlue:
+		if (color_type != kBlue)
 			return false;
 		break;
 	//Only the Red Player can collide with the red platforms
-	case EPlatformType::kHorizontalRed:
-	case EPlatformType::kVerticalRed:
-		if (color_type != EColorType::kRed)
+	case kHorizontalRed:
+	case kVerticalRed:
+		if (color_type != kRed)
 			return false;
 		break;
-	case EPlatformType::kNormal:
-	case EPlatformType::kHorizontalPulse:
-	case EPlatformType::kVerticalNormal:
-	case EPlatformType::kGoal:
+	case kNormal:
+	case kHorizontalPulse:
+	case kVerticalNormal:
+	case kGoal:
 	default:
 		break;
 	}
@@ -77,23 +77,23 @@ bool PlatformClient::HandlePlayerCollision(const EColorType color_type)
 	switch (m_type)
 	{
 	//Only the Blue Player can collide with the blue platforms
-	case EPlatformType::kHorizontalBlue:
-	case EPlatformType::kVerticalBlue:
-		if (color_type != EColorType::kBlue)
+	case kHorizontalBlue:
+	case kVerticalBlue:
+		if (color_type != kBlue)
 			return false;
 		break;
 	//Only the Red Player can collide with the red platforms
-	case EPlatformType::kHorizontalRed:
-	case EPlatformType::kVerticalRed:
-		if (color_type != EColorType::kRed)
+	case kHorizontalRed:
+	case kVerticalRed:
+		if (color_type != kRed)
 			return false;
 		break;
-	case EPlatformType::kHorizontalImpact:
-	case EPlatformType::kVerticalImpact:
-	case EPlatformType::kNormal:
-	case EPlatformType::kHorizontalPulse:
-	case EPlatformType::kVerticalNormal:
-	case EPlatformType::kGoal:
+	case kHorizontalImpact:
+	case kVerticalImpact:
+	case kNormal:
+	case kHorizontalPulse:
+	case kVerticalNormal:
+	case kGoal:
 	default:
 		break;
 	}
@@ -110,48 +110,48 @@ void PlatformClient::SetType(const EPlatformType type)
 
 	switch (type)
 	{
-	case EPlatformType::kHorizontalBlue:
+	case kHorizontalBlue:
 	{
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("HImpactBluePlatform"));
 	}
 	break;
-	case EPlatformType::kHorizontalRed:
+	case kHorizontalRed:
 	{
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("HImpactRedPlatform"));
 	}
 	break;
-	case EPlatformType::kVerticalBlue:
+	case kVerticalBlue:
 	{
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("VImpactBluePlatform"));
 	}
 	break;
-	case EPlatformType::kVerticalRed:
+	case kVerticalRed:
 	{
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("VImpactRedPlatform"));
 	}
 	break;
-	case EPlatformType::kHorizontalPulse:
+	case kHorizontalPulse:
 	{
 		m_is_pulse = true;
-		SetType(EPlatformType::kHorizontalRed);
+		SetType(kHorizontalRed);
 	}
 	break;
-	case EPlatformType::kCheckpointActivated:
+	case kCheckpointActivated:
 	{
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("ActivatedCheckpointPlatform"));
 	}
 	break;
-	case EPlatformType::kHorizontalImpact:
+	case kHorizontalImpact:
 	{
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("HImpactBlankPlatform"));
 	}
 	break;
-	case EPlatformType::kVerticalImpact:
+	case kVerticalImpact:
 	{
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("VImpactBlankPlatform"));
 	}
 	break;
-	case EPlatformType::kVerticalNormal:
+	case kVerticalNormal:
 	{
 		SetTextureOnParts(TextureManager::sInstance->GetTexture("VNormalPlatform"));
 	}
@@ -174,17 +174,17 @@ void PlatformClient::Update()
 	{
 		switch (m_type)
 		{
-		case EPlatformType::kHorizontalBlue:
-			SetType(EPlatformType::kHorizontalRed);
+		case kHorizontalBlue:
+			SetType(kHorizontalRed);
 			break;
-		case EPlatformType::kHorizontalRed:
-			SetType(EPlatformType::kHorizontalBlue);
+		case kHorizontalRed:
+			SetType(kHorizontalBlue);
 			break;
-		case EPlatformType::kVerticalBlue:
-			SetType(EPlatformType::kVerticalRed);
+		case kVerticalBlue:
+			SetType(kVerticalRed);
 			break;
-		case EPlatformType::kVerticalRed:
-			SetType(EPlatformType::kVerticalBlue);
+		case kVerticalRed:
+			SetType(kVerticalBlue);
 			break;
 		}
 
