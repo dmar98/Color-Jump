@@ -175,6 +175,6 @@ void Character::Update()
 	Accelerate(-m_velocity.mX * 0.75f, 0);
 	if (!m_grounded)
 	{
-		Accelerate(0, 9.81f * 2);
+		Accelerate(0, 9.81f);
 	}
 }
