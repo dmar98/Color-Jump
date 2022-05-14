@@ -31,8 +31,5 @@ private:
 	SpriteComponentPtr mSpriteComponent;
 	TextComponentPtr m_name_text;
 	TextComponentPtr m_team_id_text;
-
-	bool m_show_jump_animation{};
-	/*Animation m_jump_smoke_animation;*/
 };
 
