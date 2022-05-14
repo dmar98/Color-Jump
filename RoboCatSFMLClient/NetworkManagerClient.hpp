@@ -93,7 +93,7 @@ private:
 
 	void SendHelloPacket();
 	void SendQuitPacket();
-	void SendPlayerPacket();
+	void SendNamePacket();
 	void SendGoalPacket();
 	void SendStartGamePacket();
 	void SendTeamDeathPacket();
@@ -107,12 +107,12 @@ private:
 
 	void HandleStatePacket() const;
 	void HandleGameStatePacket(InputMemoryBitStream& inInputStream) const;
-	void HandlePlayerPacket(InputMemoryBitStream& input_memory_bit_stream) const;
+	void HandlePlayerPacket(InputMemoryBitStream& inInputStream) const;
 
-	void HandleQuitPacket(InputMemoryBitStream& input_memory_bit_stream);
-	void HandlePlayerNamePacket(InputMemoryBitStream& input_memory_bit_stream);
-	void HandleInitialStatePacket(InputMemoryBitStream& input_memory_bit_stream) const;
-	void HandleReadyChange(InputMemoryBitStream& input_memory_bit_stream);
+	void HandleQuitPacket(InputMemoryBitStream& inInputStream);
+	void HandlePlayerNamePacket(InputMemoryBitStream& inInputStream);
+	void HandleInitialStatePacket(InputMemoryBitStream& inInputStream) const;
+	void HandleReadyChange(InputMemoryBitStream& inInputStream);
 
 	void HandleTeamChange(InputMemoryBitStream& inInputStream);
 	void HandleColorChange(InputMemoryBitStream& inInputStream);

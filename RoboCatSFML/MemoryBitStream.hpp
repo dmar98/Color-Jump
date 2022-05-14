@@ -57,13 +57,10 @@ public:
 
 	void Write(const bool inData) { WriteBits(&inData, 1); }
 
-	void Write(const Vector3& inVector);
-	void Write(const Quaternion& inQuat);
-
 	void Write(const std::string& inString)
 	{
 		const uint32_t elementCount = inString.size();
-		Write(elementCount);
+		Write(elementCount, 4);
 		for (const auto& element : inString)
 		{
 			Write(element);
@@ -130,8 +127,6 @@ public:
 	void Read(uint8_t& outData, uint32_t inBitCount = 8) { ReadBits(&outData, inBitCount); }
 	void Read(bool& outData) { ReadBits(&outData, 1); }
 
-	void Read(Quaternion& outQuat);
-
 	void ResetToCapacity(uint32_t inByteCapacity)
 	{
 		mBitCapacity = inByteCapacity << 3;
@@ -141,16 +136,14 @@ public:
 
 	void Read(std::string& inString)
 	{
-		uint32_t elementCount;
-		Read(elementCount);
+		uint32_t elementCount = 0;
+		Read(elementCount, 4);
 		inString.resize(elementCount);
 		for (auto& element : inString)
 		{
 			Read(element);
 		}
 	}
-
-	void Read(Vector3& inVector);
 
 private:
 	char* mBuffer;

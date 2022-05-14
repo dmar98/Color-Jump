@@ -7,7 +7,7 @@ ClientProxy::ClientProxy(const SocketAddress& inSocketAddress, string inName,
 	mName(std::move(inName)),
 	mPlayerId(inPlayerId),
 	mTeamId(0),
-	mColor(EColorType::kBlue),
+	mColor(kBlue),
 	mReady(false)
 {
 	UpdateLastPacketTime();

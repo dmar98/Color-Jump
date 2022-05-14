@@ -152,7 +152,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AckRange.hpp" />
     <ClInclude Include="ByteSwap.hpp" />
     <ClInclude Include="Category.hpp" />
     <ClInclude Include="Character.hpp" />
@@ -190,7 +189,6 @@
     <ClInclude Include="World.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AckRange.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="DeliveryNotificationManager.cpp" />
     <ClCompile Include="Engine.cpp" />

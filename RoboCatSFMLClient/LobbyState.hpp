@@ -122,6 +122,7 @@ private:
 	GUI::Container m_gui_fail_container;
 
 	std::map<int, GUI::Label::Ptr> m_players;
+	std::map<int, bool> m_player_ready;
 
 	bool m_ready;
 	int m_local_id;

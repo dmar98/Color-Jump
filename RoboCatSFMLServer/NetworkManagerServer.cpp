@@ -49,13 +49,13 @@ void NetworkManagerServer::ProcessPacket(InputMemoryBitStream& inInputStream,
 
 
 void NetworkManagerServer::HandlePlayerNameChange(const ClientProxyPtr& client_proxy,
-                                                  InputMemoryBitStream& input_memory_bit_stream)
+                                                  InputMemoryBitStream& inInputStream)
 {
-	int player_id;
+	int player_id = 0;
 	std::string name;
 
-	input_memory_bit_stream.Read(player_id);
-	input_memory_bit_stream.Read(name);
+	inInputStream.Read(player_id, 5);
+	inInputStream.Read(name);
 	name = name.substr(0, 20);
 
 	client_proxy->SetName(name);
@@ -70,11 +70,11 @@ void NetworkManagerServer::HandlePlayerNameChange(const ClientProxyPtr& client_p
 
 void NetworkManagerServer::HandleGoalReached(InputMemoryBitStream& inInputStream)
 {
-	int player_id;
-	int team_id;
+	int player_id = 0;
+	int team_id = 0;
 
-	inInputStream.Read(player_id);
-	inInputStream.Read(team_id);
+	inInputStream.Read(player_id, 5);
+	inInputStream.Read(team_id, 4);
 
 	auto p_function = [this, player_id, team_id](const ClientProxyPtr& client)
 	{
@@ -86,11 +86,11 @@ void NetworkManagerServer::HandleGoalReached(InputMemoryBitStream& inInputStream
 
 void NetworkManagerServer::HandleTeamDeath(InputMemoryBitStream& inInputStream)
 {
-	int player_id;
-	int team_id;
+	int player_id = 0;
+	int team_id = 0;
 
-	inInputStream.Read(player_id);
-	inInputStream.Read(team_id);
+	inInputStream.Read(player_id, 5);
+	inInputStream.Read(team_id, 4);
 
 	auto p_function = [this, player_id, team_id](const ClientProxyPtr& client)
 	{
@@ -102,12 +102,12 @@ void NetworkManagerServer::HandleTeamDeath(InputMemoryBitStream& inInputStream)
 
 void NetworkManagerServer::HandleCheckpoint(InputMemoryBitStream& inInputStream)
 {
-	int player_id;
-	int team_id;
-	int platform_id;
+	int player_id = 0;
+	int team_id = 0;
+	int platform_id = 0;
 
-	inInputStream.Read(player_id);
-	inInputStream.Read(team_id);
+	inInputStream.Read(player_id, 5);
+	inInputStream.Read(team_id, 4);
 	inInputStream.Read(platform_id);
 
 	auto p_function = [this, player_id, team_id, platform_id](const ClientProxyPtr& client)
@@ -120,11 +120,11 @@ void NetworkManagerServer::HandleCheckpoint(InputMemoryBitStream& inInputStream)
 
 void NetworkManagerServer::HandlePlatformChange(InputMemoryBitStream& inInputStream)
 {
-	int player_id;
-	int platform_id;
-	EPlatformType platform_color;
+	int player_id= 0;
+	int platform_id= 0;
+	auto platform_color = static_cast<EPlatformType>(0);
 
-	inInputStream.Read(player_id);
+	inInputStream.Read(player_id, 5);
 	inInputStream.Read(platform_id);
 	inInputStream.Read(platform_color);
 
@@ -140,7 +140,7 @@ void NetworkManagerServer::NotifyCountDown(const ClientProxyPtr& client)
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Start_Game_Countdown);
+	packet.Write(PT_Start_Game_Countdown, 5);
 
 	SendPacket(packet, client->GetSocketAddress());
 }
@@ -178,10 +178,10 @@ void NetworkManagerServer::CheckIfAllReady()
 void NetworkManagerServer::HandleReadyPacket(const ClientProxyPtr& client_proxy,
                                              InputMemoryBitStream& inInputStream)
 {
-	int player_id;
-	bool ready;
+	int player_id = 0;
+	bool ready = false;
 
-	inInputStream.Read(player_id);
+	inInputStream.Read(player_id, 5);
 	inInputStream.Read(ready);
 
 	client_proxy->SetIsReady(ready);
@@ -199,11 +199,11 @@ void NetworkManagerServer::HandleReadyPacket(const ClientProxyPtr& client_proxy,
 void NetworkManagerServer::HandleGameStatePacket(const ClientProxyPtr& client_proxy,
                                                  InputMemoryBitStream& inInputStream)
 {
-	int player_id;
-	float x;
-	float y;
+	int player_id = 0;
+	float x = 0;
+	float y = 0;
 
-	inInputStream.Read(player_id);
+	inInputStream.Read(player_id, 5);
 	inInputStream.Read(x);
 	inInputStream.Read(y);
 
@@ -218,51 +218,51 @@ void NetworkManagerServer::ProcessPacket(const ClientProxyPtr& inClientProxy,
 	//remember we got a packet so we know not to disconnect for a bit
 	inClientProxy->UpdateLastPacketTime();
 
-	PacketType packetType;
-	inInputStream.Read(packetType);
+	auto packetType = static_cast<PacketType>(0);
+	inInputStream.Read(packetType, 5);
 	switch (packetType)
 	{
-	case PacketType::PT_Hello:
+	case PT_Hello:
 		SendWelcomePacket(inClientProxy);
 		break;
-	case PacketType::PT_State_Lobby:
+	case PT_State_Lobby:
 		SendStatePacketToClient(inClientProxy);
 		break;
-	case PacketType::PT_Quit:
+	case PT_Quit:
 		HandleClientDisconnected(inClientProxy);
 		break;
-	case PacketType::PT_Team_Changed:
+	case PT_Team_Changed:
 		HandleTeamChange(inClientProxy, inInputStream);
 		break;
-	case PacketType::PT_Color:
+	case PT_Color:
 		HandleColorChange(inClientProxy, inInputStream);
 		break;
-	case PacketType::PT_Platform:
+	case PT_Platform:
 		HandlePlatformChange(inInputStream);
 		break;
-	case PacketType::PT_Name:
+	case PT_Name:
 		HandlePlayerNameChange(inClientProxy, inInputStream);
 		break;
-	case PacketType::PT_Goal:
+	case PT_Goal:
 		HandleGoalReached(inInputStream);
 		break;
-	case PacketType::PT_Team_Death:
+	case PT_Team_Death:
 		HandleTeamDeath(inInputStream);
 		break;
-	case PacketType::PT_Checkpoint:
+	case PT_Checkpoint:
 		HandleCheckpoint(inInputStream);
 		break;
-	case PacketType::PT_Ready:
+	case PT_Ready:
 		HandleReadyPacket(inClientProxy, inInputStream);
 		break;
-	case PacketType::PT_Game_State:
+	case PT_Game_State:
 		HandleGameStatePacket(inClientProxy, inInputStream);
 		break;
-	case PacketType::PT_Player_Connect:
-	case PacketType::PT_Initial_State:
-	case PacketType::PT_Start_Game:
-	case PacketType::PT_Start_Game_Countdown:
-	case PacketType::PT_Spawn:
+	case PT_Player_Connect:
+	case PT_Initial_State:
+	case PT_Start_Game:
+	case PT_Start_Game_Countdown:
+	case PT_Spawn:
 		break;
 	default:
 		LOG("Unknown packet type received from %s",
@@ -275,14 +275,14 @@ void NetworkManagerServer::SendInitialState(const ClientProxyPtr& client_proxy)
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Initial_State);
+	packet.Write(PT_Initial_State, 5);
 	const int size = mPlayerIdToClientMap.size();
-	packet.Write(size);
+	packet.Write(size, 5);
 
 	for (const auto& player : mPlayerIdToClientMap)
 	{
-		packet.Write(player.second->GetPlayerId());
-		packet.Write(player.second->GetTeamID());
+		packet.Write(player.second->GetPlayerId(), 5);
+		packet.Write(player.second->GetTeamID(), 4);
 		packet.Write(player.second->GetName());
 		packet.Write(player.second->GetReady());
 	}
@@ -297,9 +297,9 @@ void NetworkManagerServer::NotifyOfTeamChange(const ClientProxyPtr& inClientProx
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Team_Changed);
-	packet.Write(player_id);
-	packet.Write(team_id);
+	packet.Write(PT_Team_Changed, 5);
+	packet.Write(player_id, 5);
+	packet.Write(team_id, 4);
 
 	LOG("Server Team Change, client '%s' as player %d changed to team %d",
 	    inClientProxy->GetName().c_str(),
@@ -313,8 +313,8 @@ void NetworkManagerServer::NotifyPlayerNameChange(const ClientProxyPtr& inClient
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Name);
-	packet.Write(player_id);
+	packet.Write(PT_Name, 5);
+	packet.Write(player_id, 5);
 	packet.Write(name);
 
 	LOG("Server Name Change, %d is now called '%s'", player_id, name.c_str())
@@ -328,9 +328,9 @@ void NetworkManagerServer::NotifyGoalReached(const ClientProxyPtr& inClientProxy
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Goal);
-	packet.Write(player_id);
-	packet.Write(team_id);
+	packet.Write(PT_Goal, 5);
+	packet.Write(player_id, 5);
+	packet.Write(team_id, 4);
 	packet.Write(m_game_time);
 
 	LOG("Server Goal Reached, Team %d has reached the end", team_id)
@@ -343,9 +343,9 @@ void NetworkManagerServer::NotifyTeamRespawn(const ClientProxyPtr& inClientProxy
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Team_Death);
-	packet.Write(player_id);
-	packet.Write(team_id);
+	packet.Write(PT_Team_Death, 5);
+	packet.Write(player_id, 5);
+	packet.Write(team_id, 4);
 
 	LOG("Server Team Member Death, Member from team %d has died", team_id)
 
@@ -358,9 +358,9 @@ void NetworkManagerServer::NotifyCheckpointReached(const ClientProxyPtr& inClien
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Checkpoint);
-	packet.Write(player_id);
-	packet.Write(team_id);
+	packet.Write(PT_Checkpoint, 5);
+	packet.Write(player_id, 5);
+	packet.Write(team_id, 4);
 	packet.Write(platform_id);
 
 	LOG("Server Checpoint: Team %d has reached checkpoint with id %d", team_id, platform_id)
@@ -374,8 +374,8 @@ void NetworkManagerServer::NotifyPlatformUpdate(const ClientProxyPtr& inClientPr
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Platform);
-	packet.Write(player_id);
+	packet.Write(PT_Platform, 5);
+	packet.Write(player_id, 5);
 	packet.Write(platform_id);
 	packet.Write(platform_color);
 
@@ -390,8 +390,8 @@ void NetworkManagerServer::NotifyReadyChange(const ClientProxyPtr& inClientProxy
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Ready);
-	packet.Write(player_id);
+	packet.Write(static_cast<int>(PT_Ready), 5);
+	packet.Write(player_id, 5);
 	packet.Write(ready);
 
 	LOG("Server Player Ready, Player %d has changed his readiness to %d", player_id,
@@ -401,13 +401,13 @@ void NetworkManagerServer::NotifyReadyChange(const ClientProxyPtr& inClientProxy
 }
 
 void NetworkManagerServer::HandleTeamChange(const ClientProxyPtr& inClientProxy,
-                                            InputMemoryBitStream& in_input_stream)
+                                            InputMemoryBitStream& inInputStream)
 {
-	int player_id;
-	int team_id;
+	int player_id = 0;
+	int team_id = 0;
 
-	in_input_stream.Read(player_id);
-	in_input_stream.Read(team_id);
+	inInputStream.Read(player_id, 5);
+	inInputStream.Read(team_id, 4);
 
 	inClientProxy->SetTeamID(team_id);
 
@@ -420,20 +420,20 @@ void NetworkManagerServer::HandleTeamChange(const ClientProxyPtr& inClientProxy,
 }
 
 void NetworkManagerServer::HandleColorChange(const ClientProxyPtr& inClientProxy,
-                                             InputMemoryBitStream& in_input_stream)
+                                             InputMemoryBitStream& inInputStream)
 {
-	int player_id;
-	EColorType color;
+	int player_id = 0;
+	auto color = static_cast<EColorType>(0);
 
-	in_input_stream.Read(player_id);
-	in_input_stream.Read(color);
+	inInputStream.Read(player_id, 5);
+	inInputStream.Read(color);
 
 	inClientProxy->SetColor(color);
 
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Color);
-	packet.Write(player_id);
+	packet.Write(PT_Color, 5);
+	packet.Write(player_id, 5);
 
 	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
@@ -442,10 +442,9 @@ void NetworkManagerServer::HandleColorChange(const ClientProxyPtr& inClientProxy
 void NetworkManagerServer::HandlePacketFromNewClient(InputMemoryBitStream& inInputStream,
                                                      const SocketAddress& inFromAddress)
 {
-	//read the beginning- is it a hello?
-	PacketType packetType;
-	inInputStream.Read(packetType);
-	if (packetType == PacketType::PT_Hello && !m_game_started && mAddressToClientMap.size() < 16)
+	int packetType = 0;
+	inInputStream.Read(packetType, 5);
+	if (static_cast<PacketType>(packetType) == PT_Hello && !m_game_started && mAddressToClientMap.size() < 16)
 	{
 		//read the name
 		string name;
@@ -477,11 +476,12 @@ void NetworkManagerServer::SendWelcomePacket(const ClientProxyPtr& inClientProxy
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Hello);
+	packet.Write(PT_Hello, 5);
 	int player_id = inClientProxy->GetPlayerId();
-	packet.Write(player_id);
+	packet.Write(player_id, 5);
 
 	const string name = inClientProxy->GetName();
+
 	LOG("Server Welcoming, new client '%s' as player %d", name.c_str(),
 	    player_id)
 
@@ -503,8 +503,8 @@ void NetworkManagerServer::NotifyPlayerJoin(const ClientProxyPtr& inClientProxy,
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Player_Connect);
-	packet.Write(player_id);
+	packet.Write(PT_Player_Connect, 5);
+	packet.Write(player_id, 5);
 	packet.Write(name);
 
 	LOG("Server Player Join, Player %d joined the server", player_id)
@@ -529,7 +529,7 @@ void NetworkManagerServer::SendStatePacketToClient(const ClientProxyPtr& inClien
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_State_Lobby);
+	packet.Write(PT_State_Lobby, 5);
 
 	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
@@ -539,37 +539,20 @@ void NetworkManagerServer::SendGameStatePacket(const ClientProxyPtr& inClientPro
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Game_State);
+	packet.Write(PT_Game_State, 5);
 
-	const int in_data = mPlayerIdToClientMap.size();
-	packet.Write(in_data);
+	const int player_count = mPlayerIdToClientMap.size();
+	packet.Write(player_count, 5);
 
 	for (const auto& client : mPlayerIdToClientMap)
 	{
-		packet.Write(client.second->GetPlayerId());
+		packet.Write(client.second->GetPlayerId(), 5);
 		packet.Write(client.second->GetPosition().x);
 		packet.Write(client.second->GetPosition().y);
 	}
 
 	SendPacket(packet, inClientProxy->GetSocketAddress());
 }
-
-//should we ask the server for this? or run through the world ourselves?
-void NetworkManagerServer::AddWorldStateToPacket(OutputMemoryBitStream& inOutputStream)
-{
-	const auto& gameObjects = World::sInstance->GetGameObjects();
-
-	//now start writing objects- do we need to remember how many there are? we can check first...
-	inOutputStream.Write(gameObjects.size());
-
-	for (const GameObjectPtr& gameObject : gameObjects)
-	{
-		inOutputStream.Write(gameObject->GetNetworkId());
-		inOutputStream.Write(gameObject->GetClassId());
-		gameObject->Write(inOutputStream, 0xffffffff);
-	}
-}
-
 
 int NetworkManagerServer::GetNewNetworkId()
 {
@@ -625,7 +608,7 @@ void NetworkManagerServer::NotifyGameStart(const ClientProxyPtr& client)
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Start_Game);
+	packet.Write(PT_Start_Game, 5);
 
 	SendPacket(packet, client->GetSocketAddress());
 }
@@ -639,9 +622,10 @@ void NetworkManagerServer::NotifySpawnCharacters()
 
 		OutputMemoryBitStream packet;
 
-		packet.Write(PacketType::PT_Spawn);
+		packet.Write(PT_Spawn, 5);
 		const int size = mPlayerIdToClientMap.size();
-		packet.Write(size - 1);
+		const int ghost_count = size - 1;
+		packet.Write(ghost_count, 5);
 
 		for (int i = 0; i < size; ++i)
 		{
@@ -656,19 +640,19 @@ void NetworkManagerServer::NotifySpawnCharacters()
 
 				const shared_ptr<ClientProxy> client_proxy = player_info.second;
 
-				packet.Write(player_info.first);
-				packet.Write(client_proxy->GetTeamID());
+				packet.Write(player_info.first, 5);
+				packet.Write(client_proxy->GetTeamID(), 4);
 				LOG("Server Color Sent Ghost: %d", client_proxy->GetColor())
-				packet.Write(client_proxy->GetColor());
+				packet.Write(client_proxy->GetColor(), 1);
 				packet.Write(client_proxy->GetName());
 			}
 
 			const shared_ptr<ClientProxy> proxy = mPlayerIdToClientMap[id];
 
-			packet.Write(id);
-			packet.Write(proxy->GetTeamID());
+			packet.Write(id, 5);
+			packet.Write(proxy->GetTeamID(), 4);
 			LOG("Server Color Sent Client: %d", proxy->GetColor())
-			packet.Write(proxy->GetColor());
+			packet.Write(proxy->GetColor(), 1);
 			packet.Write(proxy->GetName());
 
 			SendPacket(packet, it.second->GetSocketAddress());
@@ -719,8 +703,8 @@ void NetworkManagerServer::NotifyPlayerQuit(const ClientProxyPtr& client, int pl
 {
 	OutputMemoryBitStream packet;
 
-	packet.Write(PacketType::PT_Quit);
-	packet.Write(player_id);
+	packet.Write(PT_Quit, 5);
+	packet.Write(player_id, 5);
 
 	SendPacket(packet, client->GetSocketAddress());
 }
