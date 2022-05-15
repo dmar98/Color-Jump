@@ -5,9 +5,6 @@
 bool Server::StaticInit()
 {
 	s_instance.reset(new Server());
-
-	World::StaticInit(new WorldServer());
-
 	return true;
 }
 

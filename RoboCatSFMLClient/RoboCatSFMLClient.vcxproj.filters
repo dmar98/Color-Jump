@@ -46,11 +46,41 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{f7d8a1ed-e6bb-463c-b35b-20d93669edb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{25d0783a-4f44-4d25-8a40-152dd2267500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DrawableComponents">
+      <UniqueIdentifier>{1bea3d0a-a477-4206-bfea-51e69513d606}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Player">
       <UniqueIdentifier>{df162c19-a88e-408e-8f81-97e9aafad729}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Player">
-      <UniqueIdentifier>{25d0783a-4f44-4d25-8a40-152dd2267500}</UniqueIdentifier>
+    <Filter Include="Header Files\Managers\Resources">
+      <UniqueIdentifier>{5cb46553-fad1-4db4-af84-c9892b8cf2f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers\Rendering">
+      <UniqueIdentifier>{e8ff973a-1b0a-4ffd-bd94-91ed80602e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers\Game">
+      <UniqueIdentifier>{0c54698b-7e1b-426e-9412-4dd902794906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{de66f5ce-c042-4a20-ae5f-1d41a68ab214}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers\Game">
+      <UniqueIdentifier>{566107a0-4a69-46d9-bc6d-4f214809f247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers\Rendering">
+      <UniqueIdentifier>{10e15b71-7775-4bdc-847f-e094e0272f65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers\Resources">
+      <UniqueIdentifier>{57fa2711-8ba9-46a2-adc2-589fc489142c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{f51ad9a2-c183-4712-b609-7cc2c2905a1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DrawableComponents">
+      <UniqueIdentifier>{15d902b0-0043-4214-9c11-e7f099e37251}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,40 +90,7 @@
     <ClInclude Include="ColorJumpClientPCH.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkManagerClient.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteComponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FontManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerSpriteComponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="JoinServerState.hpp">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelLoseState.hpp">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelPauseState.hpp">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelWinState.hpp">
       <Filter>Header Files\States</Filter>
     </ClInclude>
     <ClInclude Include="LobbyState.hpp">
@@ -141,20 +138,8 @@
     <ClInclude Include="StateID.hpp">
       <Filter>Header Files\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="Utility.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StackManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerAction.hpp">
       <Filter>Header Files\Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyBinding.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerDataManager.hpp">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlatformClient.hpp">
       <Filter>Header Files\GameObjects</Filter>
@@ -165,44 +150,77 @@
     <ClInclude Include="TileClient.hpp">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="TileFactoryClient.hpp">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelLoaderClient.hpp">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldClient.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RayGround.hpp">
       <Filter>Header Files\Player</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterClient.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DrawableComponent.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SpriteComponent.hpp">
+      <Filter>Header Files\DrawableComponents</Filter>
     </ClInclude>
     <ClInclude Include="TextComponent.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\DrawableComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableComponent.hpp">
+      <Filter>Header Files\DrawableComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterClient.hpp">
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="GhostCharacterClient.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionHandler.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="Player.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandQueue.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="AudioManager.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Managers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="FontManager.hpp">
+      <Filter>Header Files\Managers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.hpp">
+      <Filter>Header Files\Managers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.hpp">
+      <Filter>Header Files\Managers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowManager.hpp">
+      <Filter>Header Files\Managers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelLoaderClient.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDataManager.hpp">
+      <Filter>Header Files\Managers\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldClient.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TileFactoryClient.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="StackManager.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkManagerClient.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBinding.hpp">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.hpp">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandQueue.hpp">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.hpp">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionHandler.hpp">
+      <Filter>Header Files\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -215,40 +233,7 @@
     <ClCompile Include="ClientMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkManagerClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FontManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerSpriteComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JoinServerState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelLoseState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelPauseState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelWinState.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
     <ClCompile Include="LobbyState.cpp">
@@ -290,18 +275,6 @@
     <ClCompile Include="Label.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StackManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyBinding.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerDataManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlatformClient.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
@@ -311,44 +284,77 @@
     <ClCompile Include="TileClient.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="TileFactoryClient.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelLoaderClient.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RayGround.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterClient.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="LevelLoaderClient.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
     </ClCompile>
-    <ClCompile Include="DrawableComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GhostCharacterClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandQueue.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="TileFactoryClient.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Managers\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Source Files\Managers\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowManager.cpp">
+      <Filter>Source Files\Managers\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldClient.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterClient.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostCharacterClient.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="StackManager.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files\Managers\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>Source Files\Managers\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManagerClient.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDataManager.cpp">
+      <Filter>Source Files\Managers\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionHandler.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyBinding.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandQueue.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>Source Files\DrawableComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawableComponent.cpp">
+      <Filter>Source Files\DrawableComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="TextComponent.cpp">
+      <Filter>Source Files\DrawableComponents</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

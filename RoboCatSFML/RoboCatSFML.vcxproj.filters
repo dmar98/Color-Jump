@@ -34,6 +34,36 @@
     <Filter Include="Source Files\Player">
       <UniqueIdentifier>{178f2af7-25e1-4036-bf5a-937838debe54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Managers\Game">
+      <UniqueIdentifier>{0c0059da-2876-485d-82fb-58f07ba19d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\Base">
+      <UniqueIdentifier>{c43cce0f-b938-4f53-9141-2788e7e41a78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{26f09dcd-fd11-4e72-8651-26f3893e69c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers\Network">
+      <UniqueIdentifier>{b3905ec6-011d-42c8-b2f6-76bde95bac57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{87e5d4de-7e54-42b9-9a1a-6ffe483f1da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Base">
+      <UniqueIdentifier>{9208b9c7-05b7-47a6-ba33-95901b021b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{07bd9923-b74b-45f7-a9c4-9bf7c37d0785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers\Game">
+      <UniqueIdentifier>{5b9e515e-d68d-4615-beda-aa99be3fae5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers\Network">
+      <UniqueIdentifier>{be66a29c-4815-4f97-a493-d1ec51941315}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{a1927de9-9ef7-49b8-be33-6293f52dc5c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.hpp">
@@ -43,66 +73,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorJumpShared.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RoboMath.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectRegistry.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryBitStream.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ReplicationCommand.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SocketAddress.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SocketAddressFactory.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SocketUtil.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StringUtils.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TCPSocket.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Timing.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UDPSocket.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeightedTimedMovingAverage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ByteSwap.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeliveryNotificationManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InFlightPacket.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TransmissionData.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LinkingContext.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Platform.hpp">
@@ -123,75 +93,87 @@
     <ClInclude Include="ETileType.hpp">
       <Filter>Header Files\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="LevelLoader.hpp">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelManager.hpp">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="TileFactory.hpp">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Character.hpp">
       <Filter>Header Files\Player</Filter>
     </ClInclude>
-    <ClInclude Include="LeaderBoardManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Category.hpp">
       <Filter>Header Files\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelLoader.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TileFactory.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.hpp">
+      <Filter>Header Files\GameObjects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="LeaderBoardManager.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="World.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="WeightedTimedMovingAverage.hpp">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="RoboMath.hpp">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="StringUtils.hpp">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Timing.hpp">
+      <Filter>Header Files\Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="DeliveryNotificationManager.hpp">
+      <Filter>Header Files\Managers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkManager.hpp">
+      <Filter>Header Files\Managers\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ByteSwap.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="InFlightPacket.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkingContext.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryBitStream.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplicationCommand.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketAddress.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketAddressFactory.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketUtil.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPSocket.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPSocket.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="TransmissionData.hpp">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RoboMath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectRegistry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryBitStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SocketAddress.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SocketAddressFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SocketUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StringUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TCPSocket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Timing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UDPSocket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ColorJumpPCH.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DeliveryNotificationManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InFlightPacket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Platform.cpp">
@@ -203,20 +185,62 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="LevelLoader.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="TileFactory.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\GameObjects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DeliveryNotificationManager.cpp">
+      <Filter>Source Files\Managers\Network</Filter>
+    </ClCompile>
     <ClCompile Include="LeaderBoardManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelLoader.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="TileFactory.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>Source Files\Managers\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketAddress.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketAddressFactory.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketUtil.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryBitStream.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="InFlightPacket.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPSocket.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="UDPSocket.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Timing.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="RoboMath.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="StringUtils.cpp">
+      <Filter>Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

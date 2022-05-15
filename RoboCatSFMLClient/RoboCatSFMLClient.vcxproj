@@ -35,9 +35,6 @@
     <ClInclude Include="JoinServerState.hpp" />
     <ClInclude Include="KeyBinding.hpp" />
     <ClInclude Include="Label.hpp" />
-    <ClInclude Include="LevelLoseState.hpp" />
-    <ClInclude Include="LevelPauseState.hpp" />
-    <ClInclude Include="LevelWinState.hpp" />
     <ClInclude Include="LobbyState.hpp" />
     <ClInclude Include="MenuState.hpp" />
     <ClInclude Include="LevelLoaderClient.hpp" />
@@ -49,7 +46,6 @@
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="PlayerAction.hpp" />
     <ClInclude Include="PlayerDataManager.hpp" />
-    <ClInclude Include="PlayerSpriteComponent.hpp" />
     <ClInclude Include="RayGround.hpp" />
     <ClInclude Include="RenderManager.hpp" />
     <ClInclude Include="ColorJumpClientPCH.hpp" />
@@ -88,9 +84,6 @@
     <ClCompile Include="JoinServerState.cpp" />
     <ClCompile Include="KeyBinding.cpp" />
     <ClCompile Include="Label.cpp" />
-    <ClCompile Include="LevelLoseState.cpp" />
-    <ClCompile Include="LevelPauseState.cpp" />
-    <ClCompile Include="LevelWinState.cpp" />
     <ClCompile Include="LobbyState.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="MultiplayerGameOverState.cpp" />
@@ -100,7 +93,6 @@
     <ClCompile Include="PlatformPartClient.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerDataManager.cpp" />
-    <ClCompile Include="PlayerSpriteComponent.cpp" />
     <ClCompile Include="RayGround.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="RoboCatClientPCH.cpp">

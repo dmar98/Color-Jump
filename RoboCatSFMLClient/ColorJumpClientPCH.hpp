@@ -30,7 +30,6 @@ class CharacterClient;
 
 #include "InputManager.hpp"
 #include "SpriteComponent.hpp"
-#include "PlayerSpriteComponent.hpp"
 #include "TextureManager.hpp"
 #include "FontManager.hpp"
 #include "AudioManager.hpp"
@@ -39,9 +38,6 @@ class CharacterClient;
 #include "StackManager.hpp"
 
 #include "JoinServerState.hpp"
-#include "LevelLoseState.hpp"
-#include "LevelPauseState.hpp"
-#include "LevelWinState.hpp"
 #include "LobbyState.hpp"
 #include "MenuState.hpp"
 #include "MultiPlayerGameOverState.hpp"

@@ -89,7 +89,6 @@ class PlatformPart;
 #include "DeliveryNotificationManager.hpp"
 
 #include "GameObject.hpp"
-#include "GameObjectRegistry.hpp"
 #include "Timing.hpp"
 #include "StringUtils.hpp"
 

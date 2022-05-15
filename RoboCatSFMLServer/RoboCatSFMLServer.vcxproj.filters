@@ -13,108 +13,54 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Level">
-      <UniqueIdentifier>{1e7fd126-7fb6-4193-a018-151915045ad2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Level">
-      <UniqueIdentifier>{801d0ed1-37e9-4533-8ef1-5a94e8a04742}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Managers">
-      <UniqueIdentifier>{8084ba06-8776-4371-a986-d45633ed7a72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Managers">
+    <Filter Include="Source Files\Network">
       <UniqueIdentifier>{9c9a51fe-a506-42b7-bfb8-5ba741553ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{8084ba06-8776-4371-a986-d45633ed7a72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClientProxy.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ColorJumpServerPCH.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkManagerServer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ReplicationManagerServer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Server.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ReplicationManagerServer.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
     <ClInclude Include="ReplicationManagerTransmissionData.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="LevelManager.hpp">
-      <Filter>Header Files\Level</Filter>
+    <ClInclude Include="NetworkManagerServer.hpp">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="PlatformServer.hpp">
-      <Filter>Header Files\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="PlatformPartServer.hpp">
-      <Filter>Header Files\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="TileServer.hpp">
-      <Filter>Header Files\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="TileFactory.hpp">
-      <Filter>Header Files\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="TileFactoryServer.hpp">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelLoaderServer.hpp">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldServer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterServer.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ClientProxy.hpp">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ClientProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ColorJumpServerPCH.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkManagerServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ReplicationManagerServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ServerMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ReplicationManagerTransmissionData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlatformServer.cpp">
-      <Filter>Source Files\Level</Filter>
-    </ClCompile>
-    <ClCompile Include="PlatformPartServer.cpp">
-      <Filter>Source Files\Level</Filter>
-    </ClCompile>
-    <ClCompile Include="TileServer.cpp">
-      <Filter>Source Files\Level</Filter>
-    </ClCompile>
-    <ClCompile Include="TileFactoryServer.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelLoaderServer.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Server.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManagerServer.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplicationManagerServer.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplicationManagerTransmissionData.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientProxy.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -8,7 +8,6 @@ Engine::Engine() : m_should_keep_running(true)
 
 	srand(static_cast<uint32_t>(time(nullptr)));
 
-	GameObjectRegistry::StaticInit();
 	LeaderBoardManager::StaticInit();
 	LevelManager::StaticInit();
 }
@@ -68,7 +67,6 @@ int Engine::DoRunLoop()
 
 void Engine::DoFrame()
 {
-	World::sInstance->Update();
 }
 
 
